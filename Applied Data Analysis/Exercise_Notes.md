@@ -72,7 +72,7 @@ You may apply some expressions on the data before you select it. Consider below 
 missions_countries = Bombing_Operations.selectExpr(["to_date(MissionDate) as MissionDate", "ContryFlyingMission"])
 missions_countries
 ```
-you can also group by several categories as seen below. These are separated with commas and with double quotes as follows :
+you can also group by several categories as seen below. These are separated with commas and with double quotes as follows. In the below we are likely adding an additional column which is called MissionsCount. The other columns are present too though. 
 
 ```
 missions_by_date = missions_countries\
@@ -81,4 +81,24 @@ missions_by_date = missions_countries\
                     .sort(asc("MissionDate")).toPandas()
 missions_by_date.head()
 ```
+Next we have the following code, where we take our data and group by the country where the mission was made. Then the first variable is the country is located, and the missions table essentially contains two columns, one for the date of the mission and one for the number of missions done in that country on that day. Here you plot the date on the x axis and the number of missions on the y axis and each plot will represent a new country. 
 
+You can also perform some searches on the data as follows :
+
+```
+jun_29_operations = Bombing_Operations.where("MissionDate = '1966-06-29' AND TargetCountry='NORTH VIETNAM'")
+```
+
+In the above we are taking the data and using the where keyword. In the parentheses we are placing the conditions that need to be verified to find the requested information. Then we find what countries have scheduled missions there on that day. We groupBy the CountryFlyingMission, count the number of rows in each group and create a new column from this called MissionsCount. Then we send this to the Pandas library. 
+
+```
+jun_29_operations.groupBy("ContryFlyingMission").agg(count("*").alias("MissionsCount")).toPandas()
+```
+
+You can put data in the cache just by typing `cache()` at the end. You can even save the data in a json file as follows : 
+
+```
+jun_29_operations.write.mode('overwrite').json("jun_29_operations.json")
+```
+
+We can also use the RDD. 
