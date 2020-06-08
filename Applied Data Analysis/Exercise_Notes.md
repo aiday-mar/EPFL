@@ -1,6 +1,6 @@
 # Notes from the Exercises 
 
-**04 : Scaling up**
+**Tutorial 04**
 
 You can import the different libraries under a different name using a smaller shortened form for example pd for panda. Then if you want to use the Python Spark common library PySpark you need to create a context as follows :
 
@@ -148,3 +148,80 @@ ORDER BY MissionsCount DESC
 
 spark.sql(query).show()
 ```
+
+**Tutorial 05**
+
+You can use collections in python as follows. A list in python is created using curly brackets as follows {}. Then you can also creates lists as follows `list([])`. This could also be done with collections like below. Here you essentially create a default dictionary which is initiliazed to some empty list. Then you can just acess a key, whether it exists or not and add a string to it. 
+
+```
+todo_list = collections.defaultdict(list)
+todo_list['ADA'].append('Homework 2')
+```
+
+The collections framework also allows Counter which initialy initializes each key as having a count of zero. 
+
+```
+counter = collections.Counter()
+counter['apples'] += 1
+counter['oranges'] += 1
+```
+
+Here is a difference of how to code file openings :
+
+```
+# Good practice
+with open('file', 'r') as file:
+    print(file.read())
+
+# Bad practice
+file = open('file', 'r')
+try:
+    print(file.read())
+finally:
+    file.close()
+```
+
+Note: Using open(...) as ... automatically closes the file after the block finishes running. You can use the pickle library to store big objects in memory as follows : `pickle.load(file)`. You can also save data into a file path. Suppose the data we want to save is called result then we have :
+
+```
+def save_pickle(result, file_path = 'pickle'):
+    with open(file_path, 'wb') as file:
+        pickle.dump(result, file_path)
+```
+
+When you have a try catch statement in python, this is actually called a try, except statement. You have in this case then an example as follows :
+
+```
+def very_complex_operation():
+    try:
+        # some code
+    except (FileNotFoundError, EOFError) as e:
+        # some computation  
+```
+
+Note: Use %d for decimals/integers, %f for floats (alternatively %.xf to specify a precision of x), and %s for strings (or objects with string representations). We have an example as follows :
+
+```
+print("There are %d apples on the table." % (num_off_apples))
+```
+
+You can create a list directory of a folder and access all the files in a directory as follows :
+
+```
+from os import listdir
+
+DATA_PATH = './data/'
+
+def process_data(path = DATA_PATH):
+   for file in listdir(path):
+       do_something(path + file)
+
+# Providing the target files through the command line
+from argparse import ArgumentParser
+
+parser = ArgumentParser()
+parser.add_argument("--filename", help="Name of the file to process", type = str)
+args = parser.parse_args()
+
+print(args.filename)
+````
