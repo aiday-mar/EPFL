@@ -58,7 +58,6 @@ missions_count_pd.head()
 Now using the Pandas library you may now plot the data in the library as follows : 
 
 ```
-
 pl = missions_count_pd.plot(kind="bar", 
                             x="ContryFlyingMission", y="MissionsCount", 
                             figsize=(10, 7), log=True, alpha=0.5, color="olive")
@@ -101,4 +100,51 @@ You can put data in the cache just by typing `cache()` at the end. You can even 
 jun_29_operations.write.mode('overwrite').json("jun_29_operations.json")
 ```
 
-We can also use the RDD. 
+We can also use the RDD. In the below we take the table and we analyze each row. Then the TakeOffLocation column of each row, contributes a value of 'one'.
+
+```
+all_locations = jun_29_operations.rdd.map(lambda row: (row.TakeoffLocation, 1))
+locations_counts_rdd = all_locations.reduceByKey(lambda a, b: a+b).sortBy(lambda r: -r[1])
+locations_counts_with_schema = locations_counts_rdd.map(lambda r: Row(TakeoffLocation=r[0], MissionsCount=r[1]))
+locations_counts = spark.createDataFrame(locations_counts_with_schema)
+locations_counts.show()
+```
+After this we take the key and consider two variable which indicate probably two rows having the same TakeOffLocation. Then you sum in such a way that you find for each TakeOffLocation how many missions were made with that specific location. Then you sort by the last column, the second column in descending order, which is why there is a negative sign. To create a schema then you create a new row, a name which is associated to the right column, and this is created into a data frame. 
+
+To do a join, you use the following syntax :
+
+```
+tables_joined = tale1.join(table2, table1.property == table2.property)
+tables_joined
+```
+To find for example the number of missions made by a specific aircraft you can write :
+
+```
+missions_joined = Bombing_Operations.join(Aircraft_Glossary, 
+                                          Bombing_Operations.AirCraft == Aircraft_Glossary.AirCraft)
+missions_joined
+missions_aircrafts = missions_joined.select("AirCraftType")
+missions_aircrafts.show(5)
+missions_aircrafts.groupBy("AirCraftType").agg(count("*").alias("MissionsCount"))\
+                  .sort(desc("MissionsCount"))\
+                  .show()
+```
+
+You can also write this in pure SQL format as follows :
+
+```
+
+Bombing_Operations.registerTempTable("Bombing_Operations")
+Aircraft_Glossary.registerTempTable("Aircraft_Glossary")
+
+query = """
+SELECT AirCraftType, count(*) MissionsCount
+FROM Bombing_Operations bo
+JOIN Aircraft_Glossary ag
+ON bo.AirCraft = ag.AirCraft
+GROUP BY AirCraftType
+ORDER BY MissionsCount DESC
+"""
+
+spark.sql(query).show()
+```
