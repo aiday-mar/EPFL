@@ -225,3 +225,5 @@ args = parser.parse_args()
 
 print(args.filename)
 ````
+
+You can also create lists using the following code which gives us three different elements in the list. We have : `results = [factorial(i) for i in range(3)]`. In the method we define we can raise errors as follows : `raise NotImplementedError`.
