@@ -9,7 +9,7 @@ The k Nearest Neighbord problem can be interepreted in different ways, for one y
 The curse of dimensionality occurs when you have a lot of dimensions and few points actually close to the point you are currently considering. However data generally lives in close clusters in low dimensions. In the decision tree you have a question at the node, the branches are various answers and leaves are final classes. You start by partitioning data from the root. You use the tree to find which people give positive/negative answers. From this we can infer the amount of entropy from the set S. This entrop is given by :
 
 ```
-H(P,N) = -P/(P+N) log(P/(P+N)) - N/(P+N)log(N/(P+N))
+H(P,N) = - P/(P+N) log(P/(P+N)) - N/(P+N)log(N/(P+N))
 ```
 
 Suppose that we have an attribute A partitioned into v partitions S, meaning S1, S2 ... Sv. Now the entropy of attribute A is :
