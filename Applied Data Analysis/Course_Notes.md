@@ -1,6 +1,6 @@
 # Course Notes for Applied Data Analysis
 
-**Starting from Lecture 6**
+**Lecture 6**
 
 In supervised learning you want to find the function f approximating the values y using the input X. In unsupervised machine learning you transform the input essentially into an output y.
 
@@ -25,3 +25,21 @@ In general, Decision Tree algorithms are referred to as CART or Classification a
 Ensemble methods are like crowsourced machine learning algorithms. In bagging you use the algorithms on different samples of data and then combineby voting for which algorithm is the best or by averaging the outputs. In stacking you combine model outputs and for this you can use linear regression. In boosting you train the learner but after filtering, weighting the samples based on the output of previous train/test runs.
 
 Random forests are created as follows : you grow K trees on datasets sampled from the original dataset. The subdata sets are of size N. Then you select m out of p features at each node, and then you aggregate the predictions at each tree. Boosted decision trees are trained sequentially by boosting : each tree is trained to predict error residuals of previous trees.
+
+In the logistic regression we solve `beta^T X = log(y/(1-y))`, which gives us : `y = 1/(1 + exp(-beta^T X))`. In linear regression we have `y = X . beta`. Where we have X has the input samples and the rows of X contains the distinct observations, while the columns of X are the input features.
+
+We have the following R-squared value, which is :
+
+```
+R^2 = 1 - sum( yi - y'i)^2 / sum( yi - y' )^2
+```
+
+Where `y'` is the sample mean and `y'i` are the components of the vector of the predicted values.
+
+**Lecture 7**
+
+Deep learning is used to learn features and models together, and reinforcing each other. In some classifiers you will need to take your feature and place into discrete categories. In this discretization, we could have an equal width separation within the range, or it can be an equal frequency separation meaning that in each separation there is an equal number of values or there is clustering. In supervised discretization you test the hypothesis that the membership in two adjacent intervals of a feature is independent of a class. If the memberships are independent, then the intervals should be merged. In the rankinng of the features, there are ways to measure the features. With the correlation coefficient for example, or using other possible measures. 
+
+The X^2 method is a test on if the feature is independent of the label. Or in the forward (backward) selection, you add or remove the features and in such a way evaluate the datasets. 
+
+**slide 31**
