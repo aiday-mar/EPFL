@@ -241,3 +241,64 @@ flights = flights.sort_values('hour')[['flight_id', 'dest_id']]
 You can deploy a job in two ways. On a single node meaning that we use the resources of one single machine, and we distribute the tasks on multiple cores. In the cluster mode we use the resources of multiple machines. As such the cluster manager is connected to the worker nodes which contain an executor that deal with tasks. It is also connected to the driver program which deals with the SparkContext. Spark offers a unified stack. In spark there is Spark Core which is built on top of Mesos and Yarn. On top of Spark Core there is Spark SQL, Spark Streaming Real-Time, MLLib and GraphX. 
 
 Spark SQL is a Spark module for structured data processing. It provides the data frames. Spark Streaming is an extension of the core Spark API which enables fault tolerant stream processing of live data streams. GraphX is used for graph-parallel computation. At a high level GraphX extends the Spark RDD by introducing a new Graph abstraction : a directed multigraph which properties attached to each vertex and edge. 
+
+**Tutorial 06**
+
+First we need to import the right packages and libraries as follows :
+
+```
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.linear_model import LinearRegression, LogisticRegression, Ridge
+from sklearn.preprocessing import OneHotEncoder
+from pandas.plotting import scatter_matrix
+from sklearn.model_selection import cross_val_predict
+from sklearn.model_selection import cross_val_score
+from sklearn.metrics import mean_squared_error
+import seaborn as sns
+%matplotlib inline
+```
+We import the dataset :
+
+```
+data = pd.read_csv('data/Advertising.csv', index_col=0)
+data.head()
+```
+Next we have :
+
+```
+fig, axs = plt.subplots(1, 3, sharey=True)
+data.plot(kind='scatter', x='TV', y='sales', ax=axs[0], figsize=(16, 8), grid=True)
+data.plot(kind='scatter', x='radio', y='sales', ax=axs[1], grid=True)
+data.plot(kind='scatter', x='newspaper', y='sales', ax=axs[2], grid=True)
+```
+
+Then we will use the LinearRegression algorithm of the Scikit-learn library. We have the followig code used to select certain features from the table called data :
+
+```
+feature_cols = ['TV', 'radio', 'newspaper']
+X = data[feature_cols]
+y = data.sales
+X.describe()
+lin_reg = LinearRegression()  # create the model
+lin_reg.fit(X, y)  # train it
+```
+From here on we can plot the predicted and the original values on one plot and then later calculate the mean squared error between the two measures. We have :
+
+```
+lr = LinearRegression()
+
+# cross_val_predict returns an array of the same size as `y` where each entry
+# is a prediction obtained by cross validation:
+predicted = cross_val_predict(lr, X, y, cv=5)
+
+# Plot the results
+fig, ax = plt.subplots(figsize=(12, 8))
+ax.scatter(y, predicted, edgecolors=(0, 0, 0))
+ax.plot([min(y), max(y)], [min(y), max(y)], 'r--', lw=4)
+ax.set_xlabel('Original')
+ax.set_ylabel('Predicted')
+plt.show()
+mean_squared_error(y, predicted)
+```
