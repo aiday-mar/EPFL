@@ -46,3 +46,22 @@ You can scale the values taken by the features as follows, by performing the fol
 
 **Lecture 8**
 
+The MapReduce algorithm schedules tasks, does a virtualization of the file system, there is a fault tolerance, and does job monitoring. Spark is a high level API for programming MapReduce like jobs. An example is :
+
+```
+sc = SparkContext()
+print “I am a regular Python program, using the pyspark lib”
+users = sc.textFile(‘users.tsv’)  # user <TAB> age
+          .map(lambda s: tuple(s.split(‘\t’)))
+          .filter(lambda (user, age): age>=18 and age<=25)
+pages = sc.textFile(‘pageviews.tsv’)  # user <TAB> url
+          .map(lambda s: tuple(s.split(‘\t’)))
+counts = users.join(pages)
+              .map(lambda (user, (age, url)): (url, 1)
+              .reduceByKey(add)
+              .takeOrdered(5)
+```
+
+Next we study RDDs which are resilient distributed datasets. The python script is run on the driver, and the RDD operatios are run on executors. Next we can operate transformations or actions on RDD. We have different RDD transformations, such as the following. The `map(func)` returns a new distributed dataset formed by passing each element of the source through a function func. The method `filter(func)` returns a new dataset formed by selecting those elements of the source on which func returns true. Next we have `flatMap(func)`, which is similar to the map function but each inputitem can be mapped to 0 or more output items. The `sample(withReplacement?, fraction, seed)` method samples a fraction fraction of the data, with or without replacement, using a given random number generator seed. The `union(otherDataset)` returns a new dataset that contains the union of the elements in the source dataset and the argument. Same for `intersection(otherDataset)`. We also have the `distinct()` methods which returns a new dataset that contains the distinct elements of the source dataset.
+
+We also consider the following methods. The method `groupByKey()` is called on a dataset of (K, V) pairs and returns a dataset of (K, Iterable<V>) pairs. We have for example : `{(1,a), (2,b), (1,c)}.groupByKey() → {(1,[a,c]), (2,[b])}`. We also have the following method `reduceByKey(func)` which when called on a dataset of (K, V) pairs, returns a dataset of (K, V) pairs where the values for each key are aggregated using the given reduce function func, which must be of type (V, V) => V. For example `{(1, 3.1), (2, 2.1), (1, 1.3)}.reduceByKey(lambda (x,y): x+y) -> {(1, 4.4), (2, 2.1)}`.
