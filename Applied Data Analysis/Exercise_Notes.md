@@ -294,6 +294,7 @@ lr = LinearRegression()
 predicted = cross_val_predict(lr, X, y, cv=5)
 
 # Plot the results
+# in the below there is only one subplot which has a specific size
 fig, ax = plt.subplots(figsize=(12, 8))
 ax.scatter(y, predicted, edgecolors=(0, 0, 0))
 ax.plot([min(y), max(y)], [min(y), max(y)], 'r--', lw=4)
