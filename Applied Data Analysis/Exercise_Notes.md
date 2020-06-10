@@ -295,11 +295,22 @@ predicted = cross_val_predict(lr, X, y, cv=5)
 
 # Plot the results
 # in the below there is only one subplot which has a specific size
+# here we have the size of the corresponding plot
 fig, ax = plt.subplots(figsize=(12, 8))
 ax.scatter(y, predicted, edgecolors=(0, 0, 0))
+# here we define the range displayed on the graph
+# we also see that the line is red and we use dashes
 ax.plot([min(y), max(y)], [min(y), max(y)], 'r--', lw=4)
 ax.set_xlabel('Original')
 ax.set_ylabel('Predicted')
 plt.show()
 mean_squared_error(y, predicted)
+```
+We next consider the logistic regression as follows :
+
+```
+logistic = LinearRegression()
+logistic.fit(X, y)
+predicted_train = logistic.predict(X)
+mean_squared_error(y, predicted_train)
 ```
