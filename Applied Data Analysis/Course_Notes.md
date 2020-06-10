@@ -42,4 +42,7 @@ Deep learning is used to learn features and models together, and reinforcing eac
 
 The X^2 method is a test on if the feature is independent of the label. Or in the forward (backward) selection, you add or remove the features and in such a way evaluate the datasets. 
 
-**slide 31**
+You can scale the values taken by the features as follows, by performing the following transformation : xi' = ( xi - mi )/( Mi - mi ). We measure the accuracy with the following equation where TP indicates the number of true positives and TN measures the number of true negatives. We have : A = (TP + TN)/N, where N is the number of cases. The precision measures what fraction of positive predictions are actually positive using : P = (TP)/(TP + FP). The recall measure measures what fraction of positive examples did we recognize as such. We have the measure is R = TP/(TP + FN). The F-score is the harmonic mean of the precision and the recall. We have : F = 2 PR/(P+R).
+
+**Lecture 8**
+
