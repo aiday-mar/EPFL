@@ -314,3 +314,56 @@ logistic.fit(X, y)
 predicted_train = logistic.predict(X)
 mean_squared_error(y, predicted_train)
 ```
+
+We can use the ridge regression as follows :
+
+```
+ridge = Ridge(alpha=6)
+
+# cross_val_predict returns an array of the same size as `y` where each entry
+# is a prediction obtained by cross validation:
+predicted_r = cross_val_predict(ridge, X, y, cv=5)
+
+fig, ax = plt.subplots(figsize=(12, 8))
+ax.scatter(y, predicted_r, edgecolors=(0, 0, 0))
+ax.plot([min(y), max(y)], [min(y), max(y)], 'r--', lw=4)
+ax.set_xlabel('Original')
+ax.set_ylabel('Predicted')
+plt.show()
+mean_squared_error(y, predicted_r)
+```
+
+Now let us perform some classification using the logistic regression. We have :
+
+```
+titanic_raw = pd.read_excel('data/titanic.xls')
+# drop from the first column the entries that have nothing in them
+titanic = titanic_raw.dropna(axis=0, how='any')
+titanic.head()
+
+# We give the name dead to the entries in the table where the survived column takes value zero, and survived name to the etries where # the column takes value 1, these entries are all placed into a column which is either called dead or survived. 
+dead = titanic[titanic['survived']==0]
+survived = titanic[titanic['survived']==1]
+
+print("Survived {0}, Dead {1}".format(len(dead), len(survived)))
+```
+
+Then we prepare the feature vectors for the training. We have :
+
+```
+titanic_features = ['sex', 'age', 'fare']
+X = pd.get_dummies(titanic[titanic_features])
+X.head()
+
+# the label used for the training 
+y = titanic['survived']
+logistic = LogisticRegression(solver='lbfgs')
+
+precision = cross_val_score(logistic, X, y, cv=10, scoring="precision")
+recall = cross_val_score(logistic, X, y, cv=10, scoring="recall")
+
+# Precision: avoid false positives
+print("Precision: %0.2f (+/- %0.2f)" % (precision.mean(), precision.std() * 2))
+# Recall: avoid false negatives
+print("Recall: %0.2f (+/- %0.2f)" % (recall.mean(), recall.std() * 2))
+```
