@@ -42,5 +42,4 @@ A method to log an user in, given that user's credentials
 A method to register a new user, given that user's information
 A method to reset an user's password, given that user's e-mail
 
-**Week 2**
-
+**Week 3**
