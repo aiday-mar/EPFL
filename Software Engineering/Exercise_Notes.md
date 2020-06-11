@@ -34,6 +34,13 @@ Integer, Path and ZonedDateTime are all things you can compare to other things o
 
 BigDecimal, ThaiBuddhistCalendar and java.util.regex.Pattern do not have much in common, beyond the fact that they can all be represented in some way in a binary form, i.e. Serializable.
 
+The Nobel Prize, the Turing Award and the Fields Medal are all awards. But they have different names, different criteria, and different regularity (the Fields Medal is only given once every four years). Thus, an interface representing them should expose these three concepts. Such an interface could also include a list of past winners, or a detailed description of the award.
 
+The AuthenticationClient interface should contain:
 
+A method to log an user in, given that user's credentials
+A method to register a new user, given that user's information
+A method to reset an user's password, given that user's e-mail
+
+**Week 2**
 
