@@ -67,3 +67,17 @@ Next we study RDDs which are resilient distributed datasets. The python script i
 We also consider the following methods. The method `groupByKey()` is called on a dataset of (K, V) pairs and returns a dataset of (K, Iterable<V>) pairs. We have for example : `{(1,a), (2,b), (1,c)}.groupByKey() → {(1,[a,c]), (2,[b])}`. We also have the following method `reduceByKey(func)` which when called on a dataset of (K, V) pairs, returns a dataset of (K, V) pairs where the values for each key are aggregated using the given reduce function func, which must be of type (V, V) => V. For example `{(1, 3.1), (2, 2.1), (1, 1.3)}.reduceByKey(lambda (x,y): x+y) -> {(1, 4.4), (2, 2.1)}`.
           
 We also have the following transformations. The `sortByKey()` method which is called on a dataset of (K, V) pairs, returns a dataset of (K, V) pairs sorted by keys. The `join(otherDataset)` called on datasets of type (K, V) and (K, W), returns a dataset of (K, (V, W)) pairs with all pairs of elements for each key. Then we have `{(1,a), (2,b)}.join({(1,A), (1,X)}) → {(1, (a,A)), (1, (a,X))}`. Analogous methods include the leftOuterJoin, rightOuterJoin, fullOuterJoin.
+
+We then have the following methods. The collect() method which returns all the elements of the dataset as an array at the driver program. This is usually useful after a filter or other operation that returns a sufficiently small subset of the data. The count() method which returns the number of elements in the dataset. The take(n) method which returns an array with the “first” n elements of the dataset. The saveAsTextFile(path) method which writes the elements of the dataset as a text file in a given directory in the local filesystem or HDFS.
+
+An RDD is a list of rows, and the DataFrame is a table with rows and typed columns. In Spark SQL we have the following commands : `sc = SparkContext()`, `sqlContext = HiveContext(sc)`, `df = sqlContext.sql("SELECT * from table1 GROUP By id")`. We have an example of the logistic regression with MLLib : 
+
+```
+from pyspark.mllib.classification import LogisticRegressionWithSGD
+
+trainData = sc.textFile("...").map(...)
+testData = sc.textFile("...").map(...)
+
+model = LogisticRegressionWithSGD.train(trainData)
+predictions = model.predict(testData)
+```
