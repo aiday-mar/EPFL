@@ -81,3 +81,11 @@ testData = sc.textFile("...").map(...)
 model = LogisticRegressionWithSGD.train(trainData)
 predictions = model.predict(testData)
 ```
+
+**Lecture 9**
+
+We have supervised machine learning which takes input and output samples and we relate these with a function f which can have different types, classification and regression. The first is used when y is discrete and the second when the y variable is continuous, as in linear regression. In unsupervised machine learning, we have samples x of the data, we compute a function f which we apply onto x to get f(x) and thus this gives a simpler representation. When y is disrete we use the clustering technique. When y is continuous, then we have dimensionality reduction. The clustering problem issuch that given a set of points, we group the points into a number of clusters, such that the members of a cluster are close to each other, and members of different clusters are dissimilar. 
+
+There is a clusrer bias because people assume a classification where there is none. In hierarchical clustering, the clusters form a tree-shaped hierarchy. In flat clustering there is no inter-cluster structure. Hard clustering assigns items to a unique cluster. 
+
+page 24.
