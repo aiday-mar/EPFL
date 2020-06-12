@@ -95,3 +95,7 @@ To determine the nearness of clusters you may find the minimum of the niterclust
 Let us consider point assignment clustering. We have the example of the k-means algorithm. The goal of this is to assign each data point to one of the k clusters such that the total distance of points to their centroids is minimized. We locally minimize the euclidean distance from the data points to their respective centroids. We find the closest cluster centroid for each item and assign it to that cluster. Then we recompute the cluster centroid for each cluster.
 
 In the K-means, we initially either choose a random sample of k points, or iteratively construct a random sample with good spacing across datasets. In the K-means++ system you first choose a cluster center at random from the data points. Then you iterate, for every remaining data point x, you compute the distance D(x) from x to the closest previously selecter cluster center. Choose a remaining point x randomly with probability proportionaly to D(x)^2 and make it a new cluster center.
+
+To choose k, you iterate over all i, you compute the following value : s(i) = (b(i) - a(i))/(max{a(i), b(i)}), where b(i) is the average distance to points in the closest other cluster and where a(i) is the average distance to points in your own cluster. You do this for different k, then calculate for each S = average of s(i) over all poinzs i. Then plot S againt k  and pick the k for which S is the greates.
+
+DBSCAN is the Density-Based spatial clustering of applications with noise. 
