@@ -44,4 +44,4 @@ You can check if the float is not a number as follows :`Flot.isNan(argument)`, t
 
 `forall {int i in (0 : upperBound); a[i] != key }`
 
-We can also have assertions, we have : `assert CONDITION : "string to be sent if condition not verified"`.
+We can also have assertions, we have : `assert CONDITION : "string to be sent if condition not verified"`. Next we have the value of this character called `ch`, and we find its value, then we find it's index in the string s. We have : `int index = s.indexOf(String.valueOf(ch))`. When this character does not exist in the string we have that the indexOf method returns -1. To initialize an array of integers `private int[] contents = new int[capacity]`. We have contracts in software engineering as follows : requires precondition with @Requires, you can rely on the postcondition with @Ensures. The representation invariants are internal contracts of a class. They must be satisfied after the instantiation of the class and preserved by public class methods.
