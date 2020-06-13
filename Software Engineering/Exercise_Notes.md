@@ -43,3 +43,20 @@ A method to register a new user, given that user's information
 A method to reset an user's password, given that user's e-mail
 
 **Week 3**
+
+The Optional container object helps provide optional values instead of null values. The search logic remains same except that we no longer return results but rather results wrapped inside optionals. This implies returning an optional of a result when there are available results. Otherwise, we return an empty Optional when there is no more result.
+
+```
+public static Optional<Result> search(String[] keywords) {
+  Iterator<String> iterator = Internet.find(keywords);
+  
+  # meaning that there is at least one result
+  if (iterator.hasNext()) {
+    # the result must depend on the given iterator
+    return Optional.of(new Result(iterator));
+  }
+  
+  # otherwise if there is no result you return an empty optional
+  return Optional.empty();
+}
+```
