@@ -60,3 +60,12 @@ public static Optional<Result> search(String[] keywords) {
   return Optional.empty();
 }
 ```
+You can check the optionalvariable is present as follows :
+
+```
+Optional<Result> optional = Google.search(keywords);
+while (optional.isPresent()) {
+  Result result = optional.get();
+  optional = result.next();
+}
+```
