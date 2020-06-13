@@ -98,4 +98,33 @@ In the K-means, we initially either choose a random sample of k points, or itera
 
 To choose k, you iterate over all i, you compute the following value : s(i) = (b(i) - a(i))/(max{a(i), b(i)}), where b(i) is the average distance to points in the closest other cluster and where a(i) is the average distance to points in your own cluster. You do this for different k, then calculate for each S = average of s(i) over all poinzs i. Then plot S againt k  and pick the k for which S is the greates.
 
-DBSCAN is the Density-Based spatial clustering of applications with noise. 
+DBSCAN is the Density-Based spatial clustering of applications with noise. DBSCAN performs density-based clustering, and follows the shape of dense neighborhoods of points. Core points have at least minPts neighbors in a sphere of diameter ε around them. Core points can directly reach neighbors in their ε-sphere. From non-core points, no other points can be reached. Point q is density-reachable from p if there is a series of points p = p1, …, pn = q such that pi+1 is directly reachable from pi. All points not density-reachable from any other points are outliers.
+
+Points p, q are density-connected if there is a point o such that both p and q are density-reachable from o. A cluster is a set of points which are mutually density-connected. That is, if a point is density-reachable from a cluster point, it is part of the cluster as well. In the above figure, red points are mutually density-reachable; B and C are density-connected; N is an outlier. We have :
+
+```
+DBSCAN(DB, dist, eps, minPts) {
+   C = 0
+   for each point P in database DB {
+       if label(P) != undefined, then continue
+       Neighbors N = RangeQuery(DB, dist, P, eps)
+       if |N| < minPts then {
+          label(P) = Noise
+          continue
+       }
+       C = C + 1
+       label(P) = C
+       Seed set S = N \ {P}
+       for each point Q in S {
+          if label(Q) = Noise then label(Q) = C
+          if label(Q) != undefined then continue
+          label(Q) = C
+          Neighbors N = RangeQuery(DB, dist, Q, eps)
+          if |N| >= minPts then {
+              S = S U N
+          }
+       }
+   }
+}
+```
+
