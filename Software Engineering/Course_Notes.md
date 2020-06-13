@@ -25,3 +25,23 @@ The Java volatile keyword is used to mark a Java variable as "being stored in ma
 **Week 3**
 
 The Javadoc is written within /** ... */. We write the parameter in @param, the return in @return and the exception throws in @throws. 
+
+To create an array of chars you can write `char array[n]` which is of size n. Reference: A reference is a variable that refers to something else and can be used as an alias for that something else. Pointer: A pointer is a variable that stores a memory address, for the purpose of acting as an alias to what is stored at that address. So, a pointer is a reference, but a reference is not necessarily a pointer. Pointers are a particular implementation of the concept of a reference, and the term tends to be used only for languages that give you direct access to the memory address.
+
+- C/C++ allows pointer arithmetic but Java Pointers (References) not: The term “pointer” is strongly associated with the C/C++ concept of pointers, which are variables which store memory addresses and can be modified arithmetically to point to arbitrary addresses.
+In Java, pointers only exist as an implementation detail for References. A copy of the reference is copied to the stack of a called function, pointing to the same object as the calling function and allowing you to manipulate that object. However you cannot change the object the calling function refers to.
+- Java doesn’t support pointer explicitly,  But java uses pointer implicitly: Java use pointers for manipulations of references but these pointers are not available for outside use. Any operations implicitly done by the language are actually NOT visible.
+Pointers can do arithmetic, References can’t: Memory access via pointer arithmetic is fundamentally unsafe and for safe guarding, Java has a robust security model and disallows pointer arithmetic for this reason. Users cannot manipulate pointers no matter what may ever is the case.
+- Pointing objects: In C, we can add or subtract address of a pointer to point to things. In Java, a reference points to one thing only. You can make a variable hold a different reference, but such c manipulations to pointers are not possible.
+- References are strongly typed:  Type of a reference is much more strictly controlled in Java than the type of a pointer is in C. In C you can have an int* and cast it to a char* and just re-interpret the memory at that location. That re-interpretation doesn’t work in Java: you can only interpret the object at the other end of the reference as something that it already is (i.e. you can cast a Object reference to String reference only if the object pointed to is actually a String).
+- Manipulation of pointers can be dangerous:  On one hand, it can be good and flexible to have control over pointers by user but it may also prove to be dangerous. They may turn out to be big source of problems, because if used incorrectly they can easily break assumptions that your code is built around. And it’s pretty easy to use them incorrectly.
+
+You can make a scanner to scan the input of users in the console as follows : `Scanner input = new Scanner(Systen.in)`. Then you can check the inputs from the scanner rather easily as follows : `input.hasNext("[aeiou]")`. This means that our scanner scans and checks when a vowel appears first. Then you can access the next element as follows : `input.next`. 
+
+You can compare dates as follows :  `dateStart.compareTo(dateEnd)`. Instead of setting `this.start = dateStart`, you can write instead the following : `this.start = new Date(dateStart.getTime())`. Similarly when you return data you make a new copy of what you want to copy. Instead of writing `return start`, you can write `return (Date) start.clone()`.
+
+You can check if the float is not a number as follows :`Flot.isNan(argument)`, this returns a boolean. You can also use the for all way of iterating as follows :
+
+`forall {int i in (0 : upperBound); a[i] != key }`
+
+We can also have assertions, we have : `assert CONDITION : "string to be sent if condition not verified"`.
