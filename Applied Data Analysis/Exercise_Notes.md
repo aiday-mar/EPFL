@@ -482,7 +482,81 @@ Suppose wewantto display the data in a dataframe :
 
 ```
 # the second parameter are the columns in the dataframe starting from the second column
+# in the below it's life weare turning the column vetor into a row vector, where you only choose the columns except for the first.
 weights_athletic = pd.DataFrame(ridge_reg_athletic.coef_.reshape((1,ridge_reg_athletic.coef_.size)), columns=athletic_skills[1:])
 weights_athletic = weights_athletic.sort_values(by=0, axis=1, ascending=False)
 weights_athletic
+```
+
+You can concatenate the two columns where we find the minimum and the maximum of each column as follows :
+
+```
+pd.concat([players_athletic.min().rename('min'), players_athletic.max().rename('max')], axis=1)
+```
+
+Here what you are doing is essentially taking the minimum and maximum of each column and putting this data into a separate column. We apply min-max scaling. Not quite sure what the following does :
+
+```
+players_values = players.values
+min_max_scaler = preprocessing.MinMaxScaler()
+players_values = min_max_scaler.fit_transform(players_values)
+players = pd.DataFrame(players_values, columns=players.columns)
+```
+You can also decide to find the relative correlation coefficients given a pair of categories. We have : `players_athletic.corr()`. Now we want to find the correlations between the overall category and the other variables as follows :
+
+```
+# here below you select the first row and all the columns starting from the second column
+correlations = players_athletic.corr().iloc[0][1:]
+# you can sort the valuesin an ascendings or a desending order
+correlations = correlations.sort_values(ascending=False)
+correlations = pd.DataFrame(correlations).T
+correlations
+```
+
+Let's study bootstrap confidence intervals :
+
+```
+num_records = y.shape[0]
+bootstrap_errors = []
+bootstrap_errors_athletic = []
+for i in range(1000):
+    # you randomly choose an element from within the vector of num_records
+    train_indices = np.random.choice(range(num_records), num_records, replace=True)
+    # this must be a method that allows you to find the indices which are not in the set, hence the method is called the set 
+    # difference in 1 d space
+    test_indices = np.setdiff1d(range(num_records), train_indices)
+    X_train_b, y_train_b = X[train_indices], y[train_indices]
+    X_test_b, y_test_b = X[test_indices], y[test_indices]
+    ridge_reg.fit(X_train_b, y_train_b)
+    # when you have trainedthe model with the fit, then you calculate the mean squared error on the test vectors
+    bootstrap_errors.append(mean_squared_error(y_test_b, ridge_reg.predict(X_test_b)))
+    
+    X_train_b, y_train_b = X_athletic[train_indices], y_athletic[train_indices]
+    X_test_b, y_test_b = X_athletic[test_indices], y_athletic[test_indices]
+    ridge_reg_athletic.fit(X_train_b, y_train_b)
+    bootstrap_errors_athletic.append(mean_squared_error(y_test_b, ridge_reg_athletic.predict(X_test_b)))
+    
+bootstrap_errors_sorted = np.sort(bootstrap_errors)
+bootstrap_errors_sorted_athletic = np.sort(bootstrap_errors_athletic)
+# this you need to write in order to be able to output to the console
+print('95% CIs')
+# when you have variables you put them in curly brackets and to specify the type you write two dots followed by type
+print('First model: [{:f}, {:f}]'.format(bootstrap_errors_sorted_athletic[25], bootstrap_errors_sorted_athletic[975]))
+print('Second model: [{:f}, {:f}]'.format(bootstrap_errors_sorted[25], bootstrap_errors_sorted[975]))
+```
+
+We also have the following code : 
+
+```
+mean_error_athletic = bootstrap_errors_sorted_athletic.mean()
+mean_error = bootstrap_errors_sorted.mean()
+deviation_athletic = bootstrap_errors_sorted_athletic - mean_error_athletic
+deviation = bootstrap_errors_sorted - mean_error
+xpos = [0,1]
+# plotting a bar graph, then you include the height of the error , for one bar you have an array of two values where the first is 
+# likely the lower bound, the second is the upper bound
+fig, ax = plt.bar(xpos, [mean_error_athletic, mean_error], yerr=[[deviation_athletic[25], deviation_athletic[975]], [deviation[25], deviation[975]]], align='center', alpha=0.5, ecolor='black', capsize=10)
+plt.xticks(xpos, ('First Model', 'Second Model'))
+plt.ylabel('Error')
+plt.title('Comparison of the Two Models')
 ```
