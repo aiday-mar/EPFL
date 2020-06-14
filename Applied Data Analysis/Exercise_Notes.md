@@ -431,4 +431,58 @@ players = players.apply(extract_work_rate, axis=1)
 players = players.drop(columns=['Work Rate'])
 ```
 
-In the code below you may choose to fill in the missing values of the players matrix as follows : `players.columns[players.isnull().any()].tolist()`. This must a returns a list of columns where we have a missing value. Then we can describe the data with : `players['SprintSpeed'].describe()`. We can fill in the missingdata with the mean : `players.fillna(players.mean(), inplace=True)`. But this is the mean of the whole matrix ? 
+In the code below you may choose to fill in the missing values of the players matrix as follows : `players.columns[players.isnull().any()].tolist()`. This must a returns a list of columns where we have a missing value. Then we can describe the data with : `players['SprintSpeed'].describe()`. We can fill in the missingdata with the mean : `players.fillna(players.mean(), inplace=True)`. But this is the mean of the whole matrix ? Consider the following code which can be used to split the data into training and testing data :
+
+```
+players_athletic = players[athletic_skills]
+# you select the 2 column to the last column
+X_athletic = players_athletic.values[:,1:] 
+# you select the first column
+y_athletic = players_athletic.values[:,0]
+
+# in the below 1 is used as the random seed
+X_train_athletic, X_test_athletic, y_train_athletic, y_test_athletic = train_test_split(X_athletic, y_athletic, test_size=0.3, random_state=1)
+```
+
+We can implement the ridge method as follows :
+
+```
+# these are empty arrays
+alphas = [] 
+scores = []
+# and this is a method which takes in two parameters
+def hyper_ridge(X, y):
+    best_alpha = 0
+    # this is a float which corresponds to the lowest possible negative number 
+    highest_score = float('-inf')
+    for alpha in np.linspace(0,2000,2001):
+        # you calculate the ridge regression youing 2001 different alpha parameters
+        ridge_reg = Ridge(alpha=alpha)
+        # we append the given alpha to the array 
+        alphas.append(alpha)
+        # here we specify the type of algorithm we want to use, here this is the ridge regression and we use also the corresponding 
+        # training data
+        curr_score = cross_val_score(ridge_reg, X_train_athletic, y_train_athletic, cv=5, scoring='neg_mean_squared_error').mean()
+        # you add the corresponding value to the array 
+        scores.append(curr_score)
+        # you update the data to use the correct alpha and the correct highest score
+        if curr_score > highest_score:
+            highest_score = curr_score
+            best_alpha = alpha
+    return best_alpha
+
+# we then find the best alpha using the ridge method
+alpha_athletic = hyper_ridge(X_train_athletic, y_train_athletic)
+# then we use it in the ridge method
+ridge_reg_athletic = Ridge(alpha=alpha_athletic)
+ridge_reg_athletic.fit(X_train_athletic, y_train_athletic)
+```
+
+Suppose wewantto display the data in a dataframe :
+
+```
+# the second parameter are the columns in the dataframe starting from the second column
+weights_athletic = pd.DataFrame(ridge_reg_athletic.coef_.reshape((1,ridge_reg_athletic.coef_.size)), columns=athletic_skills[1:])
+weights_athletic = weights_athletic.sort_values(by=0, axis=1, ascending=False)
+weights_athletic
+```
