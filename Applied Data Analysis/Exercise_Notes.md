@@ -367,3 +367,68 @@ print("Precision: %0.2f (+/- %0.2f)" % (precision.mean(), precision.std() * 2))
 # Recall: avoid false negatives
 print("Recall: %0.2f (+/- %0.2f)" % (recall.mean(), recall.std() * 2))
 ```
+
+**Homework 2 solutions**
+
+First we need to import all the appropriate libraries as follows :
+
+```
+%matplotlib inline
+import pandas as pd
+import numpy as np
+from sklearn import preprocessing
+from sklearn.model_selection import train_test_split, cross_val_score
+from sklearn.linear_model import Ridge
+from sklearn.metrics import mean_squared_error
+import matplotlib.pyplot as plt
+```
+
+Then we need to import the csv file as follows :
+
+```
+players = pd.read_csv('data/fifa19_players.csv')
+players.head()
+```
+
+Then we can plot the data from the above csv using the pyplot command :
+
+```
+plt.xlabel('Skill')
+plt.ylabel('#players')
+plt.title('Distribution of Player Skills')
+plt.hist(players['Overall'], bins=30)
+```
+
+You can after this find the data type of the table of data using the following command : `players['Overall'].dtype`.  By changing the last line of the above code to : `plt.hist(players['Overall'], np.arange(players['Overall'].min(), players['Overall'].max()))`, we find that the plot has little widths for each entry. Where you plot the players['Overall'] against a vector which ranges from the minimum value to the maximum value of tha table. Next we define the skills array, which contains the string names of the columns of the table that interest us. we then select these appropriate columny by writing `players = players[skills]`. You can also find the distinct types of values that exist in a column. For exanple when you write `players['Work Rate'].unique()`, then this outputs the unique elements in the column of work rates. We can map these different types to different numerical values as follows : 
+
+```
+# https://stackoverflow.com/questions/23586510/return-multiple-columns-from-apply-pandas
+# We have here each word is mapped to a numerical value which is either 0, 1 or 2
+rate_to_int = {'Low':0, 'Medium':1, 'High':2}
+# Then we have this variable p which is used inside of the method
+def extract_work_rate(p):
+    # meaning that is the tyoe of Work rate column of matrix p is not a string
+    if not type(p['Work Rate']) == str:
+        attack = np.nan
+        defense = np.nan
+    else:
+        # In the case when the type of the column is the correct string type
+        # then you take the string and you split it according to this symbol "/"
+        attack, defense = p['Work Rate'].split('/ ')
+        # then you need to select the appropriate indices from the table and place into the appropriate vector
+        attack = rate_to_int[attack]
+        defense = rate_to_int[defense]
+    
+    # so here we are creating two new columns and we initialize them in the apropriate manner ?
+    p['attack_work_rate'] = attack
+    p['defense_work_rate'] = defense
+    
+    return p
+
+# you apply a method onto the players matrix
+players = players.apply(extract_work_rate, axis=1)
+# you can decide to remove some columns by specifying the corresponding correct name of the column
+players = players.drop(columns=['Work Rate'])
+```
+
+In the code below you may choose to fill in the missing values of the players matrix as follows : `players.columns[players.isnull().any()].tolist()`. This must a returns a list of columns where we have a missing value. Then we can describe the data with : `players['SprintSpeed'].describe()`. We can fill in the missingdata with the mean : `players.fillna(players.mean(), inplace=True)`. But this is the mean of the whole matrix ? 
