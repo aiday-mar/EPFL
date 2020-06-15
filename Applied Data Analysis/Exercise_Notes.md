@@ -695,3 +695,42 @@ top50k = all_words.groupBy("word").agg(count("*").alias("total")).sort(col("tota
 
 top50k.show()
 ```
+
+We get the subreddit representation as follows :
+
+```
+# Get all the words in a subreddit, and here you only select distinct words from this set and put into a column
+tokens = reddit_with_tokens.select("subreddit", explode("words").alias("word")).distinct()
+# Join with the whitelist of the top 50k, where you check where words are similar in the two columns, and you then select everything 
+# in the tokens column
+filtered_tokens = tokens.alias("t").join(top50k, tokens.word==top50k.word).select("t.*")
+
+filtered_tokens
+```
+Now we need use the mapping and reducing method as follows :
+
+```
+# each row of the table r, we map to the property r.subreddit and the array formed with the r.word
+subreddit_50k = filtered_tokens.rdd.map(lambda r: (r.subreddit, [r.word])).reduceByKey(lambda a,b: a+b).collect()
+
+# for each element of the column
+for sr in subreddit_50k:
+    # we place {} in order to denote some variable goes in there
+    print("Subreddit: {} - Words: {}".format(sr[0], len(sr[1])))
+````
+
+Let's compute the jaccard similarity:
+
+```
+# Note: similarity is computed 2 times! It can be optimized
+similarity = []
+for sr1 in subreddit_50k:
+    for sr2 in subreddit_50k:
+        # append the names, then have this followed by the jaccard similarity between the second compoenents
+        similarity.append((sr1[0], sr2[0], jaccard_similarity(sr1[1], sr2[1])))
+
+# make a dataframe from the list, index implies the row element, columns implies the column index, the corresponding value is the 
+# third component
+similarity_matrix_50k_words = pd.DataFrame(similarity).pivot(index=0, columns=1, values=2)
+plot_heatmap(similarity_matrix_50k_words)
+```
