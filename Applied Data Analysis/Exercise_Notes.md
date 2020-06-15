@@ -676,6 +676,7 @@ from pyspark.sql.window import Window
 from pyspark.sql.functions import rank, col
 
 # you use the regex tokenizer to transform the table which we will call `reddit`
+# must be that you split the words in that text by separating them against the white spaces 
 regexTokenizer = RegexTokenizer(inputCol="body", outputCol="all_words", pattern="\\W")
 reddit_with_words = regexTokenizer.transform(reddit)
 
@@ -684,4 +685,13 @@ remover = StopWordsRemover(inputCol="all_words", outputCol="words")
 # means that we remove the column all_words
 reddit_with_tokens = remover.transform(reddit_with_words).drop("all_words")
 reddit_with_tokens.show(5)
+
+# get all words in a single dataframe, the way you do it is that you take the words column which contains arrays of the words present, 
+# then you explod this, meaning that you create a separate column containing consecutively all the elements as separate entities.
+all_words = reddit_with_tokens.select(explode("words").alias("word"))
+# group by, sort and limit to 50k. What we do here is we take the table, we group by the word itself, and count how many times this 
+# word appears in the column. Then we sort this column in descending order. 
+top50k = all_words.groupBy("word").agg(count("*").alias("total")).sort(col("total").desc()).limit(50000)
+
+top50k.show()
 ```
