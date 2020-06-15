@@ -560,3 +560,64 @@ plt.xticks(xpos, ('First Model', 'Second Model'))
 plt.ylabel('Error')
 plt.title('Comparison of the Two Models')
 ```
+
+We now will work with the PySpark library and attempt to scale up the capacity of the code that we are running. We have :
+
+```
+import pyspark
+import pyspark.sql
+from pyspark.sql import *
+from pyspark.sql.functions import *
+import numpy as np 
+import pandas as pd
+
+conf = pyspark.SparkConf().setMaster("local[*]").setAll([
+                                   ('spark.executor.memory', '12g'),  # find
+                                   ('spark.driver.memory','4g'), # your
+                                   ('spark.driver.maxResultSize', '2G') # setup
+                                  ])
+                                  
+# create the session, in the builder you need to have some configuration settings that will allow you to set up the session
+# the session may already have been created in which case you just get it, you don't create it
+spark = SparkSession.builder.config(conf=conf).getOrCreate()
+
+# create the context from the spark session
+sc = spark.sparkContext
+
+# FIX for Spark 2.x
+locale = sc._jvm.java.util.Locale
+locale.setDefault(locale.forLanguageTag("en-US"))
+```
+
+Then you would need to load the data in a spark datafrane as follows :
+
+```
+reddit = spark.read.json("messages.json.gz")
+score = spark.read.json("score.json.gz")
+```
+
+Then we need to import some data and include some more code as follows :
+
+```
+%run hw2_utils.py
+reddit.printSchema()
+score.printSchema()
+```
+
+Now we want to display the following table of reddit data, as follows :
+
+```
+# in the below you group by the category, then you count all the number of elements in each group and store this data in the new 
+# column which is called total_posts. Then you want to count the number of distinct authors in each group, and you give this a new 
+# alias. Then you can find the average length of the post using the avg command.
+# then you can place all this data in the cache by writing .cache()
+
+subreddit_info = reddit.groupBy("subreddit")\
+    .agg(count("*").alias("total_posts"), 
+         countDistinct("author").alias("users_count"),
+         avg(length("body")).alias("posts_length"),
+         stddev(length("body")).alias("posts_length_stddev")
+        ).cache()
+
+subreddit_info
+```
