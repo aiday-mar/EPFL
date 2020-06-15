@@ -761,3 +761,56 @@ top1000_rdd = words_count_by_subreddit.select('*', rank().over(window).alias('ra
 
 top1000 = top1000_rdd.collect()
 ```
+
+We want to shoe the person who has the most answered or posted :
+
+```
+# we use the distinct keyword because it is sufficient the person posts once in the subreddit
+# then to that specific person you assign one more 1. Then when you find the number of subreddits each author has posted in you
+# apply the map function again where this time you create a new map but this time you need to create a row with an author and the 
+# number of subreddits/communitiies he is part of 
+user_in_communities_rdd = reddit.select("subreddit", "author").distinct().rdd.map(lambda r: (r.author, 1))\
+    .reduceByKey(lambda a,b: a+b).map(lambda r: Row(author=r[0], communities=r[1]))
+
+# Create a dataframe, this dataframe is created when we already mapped using the Row keyword
+user_in_communities = spark.createDataFrame(user_in_communities_rdd).sort(col("communities").desc())
+
+user_in_communities.show(1)
+```
+
+Then we draw a graph as follows :
+
+```
+users = reddit.select("subreddit", "author").distinct()\
+    .rdd.map(lambda r: (r.subreddit, [r.author]))\
+    .reduceByKey(lambda a,b: a+b).collect()
+
+similarity_users = []
+for sr1 in users:
+    for sr2 in users:
+        similarity_users.append((sr1[0], sr2[0], jaccard_similarity(sr1[1], sr2[1])))
+        
+similarity_matrix_users = pd.DataFrame(similarity_users).pivot(index=0, columns=1, values=2)
+
+# we use nba subreddit
+sr = "nba"
+
+fig, ax = plt.subplots(figsize=(10,8))
+
+# means we take the row for the nba subreddit, then when we have the row, we drop the column/category sr and take the zeroth element 
+# which is now the jaccard value for the users
+u = similarity_matrix_users[similarity_matrix_users.index == sr].drop(sr, axis=1).to_numpy()[0]
+w = similarity_matrix_words[similarity_matrix_words.index == sr].drop(sr, axis=1).to_numpy()[0]
+ax = plt.scatter(w, u)
+
+# now we have the row with all the jaccard values, and you want to take the names of the words which are given by the column names
+c=similarity_matrix_users[similarity_matrix_users.index == sr].drop(sr, axis=1).columns.tolist()
+
+for i in range(0, len(u)):
+    # you associated the ith element of the vector c with the point xy as seen below. You associated a rotation, so the text is
+    # rotated
+    plt.annotate(c[i], xy=(w[i], u[i]), rotation=20)
+    
+plt.xlabel("Words Jaccard")
+plt.ylabel("Users Jaccard")
+plt.title("NBA similarity")
