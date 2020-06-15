@@ -621,3 +621,67 @@ subreddit_info = reddit.groupBy("subreddit")\
 
 subreddit_info
 ```
+We display the largest subreddits in terms of total post count and the number of users :
+
+```
+# we select the two columns and we sort according to the descending order for the total_posts column. We convert the table to a 
+# Pandas object
+by_posts = subreddit_info.select("subreddit", "total_posts").sort(col("total_posts").desc()).toPandas()
+by_users = subreddit_info.select("subreddit", "users_count").sort(col("users_count").desc()).toPandas()
+
+display_side_by_side(by_posts, by_users)
+```
+
+Now we perform some selections using Spark :
+
+```
+import math
+
+# We take the dataframe and we convert this to a Pandas object. We now sort the data in a descending order according to the post length
+subreddits_by_pl = subreddit_info.toPandas().sort_values("posts_length", ascending=False).reset_index(drop=True)
+
+# means you apply the anonymous function on each entry of the table
+sqrt_N = subreddits_by_pl['total_posts'].apply(lambda r: math.sqrt(r))
+# assigning the whole column to variable s 
+s = subreddits_by_pl['posts_length_stddev']
+# it would seem like here we are doing component wise operations
+subreddits_by_pl['ci99'] = 2.576*(s / sqrt_N)
+
+# horizontal bar chart and the first parameter is for the vertical axis, second for the horizontal axis
+# the third parameter is the length of the error for each bar 
+plt.barh(subreddits_by_pl.subreddit, subreddits_by_pl.posts_length, xerr=subreddits_by_pl.ci99)
+plt.xlabel('Post length average (CI 99%)')
+plt.ylabel('Subreddit')
+plt.title('Average posts length')
+plt.show()
+```
+
+Print the list of subreddits sorted by their average content scores :
+
+```
+# where we join the whole json file with this additionsal column
+# where you group by one category, then you take the average of the scores, place into one new column called score
+# then you need to sort all this data in a descending order according to the score column
+# then you need to show this table
+reddit.join(score, "id")\
+    .groupBy("subreddit").agg(avg("score").alias("score"))\
+    .sort(col("score").desc()).show()
+```
+
+Now we want to compute the most frequent words across the subreddits. We have :
+
+```
+from pyspark.ml.feature import RegexTokenizer, StopWordsRemover
+from pyspark.sql.window import Window
+from pyspark.sql.functions import rank, col
+
+# you use the regex tokenizer to transform the table which we will call `reddit`
+regexTokenizer = RegexTokenizer(inputCol="body", outputCol="all_words", pattern="\\W")
+reddit_with_words = regexTokenizer.transform(reddit)
+
+# remove stop words
+remover = StopWordsRemover(inputCol="all_words", outputCol="words")
+# means that we remove the column all_words
+reddit_with_tokens = remover.transform(reddit_with_words).drop("all_words")
+reddit_with_tokens.show(5)
+```
