@@ -734,3 +734,30 @@ for sr1 in subreddit_50k:
 similarity_matrix_50k_words = pd.DataFrame(similarity).pivot(index=0, columns=1, values=2)
 plot_heatmap(similarity_matrix_50k_words)
 ```
+
+Alternatively we compute the 1000 most frequent words for each subreddit. 
+
+```
+# for each row r we  have the name of the category, one word present there and the one after
+words_count_by_subreddit_rdd = reddit_with_tokens.rdd\
+    .flatMap(lambda r: [((r.subreddit, w), 1) for w in r.words])\
+    .reduceByKey(lambda a,b: a+b).cache()
+
+# conversion in a dataframe, the dataframe is created after the reduction step above. For each r we create a row.
+words_count_by_subreddit = spark.createDataFrame(
+            # so the first [0] implies the first element and the second [0] implies the first element of the first element
+            words_count_by_subreddit_rdd.map(lambda r: Row(subreddit=r[0][0], word=r[0][1], count=r[1]))
+)
+
+# Window on the words grouped by subreddit
+# when you use the orderBy command, you need to specify the column specifically using the `col` keyword
+window = Window.partitionBy(words_count_by_subreddit['subreddit']).orderBy(col('count').desc())
+
+# Add position with rank() function (rowNumber is accepted, and it would be more correct)
+# what does the rank method rank against ? 
+top1000_rdd = words_count_by_subreddit.select('*', rank().over(window).alias('rank'))\
+  .filter(col('rank') <= 1000).rdd.map(lambda r: (r.subreddit, [r.word])).reduceByKey(lambda a,b: a+b)
+  # in the above we have the category followed by the list of words associated 
+
+top1000 = top1000_rdd.collect()
+```
