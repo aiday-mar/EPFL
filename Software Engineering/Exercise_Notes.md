@@ -350,3 +350,106 @@ public class Format {
   }
 }
 ```
+The full main file can be written as so :
+
+```
+package ch.epfl.sweng.defensive.garbage.in.non.garbage.out;
+
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.util.logging.Logger;
+import java.util.stream.Stream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
+public class Main {
+  
+  // the logger allows you to log some results into the log. For some reason it is declared to be a static variable. What is the
+  // argument which is used.
+  static Logger logger = Logger.getLogger("");
+  
+  // once again the variable is static, you do not need to instantiate this variable. We have here an array of strings.
+  static final String[] columns = {"datetime", "ip address", "user-agent", "url"};
+  // the regex patterns are also given by strings in an array
+  static final String[] regexes = {
+    "^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}$",
+    "^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$",
+    "^.+$",
+    "^(https?:\\/\\/)?([\\da-z\\.-]+)\\.([a-z\\.]{2,6})([\\/\\w \\.-]*)*\\/?$"
+  };
+  
+  public static void main(String[] args) {
+    // here the args denotes the arguments which are the input from the user in the console.
+    if (args.length < 4) {
+      System.out.println("usage : -i <input> -o <output> -v");
+      // we quit the program by writing the code below
+      System.exit(1);
+    }
+    
+    if (!args[0].equals("-i")) {
+      System.out.println("missing input file");
+      System.exit(1);
+    }
+    // in which case since we know there are already 4/5 arguments then the second one must be the file name 
+    String inputFileName = args[1];
+  
+    if (!args[2].equals("-o")) {
+      System.out.println("missing output file");
+      System.exit(1);
+    }
+    String outputFileName = args[3];
+    
+    // the case when we have a verbose flag put at the end, and only when there are exactly five arguments.
+    final Boolean verbose = args.length == 5 && args[4].equals("-v");
+
+    try (Stream<String> stream = Files.lines(Paths.get(inputFileName))) {
+      // there is a method in the files class which allows us to create a new buffered writer.
+      BufferedWriter writer = Files.newBufferedWriter(Paths.get(outputFileName));
+      // then we iterate over the lines of the stream
+      // use a lambda function inside of the parentheses of the forEach method.
+      stream.forEach(line -> {
+        if (!line.isEmpty()) {
+          // when the line is empty, you create a new array of strings where you take the line and you split it according to the
+          // comma
+          String[] values = line.split(",");
+          // meaning that we have exactly one value per column
+          if (values.length != columns.length) {
+            if (verbose) {
+              // this info method likely allows us to log information into the computer
+              logger.info(String.format("ignored {%s} : missing values", line));
+            }
+          } else {
+            Boolean valid = true;
+            for (int i = 0; valid && i < values.length; ++i) {
+              // here we can check whether the ith value of the array matches the ith regex array
+              if (!Format.matches(values[i], regexes[i])) {
+                valid = false;
+                if (verbose) {
+                  // now you log the fact that there is a string which does not match the requires regex
+                  logger.info(String.format("ignored {%s} : invalid {%s}", line, columns[i]));
+                }
+              }
+            }
+            // meaning that we still have that all the values match the required regex patterns 
+            if (valid) {
+              try {
+                // in this case you write the line to the buffered writer
+                writer.write(line);
+                writer.newLine();
+              } catch (IOException e) {
+                // you print the error of the stack trace
+                e.printStackTrace();
+              }
+            }
+          }
+        }
+      });
+      // here you need to close the buffered writer, as well as the stream.
+      writer.close();
+      stream.close();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+}
+```
