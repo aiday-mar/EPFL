@@ -536,3 +536,36 @@ train(features = x_train,
       num_epoch = 100)
 visualize(x_train, y_train, model)
 ```
+
+We have here the machine learning algorithm :
+
+```
+class MLP(nn.Module):
+    def __init__(self, hidden_size):
+        super(MLP, self).__init__()
+        # TODO: Define parameters / layers of a multi-layered perceptron with one hidden layer
+        self.fc1 = nn.Linear(1, hidden_size)
+        self.relu = nn.Sigmoid()
+        self.fc2 = nn.Linear(hidden_size, 1) 
+    
+    def forward(self, x):
+        out = self.fc2(self.relu(self.fc1(x)))
+        return out
+    
+# TODO: Play with learning rate, hidden size, and optimizer type for multi-layered perceptron
+hidden_size = 2
+learning_rate = 1e-1
+
+# here we are essentially placing the parameter hidden_size into the MLP class and this is used in the _init_ method 
+model = MLP(hidden_size = hidden_size)
+
+optimizer = torch.optim.Adam(model.parameters(), lr = learning_rate)
+
+train(features = x_train,
+      labels = y_train,
+      model = model,
+      lossfunc = lossfunc,
+      optimizer = optimizer,
+      num_epoch = 300)
+visualize(x_train, y_train, model)
+```
