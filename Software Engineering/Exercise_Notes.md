@@ -153,3 +153,103 @@ interface Callback<T> {
 In this exercise, you are given a program that makes use of exceptions as its defense mechanism and your task will be to replace all exceptions with callbacks.
 
 Callbacks are used for _delivering an error asynchronously_. The programmer passes a function or object—the callback—to a procedure. The latter invokes the callback sometime later when the asynchronous operation completes. Exceptions on the other hand are used for _delivering an error synchronously_. The programmer catches an error when some code throws an exception.
+
+An example of the callback use is :
+
+````
+public void random(Callback<Joke> callback) {
+  try {
+    # here we have the onSuccess method which is called from the callback, and here you invoke a random joke in the parameter
+    callback.onSuccess(service.random());
+  } catch (NoJokeException e) {
+    # in this case we call the onError method from the callback
+    callback.onError(e);
+  }
+}
+````
+
+We can use the callback as follows :
+
+```
+# in here you need to specify a specific instance of the callback with some overriden methods onSuccess and onE
+repository.random(new Callback<Joke>() {
+
+  @Override
+  public void onSuccess(Joke joke) {
+    System.out.println(joke);
+  }
+
+  @Override
+  public void onError(Exception e) {
+    System.out.println(e);
+  }
+});
+```
+
+You can create a file reader from reading a file as follows : `BufferedReader reader = new BufferedReader(new FileReader(filename));`. You can check the input from this buffer as follows :
+
+```
+while ((line = reader.readLine()) != null) { ... }
+```
+
+In fact we have the following code :
+
+```
+package ch.epfl.sweng.defensive.error.processing.routine.store;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
+import ch.epfl.sweng.defensive.error.processing.routine.model.Joke;
+
+public class JokeStore {
+
+  private static JokeStore store;
+  private List<Joke> jokes = new ArrayList<>();
+  private Random random = new Random();
+
+  private JokeStore() {
+    String path = JokeStore.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+    // the s after the % symbol must mean that this is a string
+    String filename  = String.format("%s%s", path, "jokes.txt");
+    try {
+      BufferedReader reader = new BufferedReader(new FileReader(filename));
+      String line, statement = "";
+      // supposing that the nextline in the file is not null
+      while ((line = reader.readLine()) != null) {
+        if (!line.isEmpty()) {
+          statement += " " + line;
+        } else {
+          // suppose that the line is empty, then if the whole statement is not empty
+          if (!statement.isEmpty()) {
+            jokes.add(new Joke(statement)); 
+            // then in this case you add a new joke which is based on this statement
+            statement = "";
+          }
+        }
+      }
+      reader.close();
+    } catch (Exception e) {
+      System.out.println(e);
+    }
+  }
+
+  public static JokeStore get() {
+    if (store == null) {
+      // when the store is null then you need to create a new joke store
+      store = new JokeStore();
+    }
+    return store;
+  }
+
+  public Joke random() {
+    // here you are taking the size of the joke, then you choose a random index in this size and get
+    // the corresponding element.
+    return jokes.get(random.nextInt(jokes.size()));
+  }
+}
+```
