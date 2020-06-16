@@ -253,3 +253,15 @@ public class JokeStore {
   }
 }
 ```
+
+We can define a subclass of the exception as follows :
+
+```
+public class NoJokeException extends Exception {
+  // we have here the constructor of the class
+  public NoJokeException(String message) {
+    // then we call the constructor of the parent class and we can input into it a string
+    super(String.format("no kidding: %s", message));
+  }
+}
+```
