@@ -453,3 +453,6 @@ public class Main {
   }
 }
 ```
+
+*Loop Invariants*
+
