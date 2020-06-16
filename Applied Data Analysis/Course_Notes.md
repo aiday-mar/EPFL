@@ -144,3 +144,13 @@ sum_(i=1)^n ( yi - zi^t beta)^2 + lambda . sum (j=1)^p beta_j^2
 Here we penalize very high or very low weights. 
 
 To deal with the topic detection problem, to get the TF-IDF matrix you can multiple the docs x topics matrix by the word x topics matrix. Then the differences of the component wise elements, squared and summed is the latent semantic analysis. You can dins the SVD of the matrix TF-IDF and then the diagonal matrix will capiture the importance of the topics. 
+
+For the taskof topic detectopn we can use the LDA method which is the Latent Dirichlet Allocation method. Use a generative story to generate a document of length n :
+
+d = sample a topic distribution for the document
+for i = 1 ... n
+          t = sample a topic from the topic distribution d
+          w = sample a word from the topic t
+          add w to the bag of words fo the doc to be generated
+
+Essentially in the LDA you input documents represented as bags of words, and the number K of topics to be found, and the output are the K topics themselves, and for each document we find a distribution over the K topics. How to quantify the closennes of two documents - you take the cosine of the rows of the TF-IDF matrix. How to quantify the closeness of two words - you find the cosine of the columns of the TF-IDF matrix. You can also define a matrix M where against therows we display the contexts and against the columns we display the words. An entry is : M[c, w] = log [P(c,w)/P(c).P(w)]
