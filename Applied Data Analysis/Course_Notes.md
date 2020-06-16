@@ -134,4 +134,13 @@ In document retrieval, we can have a neighbor search as in kNN, where given the 
 
 Character encoding is the conversion of characters to bytes. Before the systems used where ASCII and Latin-1, now we use Unicode such as UTF-8, UTF-16, UTF-32. Tokenization maps character strings into a sequence of tokens/words. Stopwords are small words that don't carry a meaning such as 'a', 'of' etc. Casefolding is when you change all the words to lower case and use this to analyze data. Stemming is when you strip the suffixes of words and keep the common root. Alternatively you can extract n-grams when you have several tokens in a sequence you extract. We define the following : docfreq(w) which is the number of documents that contain word w, N which is the overall number of documents, idf(w) = log(N) - log(docfreq(w)), which is the inverse document frquency of the word. Now if the tf(w,d) term is the frquency of word w in document d, then we have that the TF-IDF matrix is such that the entry in row d and column w has value tf(w,d)*idf(w). 
 
-Using this TF-IDF matrix let's revisit the different possible tasks. We have for example the document retrieval task.
+Using this TF-IDF matrix let's revisit the different possible tasks. We have for example the document retrieval task. The way you do this is you compare the query doc q to all documents in the collection, and you rank the documents from the collection in an increasing order of distance. You may use for this distance measure the cosine metric, which for vectors q and v is defined as : <q/|q|, v/|v|>. The cosine distance is then 1 - cosine similarity. The second task is document classification. 
+
+Consider also the regularization which for linear regression can be shown to be : 
+
+```
+sum_(i=1)^n ( yi - zi^t beta)^2 + lambda . sum (j=1)^p beta_j^2
+```
+Here we penalize very high or very low weights. 
+
+To deal with the topic detection problem, to get the TF-IDF matrix you can multiple the docs*topics matrix by the word*topics matrix.
