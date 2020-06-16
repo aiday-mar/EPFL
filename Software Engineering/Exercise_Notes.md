@@ -69,3 +69,16 @@ while (optional.isPresent()) {
   optional = result.next();
 }
 ```
+
+*Bad Input Parameter Checks and Exceptions*
+
+You can also check the input parameters are not null by throwing otherwise a new IllegalArgumentException("the string to display in case of an exception"). You can also create a SengmentationFaultClass which extends the Exception class, and which has a constructor in which we call the constructor of the parent class. The implementation is :
+
+```
+public class SegmentationFault extends Exception {
+  public SegmentationFault() {
+    super();
+  }
+}
+```
+
