@@ -143,4 +143,4 @@ sum_(i=1)^n ( yi - zi^t beta)^2 + lambda . sum (j=1)^p beta_j^2
 ```
 Here we penalize very high or very low weights. 
 
-To deal with the topic detection problem, to get the TF-IDF matrix you can multiple the docs*topics matrix by the word*topics matrix.
+To deal with the topic detection problem, to get the TF-IDF matrix you can multiple the docs x topics matrix by the word x topics matrix. Then the differences of the component wise elements, squared and summed is the latent semantic analysis. You can dins the SVD of the matrix TF-IDF and then the diagonal matrix will capiture the importance of the topics. 
