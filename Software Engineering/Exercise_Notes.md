@@ -331,3 +331,22 @@ try (Stream<String> stream = Files.lines(Paths.get(inputFileName))) {
     //...
 ```
 
+In the above we have a stream. This stream works with Strings. The stream is equal to a file instance from which we call the lines method and inside we pass the full path. Then we create a buffered writer from the output path. We define the following Format class. We have :
+
+```
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class Format {
+  // the constructor is empty
+  private Format() {}
+  // the method returns a boolean, and takes in two arguments. There is a pattern which is made from compiling the regex, there is
+  // also an instance of the matcher class which checks whether the value matches the given regex pattern. The next line returns a
+  // boolean.
+  public static boolean matches(String value, String regex) {
+    Pattern pattern = Pattern.compile(regex);
+    Matcher matcher = pattern.matcher(value);
+    return matcher.matches();
+  }
+}
+```
