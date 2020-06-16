@@ -128,3 +128,10 @@ DBSCAN(DB, dist, eps, minPts) {
 }
 ```
 
+**Lecture 10**
+
+In document retrieval, we can have a neighbor search as in kNN, where given the query q we find the k docs with smallest distance to query q. We have document classification where each document is labelled with a class. Here we train a supervised classifier based on labelled documents using the following methods : kNN, logistic regression, decision trees, random forests. Sentiment analysis can be studied with supervised learning (regression, classification). Topic detection can be studied with clustering (hierarchical or point-assignment). An example of the use of feature vectors is aht need to transform arbitrarily long strigns to fixed length vectors. You can use the nag of words method where you keep the multiplicity of the words and you don't take into account the order of the words. The bag of words matrix has one row in the matrix per document, one column per word in the dictionary.
+
+Character encoding is the conversion of characters to bytes. Before the systems used where ASCII and Latin-1, now we use Unicode such as UTF-8, UTF-16, UTF-32. Tokenization maps character strings into a sequence of tokens/words. Stopwords are small words that don't carry a meaning such as 'a', 'of' etc. Casefolding is when you change all the words to lower case and use this to analyze data. Stemming is when you strip the suffixes of words and keep the common root. Alternatively you can extract n-grams when you have several tokens in a sequence you extract. We define the following : docfreq(w) which is the number of documents that contain word w, N which is the overall number of documents, idf(w) = log(N) - log(docfreq(w)), which is the inverse document frquency of the word. Now if the tf(w,d) term is the frquency of word w in document d, then we have that the TF-IDF matrix is such that the entry in row d and column w has value tf(w,d)*idf(w). 
+
+Using this TF-IDF matrix let's revisit the different possible tasks. We have for example the document retrieval task.
