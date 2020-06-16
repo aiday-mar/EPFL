@@ -44,6 +44,8 @@ A method to reset an user's password, given that user's e-mail
 
 **Week 3**
 
+*Neutral return values*
+
 The Optional container object helps provide optional values instead of null values. The search logic remains same except that we no longer return results but rather results wrapped inside optionals. This implies returning an optional of a result when there are available results. Otherwise, we return an empty Optional when there is no more result.
 
 ```
