@@ -294,4 +294,40 @@ public class CaseStudy {
 ```
 Why do you have to use the flatMap method above ? I guess that here you are calling the respective functions each time on the return value of the previous code. By using Optional, and never working with null, you can avoid null checks altogether. Furthermore, with the functional paradigm, you can also avoid adding new branches in the decision tree of your program.
 
+*CSV sanitization*
+
+Here args is the variable which denotes the user input. The last line indicates that the program is terminated. We have 
+
+```
+if (args.length < 4) {
+  System.out.println("usage : -i <input> -o <output> -v");
+  System.exit(1);
+}
+```
+Then we have the following code which is used to check if we did input '-i' into the console.
+
+```
+if (!args[0].equals("-i")) {
+  System.out.println("missing input file");
+  System.exit(1);
+}
+String inputFileName = args[1];
+```
+Similarly we have :
+
+```
+if (!args[2].equals("-o")) {
+  System.out.println("missing output file");
+  System.exit(1);
+}
+String outputFileName = args[3];
+```
+We have the following stream definition :
+
+```
+try (Stream<String> stream = Files.lines(Paths.get(inputFileName))) {
+  BufferedWriter writer = Files.newBufferedWriter(Paths.get(outputFileName));
+  stream.forEach(line -> {
+    //...
+```
 
