@@ -375,3 +375,164 @@ def ALS(train, test):
 
 ALS(train, test)
 ```
+
+**Problem set 11**
+
+Let's implement basic linear regression using the PyTorch library : 
+
+```
+# Useful starting lines
+%matplotlib inline
+import numpy as np
+import matplotlib.pyplot as plt
+import torch
+import torch.nn as nn
+from torch.autograd import Variable
+%load_ext autoreload
+%autoreload 2
+```
+We define the following dataset as a test data set :
+
+```
+# Defining a toy dataset
+x_train = np.array([[3.3], [4.4], [5.5], [6.71], [6.93], [4.168], 
+                    [9.779], [6.182], [7.59], [2.167], [7.042], 
+                    [10.791], [5.313], [7.997], [3.1]], dtype=np.float32)
+
+y_train = np.array([[1.7], [2.76], [2.09], [3.19], [1.694], [1.573], 
+                    [3.366], [2.596], [2.53], [1.221], [2.827], 
+                        [3.465], [1.65], [2.904], [1.3]], dtype=np.float32)
+```
+
+We have the following code which can be used to implement the linear regression. 
+
+```
+class MyLinearRegression:
+    def __init__(self):
+        # TODO: Define the parameters of the model (weights and biases)
+        # the w variable of the current instance self is a new variable where we have a tensor initialized with only one element,
+        # namely zero, what is this requires_grad variable ?
+        self.w = Variable(torch.Tensor([0]), requires_grad=True)
+        self.b = Variable(torch.Tensor([0]), requires_grad=True)
+    
+    def forward(self, x):
+        # TODO: implement forward computation - compute predictions based on the inputs
+        return self.w * x + self.b
+    
+    def parameters(self):
+        # TODO: this function should return a list of parameters of the model
+        return [self.w, self.b]
+    
+    def __call__(self, x):
+        # Convenience function, where we return the forward method evaluated in x and associated to this instance
+        return self.forward(x)
+    
+
+def mselossfunc(pred, y):
+    # TODO: implement the MSE loss function
+    return (pred - y).pow(2).mean()
+
+# we initialize an instance of this class, for this we do not need to use the new keyword, we just write the class name and ()
+model = MyLinearRegression()
+# we have an array with three elements inside of it and the second parameter is the float variable 
+numpy_inputs = np.asarray([0.0, 1.0, 2.0], dtype = np.float32)
+# you can convert a symple numpy array into a torch variable 
+torch_inputs = Variable(torch.from_numpy(numpy_inputs))
+# what does the below mean ?
+torch_outputs = model(torch_inputs)
+print("Testing model: an input of %s gives a prediction:\n %s" % (numpy_inputs, torch_outputs))
+```
+
+We then have the following train and visualization methods :
+
+```
+def train(features, labels, model, lossfunc, optimizer, num_epoch):
+
+    for epoch in range(num_epoch):
+        # TODO: Step 1 - create torch variables corresponding to features and labels
+        inputs = Variable(torch.from_numpy(features))
+        targets = Variable(torch.from_numpy(labels))
+
+        # TODO: Step 2 - compute model predictions and loss
+        # meaning you input the inputs into the model
+        outputs = model(inputs)
+        # where the lossfun is the 4th parameter above
+        loss = lossfunc(outputs, targets)
+        
+        # TODO: Step 3 - do a backward pass and a gradient update step
+        # we are going to take a gradient with only zero components
+        optimizer.zero_grad()
+        # not sure what this backward method is used for on the loss 
+        loss.backward()
+        # you need to update the step of the optimizer.
+        optimizer.step()
+        
+        # meaning that it is a mulitple of 10.
+        if epoch % 10 == 0:
+            # we have the percent sign and d must mean decimal/digit? f must mean float
+            print ('Epoch [%d/%d], Loss: %.4f' 
+                   %(epoch+1, num_epoch, loss.item()))
+        
+        
+def visualize(x_train, y_train, model):
+    # A convenience function for visualizing predictions given by the model
+    # here you put the torch variable into the model, you take the data by writing .data, and convert to a numpy structure with 
+    # numpy() 
+    predicted = model(Variable(torch.from_numpy(x_train))).data.numpy()
+    # sort against the row
+    order = np.argsort(x_train, axis = 0)
+    # below when you plot you need to first order the x_train vector, what is flatten used for 
+    plt.plot(x_train[order].flatten(), y_train[order].flatten(), 'ro', label='Original data')
+    plt.plot(x_train[order].flatten(), predicted[order].flatten(), label='Fitted line')
+    plt.legend()
+    plt.show()
+```
+
+Then we have :
+
+```
+# Training and visualizing predictions made by linear regression model
+# here you use the sub gradient descent, with the right parameters appeared first and then you have the tolerance as second parameter
+optimizer = torch.optim.SGD(model.parameters(), lr=1e-3)
+
+train(features = x_train,
+      labels = y_train,
+      model = model,
+      lossfunc = mselossfunc, 
+      optimizer = optimizer,
+      num_epoch = 50)
+visualize(x_train, y_train, model)
+```
+
+We do the same with the NN package, we have :
+
+```
+class NNLinearRegression(nn.Module):
+    # here we have the initialization method which is applied on the current instance
+    def __init__(self):
+        # does super refer to the constructor of the parent class, but what would this parent class be ? 
+        super(NNLinearRegression, self).__init__()
+        # TODO: Define the parameters of the model (linear nn layer)
+        # what is this Linear function part of the NN package, and the two parameters following it ? 
+        self.linear = nn.Linear(1, 1)
+    
+    def forward(self, x):
+        # TODO: implement forward computation
+        return self.linear(x)
+    
+# Training and visualizing predictions made by linear regression model (nn package)
+# TODO: use loss function from nn package
+lossfunc = nn.MSELoss()
+
+model = NNLinearRegression()
+
+optimizer = torch.optim.SGD(model.parameters(), lr=1e-3)
+
+train(features = x_train,
+      labels = y_train,
+      model = model,
+      lossfunc = lossfunc,
+      optimizer = optimizer,
+      num_epoch = 100)
+visualize(x_train, y_train, model)
+```
