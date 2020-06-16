@@ -265,3 +265,33 @@ public class NoJokeException extends Exception {
   }
 }
 ```
+
+*How defensive programming affects code coverage*
+
+This exercise help you understand the impact that defensive programming has on code coverage. Code coverage is a measure used to describe the degree to which the source code of a program is executed when a particular test suite runs.
+
+On the other hand, defensive programming protects your code from invalid inputs and barricades your program to contain the damage caused by errors. We have the following keywords that can be used in conjunction with the Optional object. 
+
+```
+Optional<String> opt = Optional.empty();
+Optional<String> opt = Optional.of("Hello, world!");
+Optional<String> opt = Optional.ofNullable(object);
+if (opt.isPresent()) { /* ... */ }
+String str = opt.get();
+```
+An if statement actually adds a node in the decision tree of your program. In other words, it introduces two branches: one branch for when the condition is true, and one branch for when the condition is false. You gain robustness at the cost of complexity. When you try to run the code in a functional way, the coverage is much higher. 
+
+```
+public class CaseStudy {
+  public static void demonstrate() {
+    String code = "A code";
+    Courses.findByCode(code)
+      .flatMap(Course::getLecturer)
+      .flatMap(Lecturer::getName)
+      .ifPresent(System.out::println);
+  }
+}
+```
+Why do you have to use the flatMap method above ? I guess that here you are calling the respective functions each time on the return value of the previous code. By using Optional, and never working with null, you can avoid null checks altogether. Furthermore, with the functional paradigm, you can also avoid adding new branches in the decision tree of your program.
+
+
