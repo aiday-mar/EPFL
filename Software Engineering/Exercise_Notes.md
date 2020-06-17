@@ -456,3 +456,49 @@ public class Main {
 
 *Loop Invariants*
 
+We must show three things about a loop invariant I:
+
+- Initialization: I is true prior to the first iteration of the loop.
+- Maintenance: If I it is true before an iteration of the loop, I remains true throughout the body of the loop until just before the next iteration.
+- Termination: When the loop terminates (exits), I gives us a useful property that helps to show that the algorithm is correct.
+
+The insertion sort can be implemented as follows :
+
+```
+public class InsertionSort {
+  // We have here a static class which depends on the type C. It is also a void function, which takes as a parameter an array and 
+  // a comparator 
+  public static <C> void sort(C[] array, Comparator<C> comparator) {
+    int j = 1;
+    while (j < array.length) {
+      // meaning that the jth element of the array is of type C
+      C key = array[j];
+      int i = j - 1;
+      // when you compare the ith element of the array and the key and find that the value is positive
+      while (i > -1 && comparator.compare(array[i], key) > 0) {
+        array[i + 1] = array[i];
+        i = i - 1;
+      }
+      array[i + 1] = key;
+      ++j;
+    }
+  }
+}
+```
+
+To verify the loop invariant first you want to define a helper method which will be called hold. It is given by :
+
+```
+public class LoopInvariant {
+  // the third parameter is also the iteration number
+  public static <C> boolean hold(C[] array, Comparator<C> comparator, int iteration) {
+    assert iteration <= array.length : "iteration > array.length";
+    for (int i = 0; i < iteration - 1; ++i) {
+      if (comparator.compare(array[i], array[i + 1]) > 0) {
+        return false;
+      }
+    }
+    return true;
+  }
+}
+```
