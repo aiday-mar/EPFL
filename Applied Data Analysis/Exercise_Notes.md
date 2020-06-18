@@ -1399,3 +1399,193 @@ plt.xlabel("progression in the book")
 plt.ylabel("frequency of a category")
 plt.legend()
 ```
+
+**Tutorial 08**
+
+In this tutorial we are going to study how to apply python to networks and the use in data science. First we need to import the apropriate libraries as follows :
+
+```
+import networkx as nx
+
+import pandas as pd
+from operator import itemgetter
+import matplotlib.pyplot as plt
+import collections
+from community import community_louvain
+from networkx.algorithms.community.centrality import girvan_newman
+import itertools
+%matplotlib inline
+
+import warnings
+warnings.filterwarnings('ignore')
+```
+
+You can display the version of the library you are using by writing : `nx.__version__`. Then you want to install the apropriate libraries as follows :
+
+```
+conda install -c anaconda pandas
+conda install -c conda-forge matplotlib 
+pip install networkx==2.3.0 python-louvain
+```
+
+First we construct a simple undirected graph :
+
+```
+G = nx.Graph() # for a directed graph use nx.DiGraph()
+G.add_node(1)
+# because you can add nodes from a vector of numbers 
+G.add_nodes_from(range(2,9))  # add multiple nodes at once
+
+# add edges 
+G.add_edge(1,2)
+# the edges are esentially pairs of nodes 
+edges = [(2,3), (1,3), (4,1), (4,5), (5,6), (5,7), (6,7), (7,8), (6,8)]
+G.add_edges_from(edges)
+G.nodes()
+
+# allows in essence to describe the graph
+print(nx.info(G))
+```
+
+There is also a plotting engine as follows : `nx.draw_spring(G, with_labels=True,  alpha = 0.8)`, the parameters present are the following, the graph G, the boolean with_labels set to true and the alpha value. Below we introduce some helper functions which we will be using : 
+
+```
+# Helper function for plotting the degree distribution of a Graph
+def plot_degree_distribution(G):
+    degrees = {}
+    for node in G.nodes():
+        # create a temporary variable containing the degree of the given node of the graph. 
+        degree = G.degree(node)
+        if degree not in degrees:
+            degrees[degree] = 0
+        degrees[degree] += 1
+        # means that this vector displays how many nodes of degree d there are at node which has name index i
+    # here we take the items of the list and we need to sort this in ascending or descending order 
+    sorted_degree = sorted(degrees.items())
+    # in this list os sorted degrees you display the pairs of keys and values 
+    deg = [k for (k,v) in sorted_degree]
+    cnt = [v for (k,v) in sorted_degree]
+    # in this subplot you have a, or multiple figures, and you have an axis corresponding to it
+    fig, ax = plt.subplots()
+    # it will be a bar graph where you plot the degree against the frequency
+    plt.bar(deg, cnt, width=0.80, color='b')
+    plt.title("Degree Distribution")
+    plt.ylabel("Frequency")
+    plt.xlabel("Degree")
+    ax.set_xticks([d+0.05 for d in deg])
+    ax.set_xticklabels(deg)
+```
+
+Then you have the following code which is used to describe the graph :
+
+```
+# Helper function for printing various graph properties
+def describe_graph(G):
+    print(nx.info(G))
+    # here we are checking whether the graph is connected or not 
+    if nx.is_connected(G):
+        # then you print after this line the actual average length path of the graph G
+        print("Avg. Shortest Path Length: %.4f" %nx.average_shortest_path_length(G))
+        print("Diameter: %.4f" %nx.diameter(G)) # Longest shortest path
+    else:
+        print("Graph is not connected")
+        print("Diameter and Avg shortest path length are not defined!")
+    print("Sparsity: %.4f" %nx.density(G))  # #edges/#edges-complete-graph
+    # #closed-triplets(3*#triangles)/#all-triplets
+    print("Global clustering coefficient aka Transitivity: %.4f" %nx.transitivity(G))
+```
+
+Finally we want to visualize the graph as follows : 
+
+```
+# Helper function for visualizing the graph, the node shape in this case is circular 
+def visualize_graph(G, with_labels=True, k=None, alpha=1.0, node_shape='o'):
+    # nx.draw_spring(G, with_labels=with_labels, alpha = alpha), must be a specific layout this layout 
+    pos = nx.spring_layout(G, k=k)
+    if with_labels:
+        # meaning that the labels is a dictionary mapping node n to label n, where we iteate over the nodes n of the graph.
+        lab = nx.draw_networkx_labels(G, pos, labels=dict([(n, n) for n in G.nodes()]))
+    ec = nx.draw_networkx_edges(G, pos, alpha=alpha)
+    nc = nx.draw_networkx_nodes(G, pos, nodelist=G.nodes(), node_color='g', node_shape=node_shape)
+    plt.axis('off')
+```
+
+Suppose we want to create and visualize an Erdo-Renyi graph. This can be coded as :
+
+```
+n = 10  # 10 nodes
+m = 20  # 20 edges
+
+# where here you specified beforehand the number of nodes and the number of edges and then you create a random graph based on that
+erG = nx.gnm_random_graph(n, m)
+
+describe_graph(erG)
+visualize_graph(erG, k=0.05, alpha=0.8)
+plot_degree_distribution(erG)
+```
+
+Another example of working with a network can be found below. Here we have the following code :
+
+```
+data_folder = './data/quakers/'
+nodes = pd.read_csv(data_folder + 'quakers_nodelist.csv')
+nodes.head(10)
+
+# where Gender is the name of a category, and we need to change the type of the category with the code below 
+nodes.Gender = nodes.Gender.astype('category')
+# First we write the initial name of the column : final name of the column
+nodes = nodes.rename({'Historical Significance': 'Role'}, axis = 1)
+print('There are ', len(nodes), 'quakers')
+
+# check if the names are unique
+len(nodes['Name'].unique()) == len(nodes)
+
+# since the names are unique, index based on names
+nodes.set_index('Name', inplace=True)
+
+# let's also add a new attribute based on the role column. Is (s)he a directly involved Quaker or not? 
+# meaning here we look at the string identifying the role of the person and we verify whether the string 'quaker' is in the role or not
+nodes['Quaker'] = ['quaker' in role.lower() for role in nodes.Role]
+nodes.head()
+```
+You can load the edge list from the pandas data frame as follows :
+
+```
+# the first parameter is the list of edges, we have the names of the columns that interest us
+# there are no edge attributes and for this we will be using the nx library
+quakerG =nx.from_pandas_edgelist(edges, 'Source', 'Target', edge_attr=None, create_using= nx.Graph())
+describe_graph(quakerG)
+
+# add node attributes by passing dictionary of type name -> attribute
+nx.set_node_attributes(quakerG, nodes['Role'].to_dict(), 'Role' )
+nx.set_node_attributes(quakerG, nodes['Gender'].to_dict(), 'Gender' )
+nx.set_node_attributes(quakerG, nodes['Birthdate'].to_dict(), 'Birthdate' )
+nx.set_node_attributes(quakerG, nodes['Deathdate'].to_dict(), 'Deathdate' )
+nx.set_node_attributes(quakerG, nodes['Quaker'].to_dict(), 'Quaker' )
+
+# You can easily get the attributes of a node
+quakerG.node['William Penn']
+
+# we can start by visually inspecting the graph
+visualize_graph(quakerG, False, k=0.05, alpha=0.4)
+
+# the code below allows you to find the number of connected components :
+print(nx.is_connected(quakerG))
+comp = list(nx.connected_components(quakerG))
+print('The graph contains', len(comp), 'connected components')
+
+#now we basically select the largest component, what is this key though ?
+largest_comp = max(comp, key=len)
+percentage_lcc = len(largest_comp)/quakerG.number_of_nodes() * 100
+print('The largest component has', len(largest_comp), 'nodes', 'accounting for %.2f'% percentage_lcc, '% of the nodes')
+
+# now suppose that you want to find the shortest path between two quackers, given these are in the same component
+fell_whitehead_path = nx.shortest_path(quakerG, source="Margaret Fell", target="George Whitehead")
+print("Shortest path between Fell and Whitehead:", fell_whitehead_path)
+
+# take the largest component and analyse its diameter = longest shortest-path
+# we take the subgraph which is given by the largest componentn
+lcc_quakerG = quakerG.subgraph(largest_comp)
+print("The diameter of the largest connected component is", nx.diameter(lcc_quakerG))
+print("The avg shortest path length of the largest connected component is", nx.average_shortest_path_length(lcc_quakerG))
+```
