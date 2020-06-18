@@ -875,3 +875,61 @@ we intialize the natural language processing helper using the spacy library whic
 nlp = spacy.load('en')
 ```
 
+Then after this we need to load the books as follows :
+
+```
+books = list()
+
+for book_file in os.listdir(corpus_root):
+    if ".txt" in book_file:
+        print(book_file)
+        with codecs.open(os.path.join(corpus_root,book_file),encoding="utf8") as f:
+            books.append(f.read())
+```
+
+Here we are creating first a list called books. Then what we do is access the folder called books, then we make this folder into a list directory, the command is in the os library. Then we iterate over the files in this directory. Then if this file is a text file, then we print the file. Then we get the full name of the path of the book by joining the path of the root and the name of the book. For this we use a specific encoding. Then given this filename path we can actually open the file and give it the name f. Then to this list of books we actually add the file f which in this case we would have read. Then we can print the begining of the third file, where we access the third file with [3] then we can access the lines with the second pair of brackets. Hence :
+
+```
+print(books[3][0:600])
+```
+
+Now suppose that we would want to remove the extra blank lines used to create new paragpraphs then you can write : 
+
+```
+books = [" ".join(b.split()) for b in books]
+```
+
+Here you bsically say that the book's words are split and then we join then with just one little space. Then you can choose to perform the language processing on one of the books as follows : 
+
+```
+#index all books
+book = books[1]
+
+#put in raw text, get a Spacy object
+doc = nlp(book)
+```
+
+You input the book into the spacy library. You may then want to split the text against its lines as follows : 
+
+```
+# firs we create a list of sentences, where we can access the sentences with the command sent associated to the nlp model
+sentences = [sent for sent in doc.sents]
+print('Sentence 1:',sentences[0],'\n')
+print('Sentence 2:',sentences[1],'\n')
+print('Sentence 3:',sentences[2],'\n')
+```
+Then instead you may want to split the example into tokens. We have :
+
+```
+example = 'I am already far north of London, and as I walk in the streets of Petersburgh, I feel a cold northern breeze play upon my cheeks, which braces my nerves and fills me with delight.'
+
+doc = nlp(example)
+
+#strings are encoded to hashes
+tokens = [token.text for token in doc]
+
+print(example,'\n')
+print(tokens)
+```
+
+First there is a string. Then we apply the model on the string which creates a document. Then you can access individually the tokens in the document, and to individually get the text we can write : `token.text`. Then when you want to print the array of tokens you can write : `print(tokens)`.
