@@ -1041,4 +1041,66 @@ print('Number of negative sentences:',sum(np.array(sents)<=-0.05))
 print('Number of neutral sentences:',sum(np.abs(np.array(sents))<0.05))
 ```
 
-But I thought that the above sum would actually sum the values in the corresponding elements not sum the number of times the condition is verified. 
+But I thought that the above sum would actually sum the values in the corresponding elements not sum the number of times the condition is verified. Now we will perform document classification as follows :
+
+```
+# Let's load our corpus via NLTK this time, we have this method as specified below 
+from nltk.corpus import PlaintextCorpusReader
+?PlaintextCorpusReader
+# here we are taking the name of the folder and selecting all the files having a txt extension 
+our_books = PlaintextCorpusReader(corpus_root, '.*.txt')
+# here you can show the names of the files in the given list by printing it 
+print(our_books.fileids())
+```
+
+Here we segment the books into equally long chunks.
+
+```
+def get_chunks(l, n):
+    """Yield successive n-sized chunks from l where l is a list"""
+    # here below we find the range of indices from 0 to the length of the list l and splint into chunks of size n
+    for i in range(0, len(l), n):
+        # then each time this returns us the sublist of the list l which starts at index i and where we go up to i+n
+        # however what if the length of the list is not divisble by n ? 
+        yield l[i:i + n]
+
+
+# we select the files f and n the name of the book, by using the enumerate function on the list of the names of the books.
+# so in this list it would seem like we have the name of the book followed by the actual file of the book 
+book_id = {f:n for n,f in enumerate(our_books.fileids())} # dictionary of books
+
+chunks = list()
+chunk_class = list() # this list contains the original book of the chunk, for evaluation
+
+limit = 500 # how many chunks total
+size = 50 # how many sentences per chunk/page
+
+for f in our_books.fileids():
+    # this sentence below returns all the sentences associated to the file f 
+    sentences = our_books.sents(f)
+    # then you print the name of the file followed by two dots
+    print(f,":")
+    print('Number of sentences:',len(sentences))
+    
+    # create chunks on the list of sentences, where the chunks are of size size 
+    chunks_of_sents = [x for x in get_chunks(sentences,size)] 
+    # this is a list of lists of sentences, which are a list of tokens
+    chs = list()
+    
+    # regroup so to have a list of chunks which are strings
+    for c in chunks_of_sents:
+        grouped_chunk = list()
+        # for each chunk in the list of chunks of sentences. 
+        for s in c:
+            grouped_chunk.extend(s)
+        # where here we are appending each group/chunk separately into this list 
+        chs.append(" ".join(grouped_chunk))
+    # the below code outputs the number of chunks and then we add a new line 
+    print("Number of chunks:",len(chs),'\n')
+    
+    # filter to the limit, to have the same number of chunks per book, meaning we only choose the first limit chunks of the book
+    chunks.extend(chs[:limit])
+    # where we have the length of the vector of chs[:limit] and then we create a vector from 1 to this length
+    # what is this underscore ? and why are we using the book id of the file to iterate ? 
+    chunk_class.extend([book_id[f] for _ in range(len(chs[:limit]))])
+```
