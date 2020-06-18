@@ -814,3 +814,64 @@ for i in range(0, len(u)):
 plt.xlabel("Words Jaccard")
 plt.ylabel("Users Jaccard")
 plt.title("NBA similarity")
+```
+
+**Tutorial 7**
+
+To run the notebook for the tutorial we will need to install the following : 
+
+```
+conda install nltk gensim spacy
+pip install pyLDAvis
+pip install vaderSentiment
+pip install empath
+python -m spacy download en
+python -m nltk.downloader punkt
+python -m nltk.downloader all-corpora 
+```
+Then we need to need to import some libraries that will we be used througout the code : 
+
+```
+%load_ext autoreload
+# Reload all modules (except those excluded by %aimport) every time before executing the Python code typed.
+%autoreload 2
+
+import warnings; warnings.simplefilter('ignore')
+import os, codecs, string, random
+import numpy as np
+from numpy.random import seed as random_seed
+from numpy.random import shuffle as random_shuffle
+import matplotlib.pyplot as plt
+%matplotlib inline  
+
+seed = 42
+random.seed(seed)
+np.random.seed(seed)
+
+#NLP libraries
+import spacy, nltk, gensim, sklearn
+import pyLDAvis.gensim
+
+#Vader
+import vaderSentiment
+from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
+
+#Scikit imports
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.model_selection import train_test_split
+from sklearn.model_selection import cross_val_score
+from sklearn.linear_model import LogisticRegression
+from sklearn import preprocessing
+from sklearn.preprocessing import StandardScaler
+from sklearn.utils import shuffle
+
+#The data
+corpus_root = 'books/'
+```
+
+we intialize the natural language processing helper using the spacy library which will analyze English text as follows : 
+
+```
+nlp = spacy.load('en')
+```
+
