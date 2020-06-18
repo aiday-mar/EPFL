@@ -155,4 +155,19 @@ for i = 1 ... n
 
 Essentially in the LDA you input documents represented as bags of words, and the number K of topics to be found, and the output are the K topics themselves, and for each document we find a distribution over the K topics. How to quantify the closennes of two documents - you take the cosine of the rows of the TF-IDF matrix. How to quantify the closeness of two words - you find the cosine of the columns of the TF-IDF matrix. You can also define a matrix M where against therows we display the contexts and against the columns we display the words. An entry is : M[c, w] = log [P(c,w)/P(c).P(w)]. This is also called pointwise mutual information. The word2vec is a method which studies this pmi and uses the columns of the matrix B as word vectors. When you want to contextualize the word in a phrase you can use the BERT technology. 
 
-The NLP pipeline allows tokenization, sentence splitting, part of speech tagging, named entity recognition. It can be implemented by the CoreNLP, nltk, spaCy
+The NLP pipeline allows tokenization, sentence splitting, part of speech tagging, named entity recognition. It can be implemented by the CoreNLP, nltk, spaCy.
+
+**Lecture 11**
+
+The projectin of a bipartite graph likely links the nodes in one part with other nodes in the same part that are at a distance of two away. Social networks for example are sparse and bounded by Dunbar's number. The degree distribution quantifies the probability that a node has degree k. The clustering coefficient denoted by Ci measures the number of edges between neighbors of node i divided by the actual number of potential edges between neighbors of node i. From this study we see the result of homophily, that similar people are more likely to be friends. In a similar way we see that most nodes are sparse but there are a few nodes, of popular people that are followed by many others. The farness of x is the average distance to x from other nodes. C(x) = 1/F(x) measures the closeness, and is only defined for connected graphs. Consider now the measure of the betweeness centrality, which is the fraction of all the shortest paths in the network that pass through node i. The katz cenrtality is a generalization of the betweeness centrality and also takes into account the neighbors at distance 2 or 3. This katz centrality is defined as follows :
+
+```
+C(i) = sum_{k=1}^{infinity} sum_{j=1}^N \alpha^k (A^k)_{ij}
+```
+
+Now consider the notion of centrality which says that the centrality is high if you receive many links from other nodes. 
+
+```
+xi = sum_j a_{ji} x_j / L_j
+L(j) = sum_j a_{ji}
+```
