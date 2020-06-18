@@ -932,4 +932,113 @@ print(example,'\n')
 print(tokens)
 ```
 
-First there is a string. Then we apply the model on the string which creates a document. Then you can access individually the tokens in the document, and to individually get the text we can write : `token.text`. Then when you want to print the array of tokens you can write : `print(tokens)`.
+First there is a string. Then we apply the model on the string which creates a document. Then you can access individually the tokens in the document, and to individually get the text we can write : `token.text`. Then when you want to print the array of tokens you can write : `print(tokens)`. You can also decide to tag the words in order to get the word itself followed by the type of the word : 
+
+```
+# Here we have the text of the token followed by the type, which is either a verb, a pronoun, an adverb etc
+pos_tagged = [(token.text, token.pos_) for token in doc]
+
+print(example,'\n')
+print(pos_tagged)
+```
+In a similar way we have `token.label_` designates that we are dealing with a category of objects. Now we can select the first ten elements of the list as follows : `list(spacy_stopwords)[:10]`. Here we are first selecting the first 10 elements, and then we convert this to a list. You can detect the stop words in a sentence as follows : 
+
+```
+print(example,'\n')
+stop_words = [token.text for token in doc if token.is_stop]
+print(stop_words)
+```
+
+Noun chunks are "base noun phrases" – flat phrases that have a noun as their head -- a noun plus the words describing the noun – for example, "the lavish green grass" or "the world’s largest tech fund". We can print them as :
+
+```
+print(example,'\n')
+
+for chunk in doc.noun_chunks:
+    print(chunk.text)
+```
+
+You can count word occurences as follows :
+
+```
+from collections import Counter
+
+print(example,'\n')
+words = [token.text for token in doc]
+
+# where here we apply the counter to the list of tokens in the document
+word_freq = Counter(words)
+# then we try to find the most common words
+common_words = word_freq.most_common()
+
+print(common_words)
+```
+
+Take up the example above and now suppose we want to remove the stop word as well as the punctuation and print out the same type of list.
+
+```
+# meaning we select the token texts in the given document when the token is not a stop word nor a form of punctuation
+words = [token.text for token in doc if token.is_stop != True and token.is_punct != True]
+
+# five most common tokens
+word_freq = Counter(words)
+common_words = word_freq.most_common()
+
+print(common_words)
+```
+
+You may at some point decide to not load a certain component of the pipeline by disabling the appropriate components of the pipeline : 
+
+```
+nlp.remove_pipe('parser')
+nlp.remove_pipe('tagger')
+```
+
+To deal with sentiment analysis you can first initialize the analyzer as follows : 
+
+```
+analyzer = SentimentIntensityAnalyzer()
+vs = analyzer.polarity_scores(example)
+```
+
+You can use this analyzer as follows :
+
+```
+print(example, '\n')
+print('Negative sentiment:',vs['neg'])
+print('Neutral sentiment:',vs['neu'])
+print('Positive sentiment:',vs['pos'])
+print('Compound sentiment:',vs['compound'])
+```
+
+You can decide to see what the positivity level of the book pride and prejudice is when you analyze the story sentence by sentence as follows :
+
+```
+# where here we decide to use the spacy library 
+nlp = spacy.load('en')
+# and then we input there the 3rd book into the model
+doc = nlp(books[3])
+# initialized to be empty 
+positive_sent = []
+#iterate through the sentences, get polarity scores
+# here we add into the list for all the sentences in the document, the polarity score given the text of the sentence.
+# where here you evaluate the level of positivity. 
+[positive_sent.append(analyzer.polarity_scores(sent.text)['pos']) for sent in doc.sents]
+plt.hist(positive_sent,bins=15)
+plt.xlim([0,1])
+plt.ylim([0,8000])
+plt.xlabel('Positive sentiment')
+plt.ylabel('Number of sentences')
+```
+Here we do the same by the compound category, meaning that we evaluate the feelings overall negative and positive from the sentences. To each sentence we actually associate a score between -1 and 1. In this way we can find the number of positive and negative sentences as follows :
+
+```
+# where here we have an analyzer, and then we can analyse the polarity scores in a way using the text of the sentence
+sents = [analyzer.polarity_scores(sent.text)['compound'] for sent in doc.sents]
+# where here we select the entries in the sents where the value is bigger than 0.05. Then you sum the number of such entries. 
+print('Number of positive sentences:',sum(np.array(sents)>=0.05))
+print('Number of negative sentences:',sum(np.array(sents)<=-0.05))
+print('Number of neutral sentences:',sum(np.abs(np.array(sents))<0.05))
+```
+
+But I thought that the above sum would actually sum the values in the corresponding elements not sum the number of times the condition is verified. 
