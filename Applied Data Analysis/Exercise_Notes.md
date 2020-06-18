@@ -1362,4 +1362,40 @@ for cat in lexicon.cats.keys():
 lexicon.cats["health"]
 ```
 
-Now let us use this Empath library in order to study pride and prejudice. 
+Now let us use this Empath library in order to study pride and prejudice. First we use the spacy library as follows : 
+
+```
+nlp = spacy.load('en')
+doc = nlp(books[3])
+# you analyze the text of that specific document where you use the apropriate categories too and you also need to 
+# normalize the text
+empath_features = lexicon.analyze(doc.text,categories = ["disappointment", "pain", "joy", "beauty", "affection"], normalize = True)
+bins = range(0,len(doc.text),150000)
+
+# now we want to showcase the evolution of topics where we have chosen 4 random topics
+love = []
+pain = []
+beauty = []
+affection = []
+
+# meaning we are going to enumerate over the whole vector bins all the way to the last
+for cnt,i in enumerate(bins[:-1]):
+    # then we analyze the text from the given range, and we input the categories that interest us 
+    empath_features = lexicon.analyze(doc.text[bins[cnt]:bins[cnt+1]],
+                                      categories = ["love", "pain", "joy", "beauty", "affection"], normalize = True)
+    love.append(empath_features["love"])
+    pain.append(empath_features["pain"])
+    beauty.append(empath_features["beauty"])
+    affection.append(empath_features["affection"])
+
+# you can decide to plot the categories on a graph in order to be able to see how the topics develop throughout
+# the story
+plt.plot(love,label = "love")
+plt.plot(beauty, label = "beauty")
+plt.plot(affection, label = "affection")
+plt.plot(pain,label = "pain")
+
+plt.xlabel("progression in the book")
+plt.ylabel("frequency of a category")
+plt.legend()
+```
