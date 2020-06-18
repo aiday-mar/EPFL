@@ -1633,8 +1633,10 @@ plot_degree_distribution(quakerG)
 Suppose that we want to implement code to display the katz centrality : 
 
 ```
+# here you make a dictionary between the nodes of the graph and their respective degrees 
 degrees = dict(quakerG.degree(quakerG.nodes()))
 
+# you assign the katz centrality respectively to each node 
 katz = nx.katz_centrality(quakerG)
 nx.set_node_attributes(quakerG, katz, 'katz')
 sorted_katz = sorted(katz.items(), key=itemgetter(1), reverse=True)
@@ -1642,4 +1644,80 @@ sorted_katz = sorted(katz.items(), key=itemgetter(1), reverse=True)
 # And the top 5 most popular quakers are.. 
 for quaker, katzc in sorted_katz[:5]:
     print(quaker, 'who is', quakerG.node[quaker]['Role'], 'has katz-centrality: %.3f' %katzc)
+```
+In a similar manner you can measure the betweeness centrality :
+```
+# Compute betweenness centrality
+betweenness = nx.betweenness_centrality(quakerG)
+# Assign the computed centrality values as a node-attribute in your network
+nx.set_node_attributes(quakerG, betweenness, 'betweenness')
+sorted_betweenness = sorted(betweenness.items(), key=itemgetter(1), reverse=True)
+
+for quaker, bw in sorted_betweenness[:5]:
+    print(quaker, 'who is', quakerG.node[quaker]['Role'], 'has betweeness: %.3f' %bw)
+```
+
+Now we plot this betweeness centrality :
+
+```
+# similar pattern
+list_nodes =list(quakerG.nodes())
+list_nodes.reverse()   # for showing the nodes with high betweeness centrality 
+# we have chosen a specific layout for the graph 
+pos = nx.spring_layout(quakerG)
+ec = nx.draw_networkx_edges(quakerG, pos, alpha=0.1)
+# first yu access the node then the value of the betweeness for the different nodes. 
+nc = nx.draw_networkx_nodes(quakerG, pos, nodelist=list_nodes, node_color=[quakerG.nodes[n]["betweenness"] for n in list_nodes], with_labels=False, alpha=0.8, node_shape = '.')
+
+# why do we use here the colorbar method ? 
+plt.colorbar(nc)
+plt.axis('off')
+plt.show()
+```
+
+Girvan Newman idea : Edges possessing high betweeness centrality separate communities. Let's apply this on our toy sample graph (G) to get a better understanding of the idea. The algorithm starts with the entire graph and then it iteratively removes the edge with the highest betweeness.
+
+```
+comp = girvan_newman(G)
+it = 0
+# here we slice the comp into 4 parts then we print the right data
+for communities in itertools.islice(comp, 4):
+    it +=1
+    print('Iteration', it)
+    print(tuple(sorted(c) for c in communities))
+visualize_graph(G,alpha=0.7)
+```
+
+The louvain method : It proceeds the other way around. Initially every node is considered as a community. The communities are traversed, and for each community it is tested whether by joining it to a neighboring community, we can obtain a better clustering.
+
+```
+partition = community_louvain.best_partition(quakerG)
+# add it as an attribute to the nodes
+for n in quakerG.nodes:
+    quakerG.nodes[n]["louvain"] = partition[n]
+
+# plot it out
+pos = nx.spring_layout(quakerG,k=0.2)
+ec = nx.draw_networkx_edges(quakerG, pos, alpha=0.2)
+nc = nx.draw_networkx_nodes(quakerG, pos, nodelist=quakerG.nodes(), node_color=[quakerG.nodes[n]["louvain"] for n in quakerG.nodes], with_labels=False, node_size=100, cmap=plt.cm.jet)
+plt.axis('off')
+plt.show()
+
+# which is the name of the one of the partitions
+cluster_James = partition['James Nayler']
+# Take all the nodes that belong to James' cluster
+members_c = [q for q in quakerG.nodes if partition[q] == cluster_James]
+# get info about these quakers
+for quaker in members_c:
+    print(quaker, 'who is', quakerG.node[quaker]['Role'], 'and died in ',quakerG.node[quaker]['Deathdate'])
+
+# this is another of the names of the parts of the partition
+cluster_Lydia = partition['Lydia Lancaster']
+# Take all the nodes that belong to Lydia's cluster
+members_c = [q for q in quakerG.nodes if partition[q] == cluster_Lydia]
+# get info about these quakers
+for quaker in members_c:
+    print(quaker, 'who is', quakerG.node[quaker]['Role'], 'and died in ',quakerG.node[quaker]['Deathdate'])
+
+nx.attribute_assortativity_coefficient(quakerG, 'Gender')
 ```
