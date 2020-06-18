@@ -1589,3 +1589,57 @@ lcc_quakerG = quakerG.subgraph(largest_comp)
 print("The diameter of the largest connected component is", nx.diameter(lcc_quakerG))
 print("The avg shortest path length of the largest connected component is", nx.average_shortest_path_length(lcc_quakerG))
 ```
+
+The global measure called transitivity (aka global clustering coefficient), is the ratio of all existing triangles (closed triples) over all possible triangles (open and closed triplets): `print('%.4f' %nx.transitivity(quakerG))`.
+
+Employ a local measure called clustering coefficient, which quantifies for a node how close its neighbours are to being a clique (complete graph). Measured as the ratio of, the number of edges to the number of all possible edges, among the neighbors of a node. Here we have : `print(nx.clustering(quakerG, ['Alexander Parker', 'John Crook']))`.
+
+```
+# Lets check by looking at the subgraphs induced by Alex and John
+subgraph_Alex = quakerG.subgraph(['Alexander Parker']+list(quakerG.neighbors('Alexander Parker')))
+subgraph_John = quakerG.subgraph(['John Crook']+list(quakerG.neighbors('John Crook')))
+nx.draw_spring(subgraph_Alex, with_labels=True)
+nx.draw_circular(subgraph_John, with_labels=True)
+```
+
+To find the most important node you can check which one has the highest degree :
+
+```
+# the degrees for the nodes of the graph
+degrees = dict(quakerG.degree(quakerG.nodes()))
+# now you sort the list of all the degrees 
+sorted_degree = sorted(degrees.items(), key=itemgetter(1), reverse=True)
+
+# And the top 5 most popular quakers are.. 
+for quaker, degree in sorted_degree[:5]:
+    print(quaker, 'who is', quakerG.node[quaker]['Role'], 'knows', degree, 'people')
+
+# meaning you choose the second element in the sorted set of degrees
+degree_seq = [d[1] for d in sorted_degree]
+degreeCount = collections.Counter(degree_seq)
+# you create a dataframe rom the counter 
+degreeCount = pd.DataFrame.from_dict(degreeCount, orient='index').reset_index()
+fig = plt.figure()
+ax = plt.gca()
+# you plot two different columns from the table against each other 
+ax.plot(degreeCount['index'], degreeCount[0], 'o', c='blue', markersize= 4)
+plt.ylabel('Frequency')
+plt.xlabel('Degree')
+plt.title('Degree distribution for the Quaker network')
+
+# As a bar plot
+plot_degree_distribution(quakerG)
+```
+Suppose that we want to implement code to display the katz centrality : 
+
+```
+degrees = dict(quakerG.degree(quakerG.nodes()))
+
+katz = nx.katz_centrality(quakerG)
+nx.set_node_attributes(quakerG, katz, 'katz')
+sorted_katz = sorted(katz.items(), key=itemgetter(1), reverse=True)
+
+# And the top 5 most popular quakers are.. 
+for quaker, katzc in sorted_katz[:5]:
+    print(quaker, 'who is', quakerG.node[quaker]['Role'], 'has katz-centrality: %.3f' %katzc)
+```
