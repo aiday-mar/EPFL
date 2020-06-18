@@ -1312,4 +1312,54 @@ model.show_topic(1,20)
 # while, for, if and so on. They are all statements that typically have a code block. Lambda is just another instance of a 
 # statement with a code block.
 sorted(model[corpus[0]],key=lambda x:x[1],reverse=True)
+
+# plot topics using the given model, the right body and dictionary
+data =  pyLDAvis.gensim.prepare(model, corpus, dictionary)
+pyLDAvis.display(data)
+
+# assignment
+# we initially write an empty list
+sent_to_cluster = list()
+# inside this body we have two columns, we are enumerating over
+for n,doc in enumerate(corpus):
+    # likely means that if the given document exists, then we run the following commands that follow 
+    if doc:
+        # are we taking the maximum when we evaluate the document with the model and when we are using that specific key
+        # essentially taking the first column/row? 
+        cluster = max(model[doc],key=lambda x:x[1])
+        sent_to_cluster.append(cluster[0])
+
+# accuracy
+from collections import Counter
+# because we have that in the list of items we have a book which is associated to a cluster
+for book, cluster in book_id.items():
+    assignments = list()
+    # The zip() function returns a zip object, which is an iterator of tuples where the first item in each passed iterator 
+    # is paired together, and then the second item in each passed iterator are paired together etc.
+    for real,given in zip(chunk_class,sent_to_cluster):
+        if real == cluster:
+            assignments.append(given)
+    # the counter class allows you to find the most common element in a list for example, where the 1 indicates the top most
+    # common element, the [0] indicates you are considering only the first row of the Counter ? 
+    most_common,num_most_common = Counter(assignments).most_common(1)[0] # 4, 6 times
+    print(book,":",most_common,"-",num_most_common)
+    print("Accuracy:",num_most_common/limit)
+    print("------")
 ```
+
+Now we hve the next task which is the semantic analysis based on lexical categories. Consider the following code : 
+
+```
+from empath import Empath
+lexicon = Empath()
+
+# here we take the Empath instance, take the categories and find the different keys, you need to iterate over the keys, not
+# the column name which is presumably cats in this case
+for cat in lexicon.cats.keys():
+    print(cat)
+
+# Next we can display all the elements that are in the in health category of the lexicon
+lexicon.cats["health"]
+```
+
+Now let us use this Empath library in order to study pride and prejudice. 
