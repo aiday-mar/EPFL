@@ -1104,3 +1104,212 @@ for f in our_books.fileids():
     # what is this underscore ? and why are we using the book id of the file to iterate ? 
     chunk_class.extend([book_id[f] for _ in range(len(chs[:limit]))])
 ```
+
+Then we represent the chunks with bags of words, as follows :
+
+```
+vectorizer = CountVectorizer()
+
+# initialize and specify minumum number of occurences to avoid untractable number of features
+# vectorizer = CountVectorizer(min_df = 2) if we want high frequency
+
+# create bag of words features
+X = vectorizer.fit_transform(chunks)
+
+# meaning first we find the number of rows and then we find the number of columns
+print('Number of samples:',X.toarray().shape[0])
+print('Number of features:',X.toarray().shape[1])
+
+# mask and convert to int Frankenstein
+# what does the code below do ? 
+Y = np.array(chunk_class) == 1
+Y = Y.astype(int)  
+
+#shuffle the data
+# seems like you start from a random state to initialize the randomization
+X, Y = shuffle(X, Y, random_state=0)
+
+#split into training and test set
+# the rest of the 0.8 fractional part is the training set
+X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2, random_state=42)
+```
+
+Let's fit the regularized logistic regression. Here we crossvalidate the regularization parameter on the training set. 
+
+```
+accs = []
+
+#the grid of regularization parameter 
+grid = [0.01,0.1,1,10,100,1000,10000]
+
+for c in grid:
+    
+    #initialize the classifier, what does the solver value stand for ? 
+    clf = LogisticRegression(random_state=0, solver='lbfgs',C = c)
+    
+    #crossvalidate, where the first parameter clf designates the type of regrssion we are using 
+    scores = cross_val_score(clf, X_train,Y_train, cv=10)
+    accs.append(np.mean(scores))
+
+plt.plot(accs)
+plt.xticks(range(len(grid)), grid)
+plt.xlabel('Regularization parameter \n (Low - strong regularization, High - weak regularization)')
+plt.ylabel('Crossvalidation accuracy')
+plt.ylim([0.986,1])
+```
+
+Then we train on the training set and test on the testing set. 
+
+```
+# here we fit a curve where we use the X_train and the Y_train sets of data
+clf = LogisticRegression(random_state=0, solver='lbfgs',C = 10).fit(X_train,Y_train)
+
+#predict on the test set, using the score method and using the method of the logistic regression. 
+print('Accuracy:',clf.score(X_test,Y_test))
+```
+
+Don't quite understand the code below :
+
+```
+# here we take the first coefficient of the logistic regression
+coefs=clf.coef_[0]
+
+# numpy.argpartition() function is used to create a indirect partitioned copy of input array with its elements rearranged in 
+# such a way that the value of the element in k-th position is in the position it would be in a sorted array. All elements 
+# smaller than the k-th element are moved before this element and all equal or greater are moved behind it. The ordering of the 
+# elements in the two partitions is undefined.It returns an array of indices of the same shape as arr, i.e arr[index_array] 
+# yields a partition of arr.
+top_three = np.argpartition(coefs, -20)[-20:]
+
+# why does it say top three but it prints out more than three
+print(np.array(vectorizer.get_feature_names())[top_three])
+
+print(example,'\n')
+# then you take the model, you evaluate it in the vector, you change this result to the vector and then you select the first 11
+# elements, this is transformed into a list 
+print('Embedding representation:',list((nlp(example).vector)[0:10]),'...')
+```
+
+Now suppose that we want to do some topic detection, then we have :
+
+```
+# Get the chunks again (into smaller chunks), where once again we must have the name of the book followed by the actual file 
+book_id = {f:n for n,f in enumerate(our_books.fileids())} # dictionary of books
+chunks = list()
+chunk_class = list() # this list contains the original book of the chunk, for evaluation
+
+limit = 60 # how many chunks total
+size = 50 # how many sentences per chunk/page
+
+for f in our_books.fileids():
+    # where we have the sentences are the ones associated with the different files in the folder 
+    sentences = our_books.sents(f)
+    # then we print the file f
+    print(f)
+    print('Number of sentences:',len(sentences))
+    
+    # create chunks of the list of sentences with the given size, then we iterate over all chunks of this, and made into list
+    chunks_of_sents = [x for x in get_chunks(sentences,size)] 
+    # this is a list of lists of sentences, which are a list of tokens
+    chs = list()
+    
+    # regroup so to have a list of chunks which are strings
+    for c in chunks_of_sents:
+        grouped_chunk = list()
+        for s in c:
+            # probably means we are adding this chunk to the list of grouped chunks
+            grouped_chunk.extend(s)
+        chs.append(" ".join(grouped_chunk))
+        # you append the chunks and remove the spaces in between
+    print("Number of chunks:",len(chs),'\n')
+    
+    # filter to the limit, to have the same number of chunks per book
+    # maybe extend is like append but for multiple elements
+    chunks.extend(chs[:limit])
+    # what is the below 
+    chunk_class.extend([book_id[f] for _ in range(len(chs[:limit]))])
+
+STOPWORDS = spacy.lang.en.stop_words.STOP_WORDS
+
+processed_docs = list()
+for doc in nlp.pipe(chunks, n_threads=5, batch_size=10):
+
+    # Process document using Spacy NLP pipeline.
+    ents = doc.ents  # Named entities
+
+    # Keep only words (no numbers, no punctuation).
+    # Lemmatize tokens, remove punctuation and remove stopwords.
+    doc = [token.lemma_ for token in doc if token.is_alpha and not token.is_stop]
+
+    # Remove common words from a stopword list and keep only words of length 3 or more.
+    doc = [token for token in doc if token not in STOPWORDS and len(token) > 2]
+
+    # Add named entities, but only if they are a compound of more than word. Converting here the entity into a string
+    # and making sure the length of the entity is bigger than one 
+    doc.extend([str(entity) for entity in ents if len(entity) > 1])
+
+    processed_docs.append(doc)
+docs = processed_docs
+# once we copied the contents of the processed_docs into the simple doc we delete the initial variable 
+del processed_docs
+
+# Add bigrams too
+from gensim.models.phrases import Phrases
+
+# does this mean phrases that appear at least 15 times ? 
+# Add bigrams to docs (only ones that appear 15 times or more).
+bigram = Phrases(docs, min_count=15)
+
+for idx in range(len(docs)):
+    # we get the idx element of the docs and then pass it to the bigram ? 
+    for token in bigram[docs[idx]]:
+        if '_' in token:
+            # Token is a bigram, add to document.
+            docs[idx].append(token)
+
+# Create a dictionary representation of the documents, and filter out frequent and rare words.
+from gensim.corpora import Dictionary
+dictionary = Dictionary(docs)
+
+# Remove rare and common tokens.
+# Filter out words that occur too frequently or too rarely.
+# can't appear more frequently than this 
+max_freq = 0.5
+# the number of times the word should appear
+min_wordcount = 5
+dictionary.filter_extremes(no_below=min_wordcount, no_above=max_freq)
+
+# Bag-of-words representation of the documents, where we use the abbreviation Bag of words BOw.
+corpus = [dictionary.doc2bow(doc) for doc in docs]
+#MmCorpus.serialize("models/corpus.mm", corpus)
+
+print('Number of unique tokens: %d' % len(dictionary))
+print('Number of chunks: %d' % len(corpus))
+
+# models
+from gensim.models import LdaMulticore
+# below we have a word associated to a corresponding value 
+params = {'passes': 10, 'random_state': seed}
+base_models = dict()
+
+model = LdaMulticore(corpus=corpus, num_topics=4, id2word=dictionary, workers=6,
+                passes=params['passes'], random_state=params['random_state'])
+
+# likely means that for each topic, you display 5 associated words, where as above you have 4 topics 
+model.show_topics(num_words=5)
+# here you show 20 potential topics
+model.show_topic(1,20)
+
+# shown in reverse order, and then the key is given by the first sublist of x ? why do we use a lambda function for the key to sort against
+# here we are sorting the output when corpus[0] is put into the model 
+
+# Key is a function that will be called to transform the collection's items before they are compared. 
+# The parameter passed to key must be something that is callable.
+# The use of lambda creates an anonymous function (which is callable). In the case of sorted the callable only takes one 
+# parameters. Python's lambda is pretty simple. It can only do and return one thing really.
+# The syntax of lambda is the word lambda followed by the list of parameter names then a single block of code. 
+# The parameter list and code block are delineated by colon. This is similar to other constructs in python as well such as 
+# while, for, if and so on. They are all statements that typically have a code block. Lambda is just another instance of a 
+# statement with a code block.
+sorted(model[corpus[0]],key=lambda x:x[1],reverse=True)
+```
