@@ -802,3 +802,36 @@ def train(model, criterion, dataset_train, dataset_test, optimizer, num_epochs):
     # you print the epoch, and you take the average of the accuracies where you are using here a float type
     print("Epoch {} | Test accuracy: {:.5f}".format(epoch, sum(accuracies_test).item()/len(accuracies_test)))
 ```
+Then we have :
+
+```
+num_epochs = 10
+learning_rate = 1e-3
+batch_size = 1000
+
+dataset_test = torch.utils.data.DataLoader(
+  torchvision.datasets.MNIST('../data', train=False, download=True, transform=torchvision.transforms.ToTensor()), 
+  batch_size=100,
+  shuffle=True
+)
+dataset_train = torch.utils.data.DataLoader(
+  torchvision.datasets.MNIST('../data', train=True, download=True, transform=torchvision.transforms.ToTensor()),
+  batch_size=batch_size,
+  shuffle=True
+)
+
+# If a GPU is available (should be on Colab, we will use it)
+if not torch.cuda.is_available():
+  raise Exception("Things will go much quicker if you enable a GPU in Colab under 'Runtime / Change Runtime Type'")
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+# Train the logistic regression model with the Adam optimizer
+criterion = torch.nn.CrossEntropyLoss() # this includes LogSoftmax which executes a logistic transformation
+model_logreg = LogisticRegressionModel().to(device)
+
+optimizer = torch.optim.Adam(model_logreg.parameters(), lr=learning_rate)
+train(model_logreg, criterion, dataset_train, dataset_test, optimizer, num_epochs)
+
+# You should expect a test accuracy of around 91%.
+# Training should take around a minute
+```
