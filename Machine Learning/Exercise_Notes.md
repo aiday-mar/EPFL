@@ -689,4 +689,116 @@ except:
     print("Your implementation is not correct!")
 ```
 
-Now we are considering problem three.
+Now we are considering problem three. For which the answer is a theoretical one on paper.
+
+**Problem set 13**
+
+First we will want to see how classifier models are sensitive to noise. For this we will need to first import the right libraries.
+
+```
+%matplotlib inline
+import torch
+import torchvision
+import numpy as np
+import matplotlib.pyplot as plt
+```
+
+We evaluate the classifier by looking at its accuracy on the test set :
+
+```
+def accuracy(predicted_logits, reference):
+    """
+    Compute the ratio of correctly predicted labels
+    
+    @param predicted_logits: float32 tensor of shape (batch size, num classes)
+    @param reference: int64 tensor of shape (batch_size) with the class number
+    """
+    
+    labels = torch.argmax(predicted_logits, 1)
+    # checking the equality of the reference to the given computed max label 
+    correct_predictions = labels.eq(reference)
+    # that last method probably is a measure of the number of elements nelement()
+    return correct_predictions.sum().float() / correct_predictions.nelement()
+  
+def test_accuracy():
+    # the tensor is initialized in such a way that a row is specified within one pair of square brackets and the whole matrix
+    # is specified within another pair of square brackets 
+    predictions = torch.tensor([[0.5, 1.0, 0.7], [-0.6, -0.3, 0]])
+    correct_labels = torch.tensor([0, 2])  # first is wrong, second is correct
+    # allclose method :
+    # Returns True if two arrays are element-wise equal within a tolerance.
+    assert accuracy(predictions, correct_labels).allclose(torch.tensor([0.5]))
+
+    predictions = torch.tensor([[0.5, 1.0, 0.7], [-0.6, -0.3, 0], [-1, 0, 1]])
+    correct_labels = torch.tensor([1, 1, 2])  # correct, wrong, correct
+    assert accuracy(predictions, correct_labels).allclose(torch.tensor([2/3]))
+
+    print("Tests passed")
+  
+test_accuracy()
+```
+We have the following class used to perform the logistic regression:
+
+```
+class LogisticRegressionModel(torch.nn.Module):
+    # the method that will be called when you initialize the class
+    def __init__(self):
+        # wha is the super parent class in this case ? 
+        super().__init__()
+        self.image_area = 28 * 28 # pixels
+        self.num_classes = 10
+        # what is this Linear function which is mentioned ? Part of the neural network package
+        self.linear_transform = torch.nn.Linear(self.image_area, self.num_classes, bias=True)
+
+    def forward(self, x):
+        # the batch size corresponds to the number of rows of x
+        batch_size = x.shape[0]
+        # the view method akin to the reshape method allows to change the size of the image 
+        flattened_images = x.view(batch_size, self.image_area)
+        return self.linear_transform(flattened_images)
+```
+
+In the below we train the logistic regression model : 
+
+```
+def train(model, criterion, dataset_train, dataset_test, optimizer, num_epochs):
+  # here in between the triple quotes we have the @param, the name of the parameter, :, and the type 
+  """
+  @param model: torch.nn.Module
+  @param criterion: torch.nn.modules.loss._Loss
+  @param dataset_train: torch.utils.data.DataLoader
+  @param dataset_test: torch.utils.data.DataLoader
+  @param optimizer: torch.optim.Optimizer
+  @param num_epochs: int
+  """
+  print("Starting training")
+  for epoch in range(num_epochs):
+    # Train an epoch
+    model.train()
+    for batch_x, batch_y in dataset_train:
+      batch_x, batch_y = batch_x.to(device), batch_y.to(device)
+
+      # Evaluate the network (forward pass), where you use the x coordinates now to make a prediction
+      prediction = model(batch_x)
+      loss = criterion(prediction, batch_y)
+      
+      # Compute the gradient
+      optimizer.zero_grad()
+      loss.backward()
+
+      # Update the parameters of the model with a gradient step
+      optimizer.step()
+
+    # Test the quality on the test set
+    model.eval()
+    accuracies_test = []
+    for batch_x, batch_y in dataset_test:
+      batch_x, batch_y = batch_x.to(device), batch_y.to(device)
+
+      # Evaluate the network (forward pass)
+      prediction = model(batch_x)
+      accuracies_test.append(accuracy(prediction, batch_y))
+    
+    # you print the epoch, and you take the average of the accuracies where you are using here a float type
+    print("Epoch {} | Test accuracy: {:.5f}".format(epoch, sum(accuracies_test).item()/len(accuracies_test)))
+```
