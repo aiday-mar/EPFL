@@ -906,3 +906,133 @@ def fgsm_update(image, data_grad, update_max_norm):
     # Return the perturbed image
     return perturbed_image
 ```
+
+Next we decide to evaluate the attacks :
+
+```
+def evaluate_attack(model, criterion, test_loader, update_max_norm):
+  """
+  @param model: torch.nn.Module
+  @param criterion: torch.nn.modules.loss._Loss
+  @param test_loader: torch.util.data.DataLoader
+  @param update_max_norm: float indicating the maximum L_infinity norm allowed for the perturbations
+
+  @return (
+    accuracy of the model in the perturbed test set,
+    adversarial example images: list of 5 samples of a tuple (original prediction - float, prediction - float, example image - torch.tensor)
+  )
+  """
+  accuracy_per_batch = []
+  adversarial_examples = []  # a small sample of 5 adversarial images
+
+  # Loop over all examples in test set in batches
+  for data, target in test_loader:
+    data, target = data.to(device), target.to(device)
+
+    # Indicate that we want PyTorch to compute a gradient with respect to the
+    # input batch. We have a boolean.
+    data.requires_grad = True
+
+    # Forward pass
+    output = model(data)
+    original_predictions = output.argmax(1) # get the index of the max logit
+    original_accuracy = accuracy(output, target)
+    loss = criterion(output, target)
+
+    # Zero all existing gradients
+    model.zero_grad()
+    loss.backward()
+
+    # Perturb the batch with a gradient step (using the `fgsm_update`)
+    perturbed_data = fgsm_update(data, data.grad, update_max_norm)
+
+    # Re-classify the perturbed batch
+    output = model(perturbed_data)
+    adversarial_predictions = output.argmax(1)
+    adversarial_accuracy = accuracy(output, target)
+
+    accuracy_per_batch.append(adversarial_accuracy)
+
+    # Save some adversarial examples for visualization
+    if len(adversarial_examples) < 5:
+      adv_ex = perturbed_data[0, 0, :, :].detach().cpu().numpy()
+      adversarial_examples.append( (original_predictions[0].item(), adversarial_predictions[0].item(), adv_ex) )
+
+  average_accuracy = sum(accuracy_per_batch) / len(accuracy_per_batch)  # assuming all batches are the same size
+
+  print("Epsilon: {:.2f}\tTest Accuracy = {:.3f}".format(update_max_norm, average_accuracy))
+
+  return average_accuracy, adversarial_examples
+```
+
+Here tensor.detach() creates a tensor that shares storage with tensor that does not require grad. It detaches the output from the computational graph. So no gradient will be backpropagated along this variable. The wrapper with torch.no_grad() temporarily set all the requires_grad flag to false. torch.no_grad says that no operation should build the graph. The difference is that one refers to only a given variable on which it is called. The other affects all operations taking place within the with statement. Also, torch.no_grad will use less memory because it knows from the beginning that no gradients are needed so it doesn’t need to keep intermediary results.
+
+Let's explore how the maximum allowed perturbation influences the model's test error.
+
+```
+accuracies_logreg = []
+examples_logreg = []
+
+epsilons_logreg = [0, .05, .1, .15, .2, .25, .3]
+
+# Run test for each epsilon
+for eps in epsilons_logreg:
+    acc, ex = evaluate_attack(model_logreg, criterion, dataset_test, eps)
+    accuracies_logreg.append(acc)
+    examples_logreg.append(ex)
+
+plt.figure(figsize=(5,5))
+plt.plot(epsilons_logreg, accuracies_logreg, "*-")
+plt.yticks(np.arange(0, 1.1, step=0.1))
+plt.xticks(np.arange(0, .35, step=0.05))
+plt.title("Accuracy vs Epsilon")
+plt.xlabel("Epsilon")
+plt.ylabel("Accuracy")
+plt.show()
+```
+
+We consider the relationship directly with images :
+
+```
+# Plot several examples of adversarial samples at each epsilon
+counter = 0
+plt.figure(figsize=(8,10))
+for epsilon, examples in zip(epsilons_logreg, examples_logreg):
+    for column_number, example in enumerate(examples):
+        counter += 1
+        original_prediction, adversarial_prediction, img = example
+        img = img.squeeze()
+
+        plt.subplot(len(epsilons_logreg), len(examples), counter)
+
+        plt.title("{} -> {}".format(original_prediction, adversarial_prediction))
+        plt.imshow(img, cmap="gray")
+
+        # Clear the axes
+        plt.xticks([], [])
+        plt.yticks([], [])
+
+        # Print y-labels in the first column
+        if column_number == 0:
+            plt.ylabel("Eps: {:.2f}".format(epsilon), fontsize=14)
+
+plt.tight_layout()
+# The tight_layout() function in pyplot module of matplotlib library is used to automatically adjust subplot parameters to give 
+# specified padding.
+plt.show()
+```
+
+We have below an example of the use of xticks and yticks :
+
+```
+# return locs, labels where locs is an array of tick locations and
+# labels is an array of tick labels.
+locs, labels = xticks()
+
+# set the locations of the xticks
+xticks( arange(6) )
+
+# set the locations and labels of the xticks
+xticks( arange(5), ('Tom', 'Dick', 'Harry', 'Sally', 'Sue') )
+```
+
