@@ -822,6 +822,7 @@ dataset_train = torch.utils.data.DataLoader(
 
 # If a GPU is available (should be on Colab, we will use it)
 if not torch.cuda.is_available():
+  # this exception has a string inside 
   raise Exception("Things will go much quicker if you enable a GPU in Colab under 'Runtime / Change Runtime Type'")
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -834,4 +835,74 @@ train(model_logreg, criterion, dataset_train, dataset_test, optimizer, num_epoch
 
 # You should expect a test accuracy of around 91%.
 # Training should take around a minute
+```
+We use the tools now to build a simple convolutional network. 
+
+```
+class LeNetModel(torch.nn.Module):
+  def __init__(self):
+    """From: LeCun et al., 1998. Gradient-Based Learning Applied to Document Recognition"""
+    super().__init__()
+    # Applies a 2D convolution over an input signal composed of several input planes.
+    self.conv1 = torch.nn.Conv2d(1, 10, kernel_size=5)
+    self.conv2 = torch.nn.Conv2d(10, 20, kernel_size=5)
+    # The term "dropout" is used for a technique which drops out some nodes of the network. Dropping out can be seen as temporarily
+    # deactivating or ignoring neurons of the network. This technique is applied in the training phase to reduce overfitting effects.
+    # Overfitting is an error which occurs when a network is too closely fit to a limited set of input samples.
+
+    self.conv2_drop = torch.nn.Dropout2d()
+    self.fc1 = torch.nn.Linear(320, 50)
+    # CLASS torch.nn.Linear(in_features, out_features, bias=True)
+    # Applies a linear transformation to the incoming data: y = x*W^T + b
+    # Parameters:
+    # in_features – size of each input sample (i.e. size of x)
+    # out_features – size of each output sample (i.e. size of y)
+    # bias – If set to False, the layer will not learn an additive bias. Default: True
+
+    self.fc2 = torch.nn.Linear(50, 10)
+
+  def forward(self, x):
+    relu = torch.nn.functional.relu
+    # A Tensor of format specified by data_format. The max pooled output tensor. 
+    max_pool2d = torch.nn.functional.max_pool2d
+     
+    x = relu(max_pool2d(self.conv1(x), 2))
+    x = relu(max_pool2d(self.conv2_drop(self.conv2(x)), 2))
+    x = x.view(-1, 320)
+    x = relu(self.fc1(x))
+    x = torch.nn.functional.dropout(x, training=self.training)
+    x = self.fc2(x)
+    return torch.nn.functional.log_softmax(x, dim=1)
+
+model_lenet = LeNetModel().to(device)
+optimizer = torch.optim.Adam(model_lenet.parameters(), lr=learning_rate)
+
+train(model_lenet, criterion, dataset_train, dataset_test, optimizer, num_epochs)
+
+# Expect roughly 97% accuracy on the test set.
+# Training should take around two minutes
+```
+
+We update the attack as follows :
+
+```
+def fgsm_update(image, data_grad, update_max_norm):
+    """
+    Compute the FGSM update on an image (or a batch of images)
+
+    @param image: float32 tensor of shape (batch_size, rgb, height, width)
+    @param data_grad: float32 tensor of the same shape as `image`. Gradient of the loss with respect to `image`.
+    @param update_max_norm: float, the maximum permitted difference between `image` and the output of this function measured in L_inf norm.
+
+    @returns a perturbed version of `image` with the same shape
+    """
+    # Collect the element-wise sign of the data gradient
+    sign_data_grad = data_grad.sign()
+    # Create the perturbed image by adjusting each pixel of the input image
+    perturbed_image = image + update_max_norm*sign_data_grad
+    # Adding clipping to maintain [0,1] range
+    # Clamp all elements in input into the range [ min, max ] and return a resulting tensor:
+    perturbed_image = torch.clamp(perturbed_image, 0, 1)
+    # Return the perturbed image
+    return perturbed_image
 ```
