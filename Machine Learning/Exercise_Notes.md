@@ -569,3 +569,122 @@ train(features = x_train,
       num_epoch = 300)
 visualize(x_train, y_train, model)
 ```
+
+**Problem set 12**
+
+Then we have :
+
+```
+# Useful starting lines
+%matplotlib inline
+
+import numpy as np
+import scipy
+import scipy.io
+import scipy.sparse as sp
+import matplotlib.pyplot as plt
+%load_ext autoreload
+%autoreload 2
+```
+
+We have :
+
+```
+def sigmoid(t):
+    """apply sigmoid function on t."""
+    #  we have exponential inthenumpy
+    return 1.0 / (1 + np.exp(-t))
+
+def grad_sigmoid(t):
+    """return the gradient of sigmoid on t."""
+    return sigmoid(t) * (1 - sigmoid(t))
+```
+
+We have :
+
+```
+# here we have 4 elements in this array
+x = np.array([0.01, 0.02, 0.03, 0.04])
+# below we have a dictionary where you map a word/name to a matrix of diagonal ones
+W = {
+    "w_1": np.ones((4, 5)),
+    "w_2": np.ones(5)
+}
+y = 1
+```
+
+Now we have problem 1 :
+
+```
+def simple_feed_forward(x, W):
+    """Do feed forward propagation.""" 
+    x_0 = x
+    # here we havea transpose matrix, what is this @ symbol 
+    z_1 = W["w_1"].T @ x_0
+    x_1 = sigmoid(z_1)
+    z_2 = W["w_2"].T @ x_1
+    y_hat = sigmoid(z_2)
+    
+    # we return three elements
+    return z_1, z_2, y_hat
+
+try:
+    expected = 0.93244675427215695
+    # meaning we don't really need the third return value
+    _, _, yours = simple_feed_forward(x, W)
+    # must be that you take the square of all the respective components and separately
+    # sum the components. We assert a phrase and this returns a boolean.
+    assert np.sum((yours - expected) ** 2) < 1e-15
+    print("Your implementation is correct!")
+except:
+    print("Your implementation is not correct.")
+```
+Now we consider problem two. We consider the backpropagation in neural networks. We have :
+
+```
+def simple_backpropagation(y, x, W):
+    """Do backpropagation and get delta_W."""
+    # Feed forward, and we get three return values 
+    z_1, z_2, y_hat = simple_feed_forward(x, W)
+    x_1 = sigmoid(z_1)
+    # Backpropogation
+    delta_2 = (y_hat - y) * grad_sigmoid(z_2)
+    delta_w_2 = delta_2 * x_1
+    delta_1 = delta_2 * W["w_2"] * grad_sigmoid(z_1)
+    delta_w_1 = np.outer(x, delta_1)
+    
+    # we have an example of the outer product
+    # import numpy
+    # x = numpy.array([1, 2, 3])
+    # y = numpy.array([4, 5, 6])
+    # x.__class__ and y.__class__ are both 'numpy.ndarray'
+
+    # outer_product = numpy.outer(x, y)
+    # outer_product has the value:
+    # array([[ 4,  5,  6],
+    #        [ 8, 10, 12],
+    #        [12, 15, 18]])
+
+    return {
+        "w_2": delta_w_2,
+        "w_1": delta_w_1
+    }
+  
+try:
+    # now we have an array where each row is between square brackets
+    expected = {
+        'w_1': np.array([
+            [ -1.06113639e-05,  -1.06113639e-05,  -1.06113639e-05, -1.06113639e-05,  -1.06113639e-05],
+            [ -2.12227277e-05,  -2.12227277e-05,  -2.12227277e-05, -2.12227277e-05,  -2.12227277e-05],
+            [ -3.18340916e-05,  -3.18340916e-05,  -3.18340916e-05, -3.18340916e-05,  -3.18340916e-05],
+            [ -4.24454555e-05,  -4.24454555e-05,  -4.24454555e-05, -4.24454555e-05,  -4.24454555e-05]]),
+        'w_2': np.array(
+            [-0.00223387, -0.00223387, -0.00223387, -0.00223387, -0.00223387])
+    }
+    yours = simple_backpropagation(y, x, W)
+    # we take the square of each component and then take the sum of all the components, where we iterate over the keys
+    assert np.sum([np.sum((yours[key] - expected[key]) ** 2) for key in expected.keys()]) < 1e-15
+    print("Your implementation is correct!")
+except:
+    print("Your implementation is not correct!")
+```
