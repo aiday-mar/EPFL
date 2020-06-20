@@ -1036,3 +1036,30 @@ xticks( arange(6) )
 xticks( arange(5), ('Tom', 'Dick', 'Harry', 'Sally', 'Sue') )
 ```
 
+We now do the same code but using convolutional neural networks :
+
+```
+accuracies_lenet = []
+examples_lenet = []
+
+epsilons_lenet = [0, .05, .1, .15, .2, .25, .3]
+
+# Run test for each epsilon
+for eps in epsilons_lenet:
+    acc, ex = evaluate_attack(model_lenet, criterion, dataset_test, eps)
+    accuracies_lenet.append(acc)
+    examples_lenet.append(ex)
+
+# Comparing the models below 
+plt.figure(figsize=(5,5))
+plt.plot(epsilons_logreg, accuracies_logreg, "*-", c='red', label='Logistic regression')
+plt.plot(epsilons_lenet, accuracies_lenet, "*-", c='blue', label='Convolutional network')
+
+plt.yticks(np.arange(0, 1.1, step=0.1))
+plt.xticks(np.arange(0, .35, step=0.05))
+
+plt.title("Accuracy vs Epsilon")
+plt.xlabel("Epsilon")
+plt.ylabel("Accuracy")
+plt.legend();
+```
