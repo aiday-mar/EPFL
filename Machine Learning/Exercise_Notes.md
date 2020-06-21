@@ -1063,3 +1063,85 @@ plt.xlabel("Epsilon")
 plt.ylabel("Accuracy")
 plt.legend();
 ```
+
+Next we will train a robust neural network model.
+
+```
+robust_neural_net_model = LeNetModel().to(device)
+
+num_epochs = 10
+# first we have the parameters then we have the constant of the learning rate ?
+optimizer = torch.optim.Adam(robust_neural_net_model.parameters(), lr=1e-3)
+for epoch in range(num_epochs):
+
+    # Train an epoch
+    robust_neural_net_model.train()
+    for batch_x, batch_y in dataset_train:
+        batch_x, batch_y = batch_x.to(device), batch_y.to(device)
+
+        # Forward pass for adversarial perturbations
+        batch_x.requires_grad = True
+        output = robust_neural_net_model(batch_x)
+        original_predictions = output.argmax(1) # get the index of the max logit
+        original_accuracy = accuracy(output, batch_y)
+        loss = criterion(output, batch_y)
+        robust_neural_net_model.zero_grad()
+        loss.backward()
+        perturbed_data = fgsm_update(batch_x, batch_x.grad, 0.25)
+        
+        # Evaluate the network (forward pass)
+        prediction = robust_neural_net_model(perturbed_data)
+        loss = criterion(prediction, batch_y)
+        
+        # Compute the gradient
+        optimizer.zero_grad()
+        loss.backward()
+
+        # Update the parameters of the model with a gradient step
+        optimizer.step()
+
+    # Test the quality on the test set
+    robust_neural_net_model.eval()
+    accuracies = []
+    for batch_x, batch_y in dataset_test:
+        batch_x, batch_y = batch_x.to(device), batch_y.to(device)
+
+        # Evaluate the network (forward pass)
+        prediction = robust_neural_net_model(batch_x)
+        accuracies.append(accuracy(prediction, batch_y))
+      
+    print("Epoch {:.2f} | Test accuracy: {:.5f}".format(epoch, sum(accuracies).item()/len(accuracies)))
+
+
+  # training takes around two minutes
+  # you should expect an accuracy around 96%
+```
+
+Then we have the following code :
+
+```
+accuracies_lenet_robust = []
+examples_lenet_robust = []
+
+epsilons_lenet_robust = [0, .05, .1, .15, .2, .25, .3]
+
+# Run test for each epsilon
+for eps in epsilons_lenet_robust:
+    acc, ex = evaluate_attack(robust_neural_net_model, criterion, dataset_test, eps)
+    accuracies_lenet_robust.append(acc)
+    examples_lenet_robust.append(ex)
+
+# Comparing the models
+plt.figure(figsize=(5,5))
+plt.plot(epsilons_logreg, accuracies_logreg, "*-", c='red', label='Logistic regression')
+plt.plot(epsilons_lenet, accuracies_lenet, "*-", c='blue', label='Convolutional network')
+plt.plot(epsilons_lenet_robust, accuracies_lenet_robust, "*-", c='orange', label='Convolutional network (robust)')
+
+plt.yticks(np.arange(0, 1.1, step=0.1))
+plt.xticks(np.arange(0, .35, step=0.05))
+
+plt.title("Accuracy vs Epsilon")
+plt.xlabel("Epsilon")
+plt.ylabel("Accuracy")
+plt.legend();
+```
