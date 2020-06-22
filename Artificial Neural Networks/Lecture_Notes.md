@@ -29,3 +29,8 @@ And then we have :
 And then we have :
 
 <a href="https://www.codecogs.com/eqnedit.php?latex=g(a')&space;=&space;\left\{\begin{matrix}&space;1&space;&&space;a'&space;>&space;\theta&space;\\&space;0.5&space;&&space;a'&space;=&space;\theta&space;\\&space;0&space;&&space;a'&space;<&space;\theta&space;\end{matrix}\right." target="_blank"><img src="https://latex.codecogs.com/svg.latex?g(a')&space;=&space;\left\{\begin{matrix}&space;1&space;&&space;a'&space;>&space;\theta&space;\\&space;0.5&space;&&space;a'&space;=&space;\theta&space;\\&space;0&space;&&space;a'&space;<&space;\theta&space;\end{matrix}\right." title="g(a') = \left\{\begin{matrix} 1 & a' > \theta \\ 0.5 & a' = \theta \\ 0 & a' < \theta \end{matrix}\right." /></a>
+
+In this case we have the discriminant function is obtained when equating the inside of the sgn function with zero meaning when d(x) = 0. We can also make the d(x) into a whole expression with N+1 terms x_k by writing x_{N+1} = -1 and by writing w_{N+1} = \theta. In this dimensional space which is bigger by one then we have the hyperplane passes through the origin. In gradient descent the quadratic error is :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=E(w)&space;=&space;\frac{1}{2}&space;\sum_{\mu&space;=&space;1}^p&space;[t^{\mu}&space;-&space;y^{\mu}]" target="_blank"><img src="https://latex.codecogs.com/svg.latex?E(w)&space;=&space;\frac{1}{2}&space;\sum_{\mu&space;=&space;1}^p&space;[t^{\mu}&space;-&space;y^{\mu}]" title="E(w) = \frac{1}{2} \sum_{\mu = 1}^p [t^{\mu} - y^{\mu}]" /></a>
+
