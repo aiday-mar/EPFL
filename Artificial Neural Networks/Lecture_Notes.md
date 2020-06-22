@@ -14,4 +14,18 @@ When an axon of cell j repeatedly or persistently takes part in firing cell i, t
 
 Artificial neural networks are use for classification, for action learning (where reinforcement learning comes into play) and for sequences (of music, speech). Sequence learning requires recurrent connections (feedback connections). 
 
-Start with the classification which is supposed to output a boolean, yes or no. When you classify images, you send an image to a vector and a vector to a classification. You assign either +1 or 0 to inputs. When you consider classification as a geometric problem then you are meant to find a separating surface in the high dimensional input space. Here you use a discriminant function where d(x) = 0 on the surface, d(x) > 0 on all positive examples x, d(x) < 0 for all counter examples x. For the supervised learning we need an original data set of points {(x_i,t_i), 1 <= i <= P} where the t_i = 1 if the output is correct and 0 otherwise. We have here a set of pairs of inputs and outputs. Use the errors meaning when the predicted output is not the actual output to optimize the classifier. 
+Start with the classification which is supposed to output a boolean, yes or no. When you classify images, you send an image to a vector and a vector to a classification. You assign either +1 or 0 to inputs. When you consider classification as a geometric problem then you are meant to find a separating surface in the high dimensional input space. Here you use a discriminant function where d(x) = 0 on the surface, d(x) > 0 on all positive examples x, d(x) < 0 for all counter examples x. For the supervised learning we need an original data set of points {(x_i,t_i), 1 <= i <= P} where the t_i = 1 if the output is correct and 0 otherwise. We have here a set of pairs of inputs and outputs. Use the errors meaning when the predicted output is not the actual output to optimize the classifier. Below is an example of a simple perceptron :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=y^{\mu}&space;=&space;0.5[1&space;&plus;&space;sgn(\sum_k&space;w_k&space;x_k&space;-&space;\theta)]" target="_blank"><img src="https://latex.codecogs.com/svg.latex?y^{\mu}&space;=&space;0.5[1&space;&plus;&space;sgn(\sum_k&space;w_k&space;x_k&space;-&space;\theta)]" title="y^{\mu} = 0.5[1 + sgn(\sum_k w_k x_k - \theta)]" /></a>
+
+Where here we denote by a' the value :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=\sum_k&space;w_k&space;x_k" target="_blank"><img src="https://latex.codecogs.com/svg.latex?\sum_k&space;w_k&space;x_k" title="\sum_k w_k x_k" /></a>
+
+And then we have :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=y^{\mu}&space;=&space;g(a')" target="_blank"><img src="https://latex.codecogs.com/svg.latex?y^{\mu}&space;=&space;g(a')" title="y^{\mu} = g(a')" /></a>
+
+And then we have :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=g(a')&space;=&space;\left\{\begin{matrix}&space;1&space;&&space;a'&space;>&space;\theta&space;\\&space;0.5&space;&&space;a'&space;=&space;\theta&space;\\&space;0&space;&&space;a'&space;<&space;\theta&space;\end{matrix}\right." target="_blank"><img src="https://latex.codecogs.com/svg.latex?g(a')&space;=&space;\left\{\begin{matrix}&space;1&space;&&space;a'&space;>&space;\theta&space;\\&space;0.5&space;&&space;a'&space;=&space;\theta&space;\\&space;0&space;&&space;a'&space;<&space;\theta&space;\end{matrix}\right." title="g(a') = \left\{\begin{matrix} 1 & a' > \theta \\ 0.5 & a' = \theta \\ 0 & a' < \theta \end{matrix}\right." /></a>
