@@ -89,6 +89,6 @@ N(A) = N(A) + 1
 Q(A) = Q(A) + 1/N(A)[R-Q(A)]
 ```
 
-Here N(a) is a counter of how many times the agent has taken action a. Here the learning rate is 1/N(A).
+Here N(a) is a counter of how many times the agent has taken action a. Here the learning rate is 1/N(A). The total expected discounter reward is :
 
-page 91.
+<a href="https://www.codecogs.com/eqnedit.php?latex=Q(s,a)&space;=&space;E[r_t&space;&plus;&space;\gamma&space;r_{t&plus;1}&space;&plus;&space;\gamma^2&space;r_{t&plus;2}&space;&plus;&space;...&space;|&space;s,&space;a]" target="_blank"><img src="https://latex.codecogs.com/svg.latex?Q(s,a)&space;=&space;E[r_t&space;&plus;&space;\gamma&space;r_{t&plus;1}&space;&plus;&space;\gamma^2&space;r_{t&plus;2}&space;&plus;&space;...&space;|&space;s,&space;a]" title="Q(s,a) = E[r_t + \gamma r_{t+1} + \gamma^2 r_{t+2} + ... | s, a]" /></a>
