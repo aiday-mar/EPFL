@@ -101,3 +101,6 @@ Which is also equal to :
 
 <a href="https://www.codecogs.com/eqnedit.php?latex=Q(s,a)&space;=&space;\sum_{s'}&space;P_{s&space;\rightarrow&space;s'}^a&space;[R^a_{s&space;\rightarrow&space;s'}&plus;&space;\gamma&space;\cdot&space;max_{a'}Q(s',a')]" target="_blank"><img src="https://latex.codecogs.com/svg.latex?Q(s,a)&space;=&space;\sum_{s'}&space;P_{s&space;\rightarrow&space;s'}^a&space;[R^a_{s&space;\rightarrow&space;s'}&plus;&space;\gamma&space;\cdot&space;max_{a'}Q(s',a')]" title="Q(s,a) = \sum_{s'} P_{s \rightarrow s'}^a [R^a_{s \rightarrow s'}+ \gamma \cdot max_{a'}Q(s',a')]" /></a>
 
+For the one step horizon scenario we can calculate the Q-values iteratively. We increase the Q-value by a small amount if the reward observed at time t is larger than our current estimate of Q, and conversely. In the multi step horizon we find :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=\triangle&space;\hat{Q}(s,a)&space;=&space;\eta&space;[r_t&space;&plus;&space;\gamma&space;\hat{Q}(s',a')&space;-&space;\hat{Q}(s,a)]" target="_blank"><img src="https://latex.codecogs.com/svg.latex?\triangle&space;\hat{Q}(s,a)&space;=&space;\eta&space;[r_t&space;&plus;&space;\gamma&space;\hat{Q}(s',a')&space;-&space;\hat{Q}(s,a)]" title="\triangle \hat{Q}(s,a) = \eta [r_t + \gamma \hat{Q}(s',a') - \hat{Q}(s,a)]" /></a>
