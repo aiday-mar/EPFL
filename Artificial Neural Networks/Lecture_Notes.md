@@ -64,3 +64,31 @@ The optimal policy is the policy a such that :
 In the example, we found a rather specific scheme for how to reduce the learning rate over time. But many other schemes also work in practice. For example you keep h constant for a block of time, and then you decrease it for the next block. This learning rate is used in : 
 
 <a href="https://www.codecogs.com/eqnedit.php?latex=\triangle&space;Q(s,a)&space;=&space;\eta&space;[r_t&space;-&space;Q(s,a)]" target="_blank"><img src="https://latex.codecogs.com/svg.latex?\triangle&space;Q(s,a)&space;=&space;\eta&space;[r_t&space;-&space;Q(s,a)]" title="\triangle Q(s,a) = \eta [r_t - Q(s,a)]" /></a>
+
+Generally you want to choose the action with the maximal Q(s,a), but the problem is that the correct value of Q is unknown. Which means we are in the situation of an exploration - exploitation dilemna where we explore so as to estimate reward probabilities and we exploit by taking the actions which looks optimal and maximizes the reward. A softer version of this method allows you to occasionally choose an action which looks suboptimal but which allows you to further explore the Q-values of other options. The epsilon greey and the softmax algorithms are examples following this idea. The softmax strategy says :
+
+take action a' with the probability 
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=P(a')&space;=&space;\frac{exp[\beta&space;Q(a')]}{\sum_a&space;exp[\beta&space;Q(a)]}" target="_blank"><img src="https://latex.codecogs.com/svg.latex?P(a')&space;=&space;\frac{exp[\beta&space;Q(a')]}{\sum_a&space;exp[\beta&space;Q(a)]}" title="P(a') = \frac{exp[\beta Q(a')]}{\sum_a exp[\beta Q(a)]}" /></a>
+
+Consider the following example of exploration and exploitation, consider the following epsilon-greedy algorithm.
+
+```
+bandit(A) :
+
+Initialize for a = 1 to k :
+  Q(a) = 0
+  N(a) = 0
+
+Repeat forever : 
+  A = [ argmax_a Q(a)     with probability 1 - e
+        a random action   with probability e ]
+
+R = bandit(A)
+N(A) = N(A) + 1
+Q(A) = Q(A) + 1/N(A)[R-Q(A)]
+```
+
+Here N(a) is a counter of how many times the agent has taken action a. Here the learning rate is 1/N(A).
+
+page 91.
