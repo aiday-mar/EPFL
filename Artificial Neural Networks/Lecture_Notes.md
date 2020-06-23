@@ -97,6 +97,6 @@ We require gamma to be less than one for recurrent networks. The bellman equatio
 
 <a href="https://www.codecogs.com/eqnedit.php?latex=Q(s,a)&space;=&space;\sum_{s'}&space;[P_{s&space;\rightarrow&space;s'}^a&space;&plus;&space;\gamma&space;\sum_{a'}&space;\pi(s',&space;a')&space;Q(s',&space;a')]" target="_blank"><img src="https://latex.codecogs.com/svg.latex?Q(s,a)&space;=&space;\sum_{s'}&space;[P_{s&space;\rightarrow&space;s'}^a&space;&plus;&space;\gamma&space;\sum_{a'}&space;\pi(s',&space;a')&space;Q(s',&space;a')]" title="Q(s,a) = \sum_{s'} [P_{s \rightarrow s'}^a + \gamma \sum_{a'} \pi(s', a') Q(s', a')]" /></a>
 
-This is also equal to :
+This is also : 
 
 <a href="https://www.codecogs.com/eqnedit.php?latex=Q(s,a)&space;=&space;\sum_{s'}&space;P_{s'&space;\rightarrow&space;s"}^a&space;[R^a_{s'&space;\rightarrow&space;s"}&plus;&space;\gamma&space;\cdot&space;max_{a'}&space;Q(s',&space;a')]" target="_blank"><img src="https://latex.codecogs.com/svg.latex?Q(s,a)&space;=&space;\sum_{s'}&space;P_{s'&space;\rightarrow&space;s"}^a&space;[R^a_{s'&space;\rightarrow&space;s"}&plus;&space;\gamma&space;\cdot&space;max_{a'}&space;Q(s',&space;a')]" title="Q(s,a) = \sum_{s'} P_{s' \rightarrow s"}^a [R^a_{s' \rightarrow s"}+ \gamma \cdot max_{a'} Q(s', a')]" /></a>
