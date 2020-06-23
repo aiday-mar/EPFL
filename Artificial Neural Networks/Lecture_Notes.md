@@ -44,6 +44,6 @@ old state : s
 new state : s'
 current state : s_t
 discrete actions : a 
-mean rewards for the transitions : <a href="https://www.codecogs.com/eqnedit.php?latex=R^a_{s&space;\rightarrow&space;s'}" target="_blank"><img src="https://latex.codecogs.com/svg.latex?R^a_{s&space;\rightarrow&space;s'}" title="R^a_{s \rightarrow s'}" /></a>
-
+mean rewards for the transitions : 
+<a href="https://www.codecogs.com/eqnedit.php?latex=R^a_{s&space;\rightarrow&space;s'}" target="_blank"><img src="https://latex.codecogs.com/svg.latex?R^a_{s&space;\rightarrow&space;s'}" title="R^a_{s \rightarrow s'}" /></a>
 current reward : r_t
