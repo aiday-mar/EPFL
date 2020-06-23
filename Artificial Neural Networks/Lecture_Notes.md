@@ -99,3 +99,4 @@ We require gamma to be less than one for recurrent networks. The bellman equatio
 
 This is also equal to :
 
+<a href="https://www.codecogs.com/eqnedit.php?latex=Q(s,a)&space;=&space;\sum_{s'}&space;P_{s'&space;\rightarrow&space;s"}^a&space;[R^a_{s'&space;\rightarrow&space;s"}&plus;&space;\gamma&space;\cdot&space;max_{a'}&space;Q(s',&space;a')]" target="_blank"><img src="https://latex.codecogs.com/svg.latex?Q(s,a)&space;=&space;\sum_{s'}&space;P_{s'&space;\rightarrow&space;s"}^a&space;[R^a_{s'&space;\rightarrow&space;s"}&plus;&space;\gamma&space;\cdot&space;max_{a'}&space;Q(s',&space;a')]" title="Q(s,a) = \sum_{s'} P_{s' \rightarrow s"}^a [R^a_{s' \rightarrow s"}+ \gamma \cdot max_{a'} Q(s', a')]" /></a>
