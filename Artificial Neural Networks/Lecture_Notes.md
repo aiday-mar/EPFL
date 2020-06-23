@@ -104,3 +104,14 @@ Which is also equal to :
 For the one step horizon scenario we can calculate the Q-values iteratively. We increase the Q-value by a small amount if the reward observed at time t is larger than our current estimate of Q, and conversely. In the multi step horizon we find :
 
 <a href="https://www.codecogs.com/eqnedit.php?latex=\triangle&space;\hat{Q}(s,a)&space;=&space;\eta&space;[r_t&space;&plus;&space;\gamma&space;\hat{Q}(s',a')&space;-&space;\hat{Q}(s,a)]" target="_blank"><img src="https://latex.codecogs.com/svg.latex?\triangle&space;\hat{Q}(s,a)&space;=&space;\eta&space;[r_t&space;&plus;&space;\gamma&space;\hat{Q}(s',a')&space;-&space;\hat{Q}(s,a)]" title="\triangle \hat{Q}(s,a) = \eta [r_t + \gamma \hat{Q}(s',a') - \hat{Q}(s,a)]" /></a>
+
+The above is called the SARSA update rule. The SARSA algorithm is as follows :
+
+```
+being in state s, choose action a
+ovserve reward r and next state s'
+chose action a' in state s'
+update with the SARSA update rule
+set s=s' and a=a'
+start again
+```
