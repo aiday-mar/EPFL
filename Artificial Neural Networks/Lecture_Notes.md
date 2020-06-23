@@ -41,9 +41,19 @@ You can use supervised learning in order to try to predict the next element of a
 Let's start with the formalization of reinforcement learning. We have three notions as follows : states, actions, rewards. In standard RL we have discretized space and actions. We introduce the following notations :
 
 old state : s
+
 new state : s'
+
 current state : s_t
+
 discrete actions : a 
+
 mean rewards for the transitions : 
-<a href="https://www.codecogs.com/eqnedit.php?latex=R^a_{s&space;\rightarrow&space;s'}" target="_blank"><img src="https://latex.codecogs.com/svg.latex?R^a_{s&space;\rightarrow&space;s'}" title="R^a_{s \rightarrow s'}" /></a>
+<a href="https://www.codecogs.com/eqnedit.php?latex=R^a_{s&space;\rightarrow&space;s'}=&space;E(r&space;|&space;s,&space;a,&space;s')" target="_blank"><img src="https://latex.codecogs.com/svg.latex?R^a_{s&space;\rightarrow&space;s'}=&space;E(r&space;|&space;s,&space;a,&space;s')" title="R^a_{s \rightarrow s'}= E(r | s, a, s')" /></a>
+
 current reward : r_t
+
+Most transitions have zero reward. An episode finishes when the target is reached. Over time the episodes get shorter and shorter indicating that the reinforcement learning is ahcieving the results quicker. One notion in RL is the Q-value. Q(s,a) has two indices : you start in state s and take action a. This Q-value is the mean expected reward that you will get if you take action a starting from state s. In other words we have :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=Q(s,&space;a)&space;=&space;\sum_{s'}&space;P^a_{s&space;\rightarrow&space;s'}&space;E(r&space;|&space;s,&space;a,&space;s')" target="_blank"><img src="https://latex.codecogs.com/svg.latex?Q(s,&space;a)&space;=&space;\sum_{s'}&space;P^a_{s&space;\rightarrow&space;s'}&space;E(r&space;|&space;s,&space;a,&space;s')" title="Q(s, a) = \sum_{s'} P^a_{s \rightarrow s'} E(r | s, a, s')" /></a>
+
