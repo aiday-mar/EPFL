@@ -115,3 +115,5 @@ update with the SARSA update rule
 set s=s' and a=a'
 start again
 ```
+
+Consider the following theorem : suppose the SARSA algorithm has been applied for a very long time with the correct updates. If all the Q-values have converged in expectation meaning the expectation of the updates of Q gives zero then the set of Q-values solves the Bellmann equation. 
