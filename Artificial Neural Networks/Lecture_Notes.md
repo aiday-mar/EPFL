@@ -57,3 +57,10 @@ Most transitions have zero reward. An episode finishes when the target is reache
 
 <a href="https://www.codecogs.com/eqnedit.php?latex=Q(s,&space;a)&space;=&space;\sum_{s'}&space;P^a_{s&space;\rightarrow&space;s'}&space;E(r&space;|&space;s,&space;a,&space;s')" target="_blank"><img src="https://latex.codecogs.com/svg.latex?Q(s,&space;a)&space;=&space;\sum_{s'}&space;P^a_{s&space;\rightarrow&space;s'}&space;E(r&space;|&space;s,&space;a,&space;s')" title="Q(s, a) = \sum_{s'} P^a_{s \rightarrow s'} E(r | s, a, s')" /></a>
 
+The optimal policy is the policy a such that :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=a*&space;=&space;argmax_a[Q(s,&space;a)]" target="_blank"><img src="https://latex.codecogs.com/svg.latex?a*&space;=&space;argmax_a[Q(s,&space;a)]" title="a* = argmax_a[Q(s, a)]" /></a>
+
+In the example, we found a rather specific scheme for how to reduce the learning rate over time. But many other schemes also work in practice. For example you keep h constant for a block of time, and then you decrease it for the next block. This learning rate is used in : 
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=\triangle&space;Q(s,a)&space;=&space;\eta&space;[r_t&space;-&space;Q(s,a)]" target="_blank"><img src="https://latex.codecogs.com/svg.latex?\triangle&space;Q(s,a)&space;=&space;\eta&space;[r_t&space;-&space;Q(s,a)]" title="\triangle Q(s,a) = \eta [r_t - Q(s,a)]" /></a>
