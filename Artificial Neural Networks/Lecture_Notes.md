@@ -92,3 +92,10 @@ Q(A) = Q(A) + 1/N(A)[R-Q(A)]
 Here N(a) is a counter of how many times the agent has taken action a. Here the learning rate is 1/N(A). The total expected discounter reward is :
 
 <a href="https://www.codecogs.com/eqnedit.php?latex=Q(s,a)&space;=&space;E[r_t&space;&plus;&space;\gamma&space;r_{t&plus;1}&space;&plus;&space;\gamma^2&space;r_{t&plus;2}&space;&plus;&space;...&space;|&space;s,&space;a]" target="_blank"><img src="https://latex.codecogs.com/svg.latex?Q(s,a)&space;=&space;E[r_t&space;&plus;&space;\gamma&space;r_{t&plus;1}&space;&plus;&space;\gamma^2&space;r_{t&plus;2}&space;&plus;&space;...&space;|&space;s,&space;a]" title="Q(s,a) = E[r_t + \gamma r_{t+1} + \gamma^2 r_{t+2} + ... | s, a]" /></a>
+
+We require gamma to be less than one for recurrent networks. The bellman equation relates the Q-value for state s and action a with the Q-values of the neighboring states. We have : 
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=Q(s,a)&space;=&space;\sum_{s'}&space;[P_{s&space;\rightarrow&space;s'}^a&space;&plus;&space;\gamma&space;\sum_{a'}&space;\pi(s',&space;a')&space;Q(s',&space;a')]" target="_blank"><img src="https://latex.codecogs.com/svg.latex?Q(s,a)&space;=&space;\sum_{s'}&space;[P_{s&space;\rightarrow&space;s'}^a&space;&plus;&space;\gamma&space;\sum_{a'}&space;\pi(s',&space;a')&space;Q(s',&space;a')]" title="Q(s,a) = \sum_{s'} [P_{s \rightarrow s'}^a + \gamma \sum_{a'} \pi(s', a') Q(s', a')]" /></a>
+
+This is also equal to :
+
