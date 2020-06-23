@@ -38,4 +38,12 @@ In this case we have the discriminant function is obtained when equating the ins
 
 You can use supervised learning in order to try to predict the next element of a sequence. In the brain the reward is modulated by dopamine, it is a neuromodulator. Activity in the brain are changed if three factors come together : the activity of the sending neuron j, some form of activity of the receiving neuron i, and the success signal. Animals learn through conditioning, consider the example of the Morris water maze ? In the same way the artificial neural network AlphaZero discovered different strategies by playing against itself. In deep reinforcement learning we change the connections, and the aim is to choose the next action to win, and the aim for the current value unit is to predict the value of the current position.
 
-Let's start with the formalization of reinforcement learning. We have three notions as follows : states, actions, rewards. 
+Let's start with the formalization of reinforcement learning. We have three notions as follows : states, actions, rewards. In standard RL we have discretized space and actions. We introduce the following notations :
+
+old state : s
+new state : s'
+current state : s_t
+discrete actions : a 
+mean rewards for the transitions : <a href="https://www.codecogs.com/eqnedit.php?latex=R^a_{s&space;\rightarrow&space;s'}" target="_blank"><img src="https://latex.codecogs.com/svg.latex?R^a_{s&space;\rightarrow&space;s'}" title="R^a_{s \rightarrow s'}" /></a>
+
+current reward : r_t
