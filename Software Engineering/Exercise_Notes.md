@@ -533,3 +533,6 @@ We can use the meta-character '\d' to match the number of files and use the expr
 
 We have to match only the lines that have a space between the list number and 'abc'. We can do that by using the expression \d\.\s+abc to match the number, the actual period (which must be escaped), one or more whitespace characters then the text.
 
+One way to tighten our patterns is to define a pattern that describes both the start and the end of the line using the special ^ (hat) and $ (dollar sign) metacharacters. In the example above, we can use the pattern ^success to match only a line that begins with the word "success", but not the line "Error: unsuccessful operation". And if you combine both the hat and the dollar sign, you create a pattern that matches the whole line completely at the beginning and end. Note that this is different than the hat used inside a set of bracket [^...] for excluding characters, which can be confusing when reading regular expressions.
+
+The expression 'Mission: successful' will match anywhere in the text, so we need to use the starting and ending anchors in an expression ^Mission: successful$ to only match the full string that starts with 'Mission' and ends with 'successful'.
