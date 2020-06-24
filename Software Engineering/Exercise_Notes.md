@@ -502,3 +502,16 @@ public class LoopInvariant {
   }
 }
 ```
+
+*Interface Contracts*
+
+Such a list contains objects that can be treated as Students. `List<? super Student>` expresses an upper bound on the type of the objects in the list. In such a list you can find Objects or Students — any of the superclasses of `Student` including itself, but never a subclass (e.g. no `SwEngStudent`). Here SwEngStudent is not accepted because it is not a super class of Student.
+
+Consider now the two lists :
+
+```
+List<? extends Student> l1 = ...;
+List<? super Student> l2 = ...;
+```
+
+Now you can perform the following `Student s1 = l1.get(0);` operation because we know that the list contains students or subclasses of students. However for the same reason the following code is not valid : `Student s2 = l2.get(0)`. Conversely the following operation `l1.add(new Student())` is not safe because you may want to extract specifically SwEngStudents and then you find a general Student. On the contrary if you consider the following operation `l2.add(new Student())`, this is safe, because this list can contain any of the superclasses of the students and the list will not be expected to contain anything more specific than a student.
