@@ -515,3 +515,12 @@ List<? super Student> l2 = ...;
 ```
 
 Now you can perform the following `Student s1 = l1.get(0);` operation because we know that the list contains students or subclasses of students. However for the same reason the following code is not valid : `Student s2 = l2.get(0)`. Conversely the following operation `l1.add(new Student())` is not safe because you may want to extract specifically SwEngStudents and then you find a general Student. On the contrary if you consider the following operation `l2.add(new Student())`, this is safe, because this list can contain any of the superclasses of the students and the list will not be expected to contain anything more specific than a student.
+
+*Regex Dos*
+
+First we do an overview of the regex syntax. Most patterns use normal ASCII, which includes letters, digits, punctuation and other symbols on your keyboard like %#$@!, but unicode characters can also be used to match any type of international text. Any digit from 0 to 9 can be written with \d. Similarly, there is the concept of a wildcard, which is represented by the . (dot) metacharacter, and can match any single character (letter, digit, whitespace, everything). You may notice that this actually overrides the matching of the period character, so in order to specifically match a period, you need to escape the dot by using a slash \. accordingly.
+
+There is a method for matching specific characters using regular expressions, by defining them inside square brackets. For example, the pattern [abc] will only match a single a, b, or c letter and nothing else. To represent this, we use a similar expression that excludes specific characters using the square brackets and the ^ (hat). For example, the pattern [^abc] will match any single character except for the letters a, b, or c. Luckily, when using the square bracket notation, there is a shorthand for matching a character in list of sequential characters by using the dash to indicate a character range. For example, the pattern [0-6] will only match any single digit character from zero to six, and nothing else. And likewise, [^n-p] will only match any single character except for letters n to p. Multiple character ranges can also be used in the same set of brackets, along with individual characters. An example of this is the alphanumeric \w metacharacter which is equivalent to the character range [A-Za-z0-9_] and often used to match characters in English text.
+
+
+
