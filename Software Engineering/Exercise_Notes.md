@@ -546,3 +546,36 @@ This expression requires capturing two parts of the data, both the year and the 
 Specifically when using groups, you can use the | (logical OR, aka. the pipe) to denote different possible sets of characters. In the above example, I can write the pattern "Buy more (milk|bread|juice)" to match only the strings Buy more milk, Buy more bread, or Buy more juice. An example is : 'I love (cats|dogs)' which matches both of the variants.
 
 We have already learned the most common metacharacters to capture digits using \d, whitespace using \s, and alphanumeric letters and digits using \w, but regular expressions also provides a way of specifying the opposite sets of each of these metacharacters by using their upper case letters. For example, \D represents any non-digit character, \S any non-whitespace character, and \W any non-alphanumeric character (such as punctuation). Depending on how you compose your regular expression, it may be easier to use one or the other. Additionally, there is a special metacharacter \b which matches the boundary between a word and a non-word character. It's most useful in capturing entire words (for example by using the pattern \w+\b).
+
+**Week 4**
+
+*Find the bugs*
+
+Now in the Person class we are checking that age < 17 rather than age < 18. The test below then should fail :
+
+```
+@Test
+// notice that below the name of the test is put directly into the name of the method
+void seventeenYearOldPeopleAreMinors() {
+    assertThat(new Person("Carmen", "Sandiego", 17).isMinor(), is(true));
+}
+```
+
+In the addressbook example we have that the last name of the person is not taken into account :
+
+```
+@Test
+void differentLastNamesButSameFirstNamesAndAgesAreNotConfused() {
+    AddressBook book = new AddressBook();
+    book.setAddress(new Person("Alan", "Turing", 99), "Secret Enigma-cracking lab");
+    book.setAddress(new Person("Alan", "Rickman", 99), "Potions-brewing room");
+   
+    // sometimes you may want to verify two conditions which you can do with both().and()
+    // inside of each brackets a true value must be returned. For this we probably must have defined a custom
+    // containsString() method which returns a boolean true or false. 
+    assertThat(book.toString(),
+           both(containsString("Alan Turing: Secret Enigma-cracking lab"))
+          .and(containsString("Alan Rickman: Potions-brewing room"))
+    );
+}
+```
