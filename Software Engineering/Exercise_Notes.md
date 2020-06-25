@@ -615,3 +615,166 @@ int hours = (int) start.until(stop, ChronoUnit.HOURS);
 ```
 
 In the above we have case the time spent working as an integer. We have the start and then we have the until method wich accets a stopping time and display the time between in terms of hours. 
+
+*Adapt the code*
+
+You will change the code to use dependency injection instead. The idea is simple: instead of instantiating the objects and services that a class depends on (i.e., its "dependencies"), a class should receive them as parameters to its constructor (i.e., get them "injected"). Those dependencies should be interfaces, not specific implementations. For example instead of writing `new RealHttpClient()` to instantiate the interface, you can write : 
+
+```
+private final HttpClient client;
+
+public WeatherService(HttpClient client) {
+    this.client = client;
+}
+```
+
+Not only does GoogleService not implement an interface, but its signIn method is static! To avoid this issue, create the interface yourself, then use the Adapter pattern to create the "real" implementation. The Adapter pattern is a simple concept: create adapter code so that a type can be used as if it implemented an interface. This is just like real-life adapters, where a Swiss laptop charger can be used in Japan with an adapter that "implements" the Swiss electrical "interface" on top of the Japanese one. For instance, in the Google sign-in example, the code could look like this:
+
+```
+class MyUser {
+  // ... properties of GoogleUser that you want to expose to the app ...
+  // This class exists so that the rest of the app doesn't depend on GoogleUser;
+  // after all, Google is just one way to sign in, you could in the future add Facebook or Twitter.
+}
+
+interface SignInService {
+  MyUser signIn();
+}
+
+// below is the adapter which is implementing the sign in service 
+class GoogleSignInAdapter implements SignInService {
+  public MyUser signIn() {
+    GoogleUser user = GoogleService.signIn();
+    // ... convert 'user' to an object of class MyUser, and return it ...
+  }
+}
+```
+
+You can create an interface for getting a user's position as follows :
+
+```
+public interface LocationService {
+    Position getUserPosition();
+}
+```
+
+We implement the interface by writing a specific service which will extend this interface as follows :
+
+```
+public final class GeolocatorLocationService implements LocationService {
+    
+    // the geolocator is initialized here, it's a final variable because it can not be changed
+    private final Geolocator locator = new Geolocator();
+
+    @Override
+    public Position getUserPosition() {
+        return locator.getUserPosition();
+    }
+}
+```
+
+Now while before we had the following code for TreasureFinder : 
+
+```
+public class TreasureFinder {
+
+    private final Geolocator geolocator;
+
+
+
+    // There MUST be a parameterless constructor,
+
+    // it is used by our Super-Fancy-Framework-That-Does-Not-Support-Parameters™
+
+    public TreasureFinder() {
+
+        geolocator = new Geolocator();
+
+    }
+
+
+
+    public String getHint(Position treasurePos) {
+
+        Position userPos = geolocator.getUserPosition();
+
+        if (userPos.latitude > 70) {
+
+            return "Nope, the treasure is not at the North Pole.";
+
+        }
+
+
+
+        // Not accurate because of the Earth's curvature. Better calculation coming next sprint!
+
+        double diff = Math.sqrt(Math.pow(treasurePos.latitude - userPos.latitude, 2) + Math.pow(treasurePos.longitude - userPos.longitude, 2));
+
+
+
+        if (diff < 0.005) {
+
+            return "You're right there!";
+
+        }
+
+
+
+        if (diff < 0.05) {
+
+            return "Close...";
+
+        }
+
+
+
+        if (diff < 0.5) {
+
+            return "Not too far.";
+
+        }
+
+
+
+        return "Far away.";
+
+    }
+
+}
+```
+
+We can rewrite this TreasureFinder using the location service to get : 
+
+```
+private final LocationService locationService;
+
+public TreasureFinder() {
+    // new instance of the service 
+    locationService = new GeolocatorLocationService();
+}
+
+public TreasureFinder(LocationService locationService) {
+    // here we have a dependency injection 
+    this.locationService = locationService;
+}
+```
+
+Now we may want to test the above code as follows :
+
+```
+@Test
+public void northPoleTriggersEasterEgg() {
+    LocationService locator = serviceReturning(80.0, 1.0);
+    TreasureFinder finder = new TreasureFinder(locator);
+    assertThat(finder.getHint(new Position(1.0, 1.0)), is("Nope, the treasure is not at the North Pole."));
+}
+
+private static LocationService serviceReturning(double lat, double lon) {
+    return new LocationService() {
+        @Override
+        public Position getUserPosition() {
+            return new Position(lat, lon);
+        }
+    };
+}
+```
