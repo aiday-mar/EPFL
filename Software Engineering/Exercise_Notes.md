@@ -579,3 +579,39 @@ void differentLastNamesButSameFirstNamesAndAgesAreNotConfused() {
     );
 }
 ```
+
+The WorkLog class uses ZonedDateTime.now(), which depends on the real system clock. This is a problem for tests because they could pass or fail depending on the date or time! Instead, the WorkLog class needs to take a Clock class in its constructor, which should be stored as a private field and then passed to the now method, which has an overload accepting a Clock. To this end, we can create a FakeClock which extends the Clock as follows : 
+
+```
+private final class FakeClock extends Clock {
+    private Instant instant;
+
+    void setInstant(Instant instant) {
+        this.instant = instant;
+    }
+
+    @Override
+    public ZoneId getZone() {
+        return ZoneId.of("UTC");
+    }
+
+    @Override
+    public Clock withZone(ZoneId zoneId) {
+        // this method therefore should not be used 
+        throw new RuntimeException("This method should not be called");
+    }
+
+    @Override
+    public Instant instant() {
+        return instant;
+    }
+}
+```
+
+Now if the start and the end are not on the same day, there can be an error in terms of the number of hours worked. Instead we can decide to replace the current code with the following code :
+
+```
+int hours = (int) start.until(stop, ChronoUnit.HOURS);
+```
+
+In the above we have case the time spent working as an integer. We have the start and then we have the until method wich accets a stopping time and display the time between in terms of hours. 
