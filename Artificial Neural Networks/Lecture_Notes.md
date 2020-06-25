@@ -117,3 +117,7 @@ start again
 ```
 
 Consider the following theorem : suppose the SARSA algorithm has been applied for a very long time with the correct updates. If all the Q-values have converged in expectation meaning the expectation of the updates of Q gives zero then the set of Q-values solves the Bellmann equation. 
+
+**Lecture 3**
+
+The Q-value is the expectation of the accumulated reward (discounted with a factor gamma smaller than one).
