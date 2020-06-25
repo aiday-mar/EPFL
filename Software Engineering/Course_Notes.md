@@ -45,3 +45,94 @@ You can check if the float is not a number as follows :`Flot.isNan(argument)`, t
 `forall {int i in (0 : upperBound); a[i] != key }`
 
 We can also have assertions, we have : `assert CONDITION : "string to be sent if condition not verified"`. Next we have the value of this character called `ch`, and we find its value, then we find it's index in the string s. We have : `int index = s.indexOf(String.valueOf(ch))`. When this character does not exist in the string we have that the indexOf method returns -1. To initialize an array of integers `private int[] contents = new int[capacity]`. We have contracts in software engineering as follows : requires precondition with @Requires, you can rely on the postcondition with @Ensures. The representation invariants are internal contracts of a class. They must be satisfied after the instantiation of the class and preserved by public class methods.
+
+**Week 4**
+
+Here we can use JUnit as follows : `assertEquals(1+1, 2)`. When you want to use JUnit and Hamcrest then you can write : `assertThat(1+1, is(2))`. You can execute different test codes at different times using the following keywords : `@BeforeAll, @AfterAll, @BeforeEach, @AfterEach`. 
+
+We include here the code to create an array of integers and then take the sum of the individual elements : `sum(new int[] {1,2,3})`. Now here is an example of the use of an interface :
+
+```
+interface AuthService {
+ User getCurrentUser();
+}
+
+// here we are creating a new instance of the interface 
+AuthService auth = new AuthService() {
+ // inside of this instance we need to override the methods from above
+ @Override
+ public User getCurrentUser() {
+  return null;
+ }
+}
+```
+
+We can also write code to check whether certain calls to methods indeed do return the right exceptions as follows:
+
+```
+HttpClient client = new HttpClient() {
+ @Override
+ public String post(String url, String body) {
+  assertThat(body, is("MSG:Hi");
+  return "OK";
+ }
+}
+
+assertThrows(IllegalStateException.class, () -> postMessage("Hi", auth, client))
+```
+
+In test-driven development, you first write the tests then write the code. An example where you code the bank accounts on code is as follows :
+
+```
+class Account {
+ 
+ private int balance;
+ 
+ int balance() { return balance; }
+ 
+ public Account(int balance) {
+  if (balance < 0) {
+   throw new IllegalArgumentException();
+  }
+  
+  this.balance = balance;
+ }
+ 
+ int withdraw(int amount) {
+  int result = Math.min(balance, amount);
+  balance -= result;
+  return result;
+ }
+}
+```
+
+The corresponding test are :
+
+```
+@Test
+void partialWithdrawIfBalanceTooLow() {
+ Account account = new Account(10);
+ assertThat(account.withdraw(20), is(10));
+ assertThat(account.balance(), is(0)):
+}
+
+@Test
+void canWithdrawLessThanBalance() {
+ Account account = new Account(100);
+ assertThat(account.withdraw(10), is(10));
+ assertThat(account.balance(), is(90));
+}
+
+@Test
+void cannotInitializeWithNegativeBalance() {
+ assertThrows(IllegalArgumentException.class, () -> new Account(-1));
+}
+
+@Test
+void canWithdrawNothing() {
+ Account account = new Account(100);
+ assertThat(account.withdraw(0), is(0));
+}
+```
+
+Regression testing is done after the release of the code. In the regression testing you reproduce the bug, then you fix the bug. The coverage notion measures the amount of code executed by tests divided by the total amount of code. The program paths indicate all the possible evolutions of the code and with what sort of output we can be outputted. These can be found by examining the cases when the different boolean methods return different possible values meaning when influential and unpaid bills are respectively equal to true or false. In this code the user can also turn out to be null. The different paths are found with the if statements.
