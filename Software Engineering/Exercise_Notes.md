@@ -764,17 +764,74 @@ Now we may want to test the above code as follows :
 ```
 @Test
 public void northPoleTriggersEasterEgg() {
+    // here we have a location specified in the parentheses in the service returning
     LocationService locator = serviceReturning(80.0, 1.0);
+    // the treasure finder depends on the locator which takes in 2D coordinates 
     TreasureFinder finder = new TreasureFinder(locator);
+    // in the assert method we have the new position and we get the hint associated which returns us a string 
+    // which is related to this coordinate position. Then we compare this string against the other string in the 
+    // is() method
     assertThat(finder.getHint(new Position(1.0, 1.0)), is("Nope, the treasure is not at the North Pole."));
 }
 
+// here we input a position given by a lattitude and a longitude in the parentheses of the serviceReturning method
 private static LocationService serviceReturning(double lat, double lon) {
     return new LocationService() {
+        // you return an instance of this location service class in which you want to override the method below
+        // this method return a position with the right parameters
         @Override
         public Position getUserPosition() {
             return new Position(lat, lon);
         }
     };
+}
+```
+
+*Dependency Injection on Adroid*
+
+You can use a static factory for dependencies as follows :
+
+```
+public final class HttpClientFactory {
+    private static HttpClient client = new RealHttpClient();
+
+    public static HttpClient getClient() {
+        return client;
+    }
+    
+    // why do we just not access this.client and we write the full name of the class ? 
+    public static void setClient(HttpClient client) {
+        HttpClientFactory.client = client;
+    }
+}
+```
+
+We use the factory as follows :
+
+```
+public WeatherService() {
+    this.client = HttpClientFactory.getClient();
+}
+```
+
+We can write tests now :
+
+```
+@Test
+void questionMarksMeanItsRainingMen() {
+    HttpClientFactory.setClient(new HttpClient() {
+        // you can override any methods in the HttpClient class
+        // when the string throws an exception you can write this in the definition of the method
+        @Override
+        public String get(String url) throws IOException {
+            // you return a string which consists in three question marks 
+            return "???";
+        }
+    });
+
+    WeatherService service = new WeatherService();
+    
+    // you use the service weather to find the current weather, and you use hamcrest to compare this to some parameter
+    assertThat(service.getWeatherToday(), is(Weather.ITS_RAINING_MEN_HALLELUJAH));
 }
 ```
