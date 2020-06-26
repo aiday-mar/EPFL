@@ -890,3 +890,11 @@ git branch -d fix-sort-bug
 git push
 ```
 Now if we want to rollback completely to a previous state : `git reset --hard <commit-id>`. You can also view the differences between the versions as follows for example `git diff <commit-id1> <commit-id2>`.
+
+0. Breakpoints: Code line locations to pause the execution of the program. The developer can execute expressions and view the state of the program.
+1. Step-Over: Execute the method call and skip to the next statement without getting into inner details of the method.
+2. Step-Into: Execute a statement, if it is a method call, go inside the method.
+3. Step-Out: Finish the method call, return from it to the caller method and go to the next statement.
+4. Resume: Resume until the next breakpoint, if no breakpoint then continue until the end of the program execution.
+5. Re-run: Restart the debugged program.
+6. View breakpoints: You can observe and modify all breakpoints.
