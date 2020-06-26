@@ -848,3 +848,5 @@ void questionMarksMeanItsRainingMen() throws IOException {
     assertThat(service.getWeatherToday(), is(Weather.ITS_RAINING_MEN_HALLELUJAH));
 }
 ```
+
+Fuzzing is an advanced testing technique consisting of sending random inputs to a program to find bugs. While this may seem odd at first glance, it has shown to be very effective especially in low-level languages where fuzzing finds crashes and undefined behavior quickly. Now that you have learned about fuzzing, download AFL, one of the most well-known fuzzers, and find bugs in the LAVA-M corpus of buggy programs. Or find bugs in your favorite program, and report them to the developers!
