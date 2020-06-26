@@ -857,4 +857,36 @@ When you have messed up the commit message you can write : `$ git commit --amend
 
 First, recompile your program with the -g flag. This tells the compiler to add extra information to the class file so that the debugger is aware of local stack variables. You can add breakpoints in jdb using : `stop in <classname>`.
 
-The cont command will continue execution, either until another breakpoint is hit, or the program terminates (or crashes). At any time you can use the help command to see all available commands in jdb. 
+The cont command will continue execution, either until another breakpoint is hit, or the program terminates (or crashes). At any time you can use the help command to see all available commands in jdb.
+
+Here we have to pay attention to the merge keyword. Merging is basically porting the code differences from one branch to another so that code features that are available in one branch are also available in the other one. There is one master branch, which can be used for release or keeping a stable version of the application and a develop branch, which is used for code development such as adding new features or bug fixes. When the developer is committing to a branch, that branch has to be checked out and the HEAD should point to the latest commit in that branch. We can run the following commands :
+
+```
+echo "# swengweek1" >> README.md  
+git init  
+// add this file 
+git add README.md  
+// the -m is the label for the message
+git commit -m "first commit"  
+// where here we have the url of the origin
+git remote add origin https://github.com/<user-id>/<repo-id>.git 
+// push the urls to the master 
+git push -u origin master 
+```
+Commit and push the files :
+
+```
+git add *.java
+git commit -m "adding java files"  
+git push  
+```
+
+List all the branches we have : `git branch -a`. The previous command shows all the branches. To create a branch you can write : `git branch newbranch`. Now to delete the branch you have to write : `git branch -d newbranch`. To make sure you are working on the actual branch is : `git checkout fix-sort-bug`. Alternative method: Instead of first creating a branch, then checking out, you can do it with one command. This can be written with : `git checkout -b fix-sort-bug`. We can commit all the files to the QuickSort file as follows : `git log --follow -- QuickSort.java`. We can see all the commits for the current branch : `git log`. Now we want to merge the branch into the main branch :
+
+```
+git checkout master
+git merge fix-sort-bug 
+git branch -d fix-sort-bug  
+git push
+```
+Now if we want to rollback completely to a previous state : `git reset --hard <commit-id>`. You can also view the differences between the versions as follows for example `git diff <commit-id1> <commit-id2>`.
