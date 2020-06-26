@@ -853,6 +853,4 @@ Fuzzing is an advanced testing technique consisting of sending random inputs to 
 
 **Week 5**
 
-The waterfall model is defined by the following : requirement specifications, system design, design implementation, verification and test, system deployment, software maintenance. The weakness of the waterfall method is that requirements must be known upfront, the method is inflexible, the customer does not get to review the product. The scrum method has a sprint as a basic structure. A sprint lasts 1-2 weeks, there has to be a working product at the end of each sprint.
-
-In ths scrum method we have inputs from customers, teams and managers to the product owner. The product owner has a product backlog, who creates a sprint planning meeting. Then there is a sprint backlog where all the information relative to the sprint is stored. The product owner represents the end-user's interests. The team builds the product, and it is cross-functional. The team is self-managing, it is autonomous and accountable. In the scrum method there is a scrum master. His role is to ensure the team's success.
+When you have messed up the commit message you can write : `$ git commit --amend`. To view previous commits and messages you can run `$ got log`. To view a specific commit, copy it's hash ID and run : `$ git show <commit>`.
