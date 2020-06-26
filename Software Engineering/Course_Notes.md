@@ -136,3 +136,9 @@ void canWithdrawNothing() {
 ```
 
 Regression testing is done after the release of the code. In the regression testing you reproduce the bug, then you fix the bug. The coverage notion measures the amount of code executed by tests divided by the total amount of code. The program paths indicate all the possible evolutions of the code and with what sort of output we can be outputted. These can be found by examining the cases when the different boolean methods return different possible values meaning when influential and unpaid bills are respectively equal to true or false. In this code the user can also turn out to be null. The different paths are found with the if statements.
+
+**Week 5**
+
+The waterfall model is defined by the following : requirement specifications, system design, design implementation, verification and test, system deployment, software maintenance. The weakness of the waterfall method is that requirements must be known upfront, the method is inflexible, the customer does not get to review the product. The scrum method has a sprint as a basic structure. A sprint lasts 1-2 weeks, there has to be a working product at the end of each sprint.
+
+In ths scrum method we have inputs from customers, teams and managers to the product owner. The product owner has a product backlog, who creates a sprint planning meeting. Then there is a sprint backlog where all the information relative to the sprint is stored. The product owner represents the end-user's interests. The team builds the product, and it is cross-functional. The team is self-managing, it is autonomous and accountable. In the scrum method there is a scrum master. His role is to ensure the team's success.
