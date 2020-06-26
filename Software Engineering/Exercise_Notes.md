@@ -853,4 +853,8 @@ Fuzzing is an advanced testing technique consisting of sending random inputs to 
 
 **Week 5**
 
-When you have messed up the commit message you can write : `$ git commit --amend`. To view previous commits and messages you can run `$ got log`. To view a specific commit, copy it's hash ID and run : `$ git show <commit>`.
+When you have messed up the commit message you can write : `$ git commit --amend`. To view previous commits and messages you can run `$ got log`. To view a specific commit, copy it's hash ID and run : `$ git show <commit>`. Here we can find the version of java using : `javac -version`. You can check the jdb debugger are installed by writing : `jdb`. Where we have an array of integers : `int[] numbers = new int[]{ 1, 2, 3, 4, 5};`. You can find the length with numbers.length . You can run the program with javac, and run the program with java. 
+
+First, recompile your program with the -g flag. This tells the compiler to add extra information to the class file so that the debugger is aware of local stack variables. You can add breakpoints in jdb using : `stop in <classname>`.
+
+The cont command will continue execution, either until another breakpoint is hit, or the program terminates (or crashes). At any time you can use the help command to see all available commands in jdb. 
