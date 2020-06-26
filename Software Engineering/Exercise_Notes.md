@@ -850,3 +850,9 @@ void questionMarksMeanItsRainingMen() throws IOException {
 ```
 
 Fuzzing is an advanced testing technique consisting of sending random inputs to a program to find bugs. While this may seem odd at first glance, it has shown to be very effective especially in low-level languages where fuzzing finds crashes and undefined behavior quickly. Now that you have learned about fuzzing, download AFL, one of the most well-known fuzzers, and find bugs in the LAVA-M corpus of buggy programs. Or find bugs in your favorite program, and report them to the developers!
+
+**Week 5**
+
+The waterfall model is defined by the following : requirement specifications, system design, design implementation, verification and test, system deployment, software maintenance. The weakness of the waterfall method is that requirements must be known upfront, the method is inflexible, the customer does not get to review the product. The scrum method has a sprint as a basic structure. A sprint lasts 1-2 weeks, there has to be a working product at the end of each sprint.
+
+In ths scrum method we have inputs from customers, teams and managers to the product owner. The product owner has a product backlog, who creates a sprint planning meeting. Then there is a sprint backlog where all the information relative to the sprint is stored. The product owner represents the end-user's interests. The team builds the product, and it is cross-functional. The team is self-managing, it is autonomous and accountable. In the scrum method there is a scrum master. His role is to ensure the team's success.
