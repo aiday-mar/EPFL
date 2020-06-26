@@ -835,3 +835,16 @@ void questionMarksMeanItsRainingMen() {
     assertThat(service.getWeatherToday(), is(Weather.ITS_RAINING_MEN_HALLELUJAH));
 }
 ```
+
+Mocking libraries help you write fake dependencies, also called mocks, by making it easy to create implementations of any dependency interface that return the values you want, instead of having to write an implementation of the interface every time.
+
+```
+@Test
+void questionMarksMeanItsRainingMen() throws IOException {
+    HttpClient client = mock(HttpClient.class);
+    when(client.get("http://example.org/weather/today")).thenReturn("???");
+    WeatherService service = new WeatherService(client);
+
+    assertThat(service.getWeatherToday(), is(Weather.ITS_RAINING_MEN_HALLELUJAH));
+}
+```
