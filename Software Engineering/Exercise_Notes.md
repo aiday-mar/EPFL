@@ -904,3 +904,15 @@ Now if we want to rollback completely to a previous state : `git reset --hard <c
 Large software projects miss their deadlines more often than small projects because the management task is more difficult and prone to wrong decisions as the project gets bigger. There should be no discussion during the daily scrum meeting. The Backlog should not change during the Sprint, it should be discussed during the Sprint Planning Meeting and Sprint Review. The burnout chart provides the information of an estimation of the amount of work left for the sprint and the average team daily performance. In every bar of the burnout chart you can find the parts of user stories that remain to be done. Now the product owner manages the product backlog. The product owner manages the product backlog. Who can move an item from the Product Backlog to the Sprint Backlog? The deveopment team. The role of the scrum master is to serve the Product Owner by helping them communicate with the Development Team, to serve the Development Team by coaching them in self-organization and flexibility, to serve the Development Team by removing impediments. The development team should speak in the daily scrum.
 
 The Sprint Review has to show the Increment to stakeholders and the Product Owner so that they can communicate their expectations. The outcome is a revised Product Backlog that is ready for the Spring Planning meeting. The Backlog can be adjusted further by the Product Owner, if necessary. The Sprint Retrospective is for the Scrum Team to inspect what worked and what didn't during the Sprint. The goal of the Sprint Retrospective is to identify improvements that the Scrum Team can implement in the next Sprint. The Scrum Team can update its definition of Done during the Sprint Retrospective.
+
+**Week 8**
+
+There are no slides in between. There are various refactoring methods : push up common methods/properties of two subclasses, pull down a specific method/property to subclass, create a common class to all the methods/properties, divide the class into different subclasses. Code smell is when you have unreadable code, complex structures, or useless structures. Refactoring is made to simplify this code, make it more readable etc. The code can also become more maintainable, it reduces coupling. You can also delete classes that have no functionality. When your class uses mostly methods of other classes this is called feature envy. Refactoring can be dangerous, it can be expensive, and you can end up wasting time on it. A method's body should be just as clear as its name. You can return a boolean in a method as follows :
+
+```
+private in getRating() {
+  return (moreThanFiveLateDeliveries()) ? 2 : 1;
+}
+```
+
+Also instead of using a constant you can use a query, or a call to a method instead. You can create a list as follows too : `List<String> candidates = Arrays.asList(1,2,3)`. You can check whether this array contains something with : `candidates.contains(1)`.
