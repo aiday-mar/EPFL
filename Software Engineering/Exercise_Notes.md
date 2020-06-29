@@ -919,6 +919,18 @@ Also instead of using a constant you can use a query, or a call to a method inst
 
 **Week 9**
 
+*Identifying code smell*
+
 In the data clump you have properties in your class that are not necessarily related to the object you want to describe directly, so you can extract some properties and create two classes instead. Some methods are too long and so you can split the method into smaller methods. Similarly you can break up a specific computation into different parts by writing a simple expression per line.
 
 The whole point of objects is that they are a technique to package data with the processes used on that data. A classic smell is a method that seems more interested in a class other than the one it is in. The most common focus of the envy is the data.
+
+*Duplication*
+
+Duplication of code can be in the same class/method, in the sibling class, in a different class or there could be two methods that could be considered similar. Suppose that a scanner is created in every single method of the same class then you can extract this scanner into a static field, and make it available to all the methods.
+
+*Identifying refactoring techniques*
+
+The algorithm used here didn't really make sense (why would you compute a minimum if the name of the method was getMostValuableMember ?). The method was pretty long so extracting a part of it into a separate method makes it more concise. It is also easier to spot a potential bug as one can test the sumTransactions method separately.
+
+Explanation: The getCurrentlyUsedVersionNumber method was being called many times, especially inside the for-loop. Imagine the returned value requires performing expensive computations or needs to fetch the information from a distant server. Getting the value only once and storing it inside a variable reduces cost. The name of the mentioned method was clearly too long, and was renamed to something simpler that describes it's role just as well. The VERSIONS array stored the information about each version in arrays of ints. This hurts the understandability of the code "what was stored in [1] again ??". A Version object with explicit methods such as setStatus can be extracted. Finally, the magic numbers (i.e. 0x3) aren't meaningfull and can easily be misstyped. They have been replaced by constants in an enum. Therefoer the 4 refactoring methods used are : extract the variable, rename the method, extract the class and replace maginc numbers with symbolic constants.
