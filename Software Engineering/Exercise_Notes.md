@@ -937,4 +937,98 @@ Explanation: The getCurrentlyUsedVersionNumber method was being called many time
 
 *More refactoring*
 
-Sometimes we can just use a simple string instead of using an object. On the contrary when three attributes specify one type of characteristic then you can extract these into a class for example. You can specify constants as follows : `private static final double FLOOR_HEIGHT = 10`. We have the following method from the Math class : `Math.toRadians(...), Math.cos(...), Math.sin(...), Math.atant2(...), Math.sqrt(...), Math.pow(... , ...)`.
+Sometimes we can just use a simple string instead of using an object. On the contrary when three attributes specify one type of characteristic then you can extract these into a class for example. You can specify constants as follows : `private static final double FLOOR_HEIGHT = 10`. We have the following method from the Math class : `Math.toRadians(...), Math.cos(...), Math.sin(...), Math.atant2(...), Math.sqrt(...), Math.pow(... , ...)`. You can code the two methods isAvailable, and, isAvailableAt the following way :
+
+```
+public boolean isAvailable() {
+    // where you need to input the urrent time into the method 
+    return isAvailableAt(TimeSlot.now());
+}
+    
+public boolean isAvailableAt(TimeSlot slot) {
+    // here you use an instance of a class which we call occupancies
+    // and we call the containsKey method from this instance, and using the passed in time slot.
+    return occupancies.containsKey(slot);
+}
+```
+
+Now we want to refactor the following method :
+
+```
+// where you map a timeslot to a specific course
+private Map<TimeSlot, Course> occupancies;
+
+public Course.TYPE mostCommonCourseType() {
+        int nbMath, nbArt, nbEnglish, nbHistory, nbGeography;
+        Course.TYPE currentBest = null;
+        int currentMax = -1;
+        
+        // you consider all the second column that contains the courses and we iterate over these courses 
+        for (Course c : occupancies.values()) {
+            // where the getType returns an instance of the TYPE class
+            switch(c.getType()) {
+                case MATH:
+                    nbMath++;
+                    if(nbMath > currentMax) {
+                        currentMax = nbMath;
+                        currentBest = MATH;
+                    }
+                    break;
+                case ART:
+                    nbArt++;
+                    if(nbArt > currentMax) {
+                        currentMax = nbArt;
+                        currentBest = ART;
+                    }
+                    break;
+                case ENGLISH:
+                    nbEnglish++;
+                    if(nbEnglish > currentMax) {
+                        currentMax = nbEnglish;
+                        currentBest = ENGLISH;
+                    }
+                    break;
+                case HISTORY:
+                    nbHistory++;
+                    if(nbHistory > currentMax) {
+                        currentMax = nbHistory;
+                        currentBest = HISTORY;
+                    }
+                    break;
+                case GEOGRAPHY:
+                    nbGeography++;
+                    if(nbGeography > currentMax) {
+                        currentMax = nbGeography;
+                        currentBest = GEOGRAPHY;
+                    }
+                    break;
+                default:
+                    throw new Error("Undefined course type !");
+            }
+        }
+        return currentBest;
+    }
+```
+
+A more concise method is the following method :
+
+```
+public Course.TYPE mostCommonCourseType() {
+    // here what we are likely doing is taking the Course.Type type and we are saying that the size of this array
+    // will be the length of the second column of this map
+    Integer[] counts = new Integer[Course.TYPE.values().length];
+    // now that we know what the length should be we are going to fill in this array with zeroes
+    Arrays.fill(counts, 0);
+    // because we know that this map contains courses as the type of the variable in the second column
+    for (Course c : occupancies.values())
+        // The java.lang.Enum.ordinal() method returns the ordinal of this enumeration constant 
+        // (its position in its enum declaration, where the initial constant is assigned an ordinal of zero).
+        counts[c.getType().ordinal()]++;
+    // you can stream the array, now to take the maximum likely you need to use a comparator to apply on the entries
+    // therefore you call the compareTo method in the Integer class, and then you need to get() the result
+    Integer max = Arrays.stream(counts).max(Integer::compareTo).get();
+    int index = Arrays.asList(counts).indexOf(max);
+    return Course.TYPE.values()[index];
+}
+```
+
