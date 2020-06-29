@@ -916,3 +916,9 @@ private in getRating() {
 ```
 
 Also instead of using a constant you can use a query, or a call to a method instead. You can create a list as follows too : `List<String> candidates = Arrays.asList(1,2,3)`. You can check whether this array contains something with : `candidates.contains(1)`.
+
+**Week 9**
+
+In the data clump you have properties in your class that are not necessarily related to the object you want to describe directly, so you can extract some properties and create two classes instead. Some methods are too long and so you can split the method into smaller methods. Similarly you can break up a specific computation into different parts by writing a simple expression per line.
+
+The whole point of objects is that they are a technique to package data with the processes used on that data. A classic smell is a method that seems more interested in a class other than the one it is in. The most common focus of the envy is the data.
