@@ -1108,3 +1108,35 @@ We use the adapter design pattern to create a new class with the name NewFacebok
 *Exercise 4*
 
 To remove elements from a table you can write : `table.remove(key)`. In the following class `public class DatabaseImplToKeyValueStoreAdapter implements KeyValueStore {...}`, we have a private DatabaseImpl, and in the constructor we use the method from the instance of the DatabaseImpl. Then you need to override the methods from the KeyValueStore, using the `@Override` keyword. There are a few methods you can use which are part of the Integer class `Integer.toString(key)` and `Integer.valueOf(result)`.
+
+*Exercise 5*
+
+In the abstract class Shape, you just need one method to be abstract, all the methods need not be abstract. You can also define an exception of an unsupported operation : `throw new UnsupportedOperationException("This operation is not supported!");`.
+
+*Exercise 7*
+
+In the absract class, the methods can have a body. You can have an abstract class extend an abstract class. Then this sub abstract class does not need to override the abstract methods of the original abstract class. However a simple class extending the abstract class must override the methods with no body in the original abstract class ? You can use the following to format strings : `String.format("An %s costs %.2f$", espressoWithSteamedMilk.getDescription(), espressoWithSteamedMilk.cost())`.
+
+*Exercise 8*
+
+When you have a subclass extending a class, then in the constructor you can call the constructor of the super class with `super(user.getUsername());`. You can have a `Jframe frame = new JFrame()` to show desktop applications, and a JButton("...") which takes as a parameter the string to show in the button. You can add listeners to the button where : `button.addActionListener(new AngelListener());` where we have that `class AngelListener implements ActionListener {...}`. Then you can add the button to the frame as follows : `frame.getContentPane().add(BorderLayout.CENTER, button);`. You can write :
+
+```
+frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+frame.getContentPane().add(BorderLayout.CENTER, button);
+frame.setSize(300,300);
+frame.setVisible(true);
+```
+
+And the action event listener is :
+
+```
+class AngelListener implements ActionListener {
+
+  public void actionPerformed(ActionEvent event) {
+    System.out.println("Don't do it, you might regret it!");
+  }
+}
+```
+
+**Week 11**
