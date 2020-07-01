@@ -1100,3 +1100,11 @@ Then in the computer builder you have private variables to which we can assign d
         return this;
     }
 ```
+
+*Exercise 3*
+
+We use the adapter design pattern to create a new class with the name NewFacebokPosterToFacebookPosterAdapter and instantiate it in the PosterTest class. The FacebookPoster class only has the method names without the definition of the body. Then you can have a FacebookPosterImpl class which implements the FacebookPoster interface from before.
+
+*Exercise 4*
+
+To remove elements from a table you can write : `table.remove(key)`. In the following class `public class DatabaseImplToKeyValueStoreAdapter implements KeyValueStore {...}`, we have a private DatabaseImpl, and in the constructor we use the method from the instance of the DatabaseImpl. Then you need to override the methods from the KeyValueStore, using the `@Override` keyword. There are a few methods you can use which are part of the Integer class `Integer.toString(key)` and `Integer.valueOf(result)`.
