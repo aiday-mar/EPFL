@@ -1083,3 +1083,20 @@ Then you can have `public class DataStore extends Subject{}`. Then here we do no
 
 *Exercise 2*
 
+We use the builder design pattern to make the code more manageable. Suppose you have a computer which has many properties you want to istantiate. Then you can create a long constructor with all the necessary properties to istantiate the class, however you may want to create a computer builder too. You can use the string builder as follows : 
+
+```
+StringBuilder sb = new StringBuilder(); 
+sb.append(this.name); 
+return sb.toString();
+```
+
+Then in the computer builder you have private variables to which we can assign default values. Then we have a build method which returns exceptions if one of the properties is null. Then you have an example of the set methods in the buider as follows : 
+
+```
+ public ComputerBuilder setDram(int dram) {
+        this.dram = dram;
+        // meaning we return this instance of the ComputerBuilder class
+        return this;
+    }
+```
