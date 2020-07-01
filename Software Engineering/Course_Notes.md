@@ -150,3 +150,7 @@ In between the two weeks there was no need to take notes. We have that refactori
 There are differnet refactoring methods you can use, such as the refactoring inheritance. In the pull up field, subclasses have the same field, which is used in the same way. We move the field to the superclass, and we make the field protected or encapsulate it. The push down field is the opposite, you move the specific field or method to the subclass. Or when two classes share similar features, you can create a superclass and pull up common features. Or on the contrary when a superclass and a subclass are similar we can merge the two into one. 
 
 Feature envy is the case when the code uses methods and fields of a different class more than those of its' own. Then you have to move the code to where it wants to be. 
+
+**Week 10**
+
+We will now study design patterns.
