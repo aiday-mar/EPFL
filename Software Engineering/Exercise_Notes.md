@@ -1032,3 +1032,54 @@ public Course.TYPE mostCommonCourseType() {
 }
 ```
 
+**Week 10**
+
+*Exercise 1*
+
+Here, the subject is the DataStore and the observers are the different kind of Phone and Screen. When the subject changes, we want the observers to be notified in order to update their content to display the newly updated data. Consider the following example of an observable object class :
+
+```
+import java.util.ArrayList;
+
+/**
+ * This class represents an observable object. It can be subclassed to represent an object that the application wants to have observed.
+ * A subject can have one or more observers. An observer can be any object that implements the Observer interface.
+ */
+
+public abstract class Subject {
+
+    private ArrayList<Observer> observers;
+  
+    // here we have the constructor for an abstract class, since the class is abstract, then in front of the constructor we do not keep any keyword.
+    Subject(){
+        observers = new ArrayList<>();
+    }
+
+    void registerObserver(Observer o) {
+        // adding into the array list 
+        observers.add(o);
+    }
+
+    void removeObserver(Observer o) {
+        // the index of this observer in this array list 
+        int i = observers.indexOf(o);
+        // meaning when this object exists in the array list 
+        if (i >= 0) {
+            observers.remove(i);
+        }
+    }
+
+    void notifyObservers(String data) {
+        for (int i = 0; i < observers.size(); i++) {
+            // meaning we cast the ith element of the observers list as an Observer 
+            Observer observer = (Observer) observers.get(i);
+            observer.update(data);
+        }
+    }
+}
+```
+
+Then you can have `public class DataStore extends Subject{}`. Then here we do not need to specify a constructor in the data store and we do not need to override the methods, we can however add some methods. You can extend classes and implement interfaces. Then in the class where you implement the interface you can override the methods from the interface. 
+
+*Exercise 2*
+
