@@ -1184,3 +1184,73 @@ abstract public class Pizza {
 *Exercise 2*
 
 We used to have 4 constructors with the same name and a different number of parameters. Now we create different static methods to create the corresponding loan, and in each method we have a corresponding call to the initial constructor. You also input where needed some default values into the initial constructor if in the corresponding call to the class you do not need these specific parameters defined. Then in this constructor you may create also after a corresponding instance of the capitalStrategy, or you create an instance of any subclass of the capitalStrategy. Meaning that here in the constructor you could create a CapitalStrategyTermLoan, a CapitalStrategyRevolver or a CapitalStrategyRCTL.
+
+*Exercise 3*
+
+We use the Abstract Factory design pattern to be able to create different types of computers. The example is :
+
+```
+public class PCFactory implements ComputerAbstractFactory {
+
+    private String ram;
+    private String hdd;
+    private String cpu;
+
+    public PCFactory(String ram, String hdd, String cpu){
+        this.ram=ram;
+        this.hdd=hdd;
+        this.cpu=cpu;
+    }
+
+    @Override
+    public Computer createComputer() {
+        return new PC(ram,hdd,cpu);
+    }
+}
+```
+
+*Exercise 4*
+
+We have the following code :
+
+```
+public interface House {
+    Member createMember();
+    Bastard createBastard();
+}
+
+public class HouseStark implements House {
+    @Override
+    public Member createMember() {
+        return new StarkMember();
+    }
+
+    @Override
+    public Bastard createBastard() {
+        return new StarkBastard();
+    }
+}
+
+
+public interface Member {
+    void sayMotto();
+}
+
+public interface Bastard {
+    void sayLastName();
+}
+
+public class StarkBastard implements Bastard {
+    @Override
+    public void sayLastName() {
+        System.out.println("My last name is Snow.");
+    }
+}
+
+public class StarkMember implements Member {
+    @Override
+    public void sayMotto() {
+        System.out.println("Winter is coming.");
+    }
+}
+```
