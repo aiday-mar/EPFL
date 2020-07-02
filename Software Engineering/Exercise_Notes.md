@@ -1180,3 +1180,7 @@ abstract public class Pizza {
     ...
 }
 ```
+
+*Exercise 2*
+
+We used to have 4 constructors with the same name and a different number of parameters. Now we create different static methods to create the corresponding loan, and in each method we have a corresponding call to the initial constructor. You also input where needed some default values into the initial constructor if in the corresponding call to the class you do not need these specific parameters defined. Then in this constructor you may create also after a corresponding instance of the capitalStrategy, or you create an instance of any subclass of the capitalStrategy. Meaning that here in the constructor you could create a CapitalStrategyTermLoan, a CapitalStrategyRevolver or a CapitalStrategyRCTL.
