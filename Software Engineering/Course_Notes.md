@@ -153,4 +153,94 @@ Feature envy is the case when the code uses methods and fields of a different cl
 
 **Week 10**
 
-We will now study design patterns.
+We will now study design patterns. To simplify the creation of objects you can use builders for the object of interest. Here is an example :
+
+```
+new RectangleBuilder(100, 200)
+.withBorder(10, Colors.BLACK)
+.withBackground(Colors.RED)
+.withOffsetShadow(0, 10)
+.build();
+```
+
+The class of the builder could be as follows :
+
+```
+class RectangleBuilder {
+RectangleBuilder(...) { ... }
+RectangleBuilder withBorder(...)
+RectangleBuilder withDottedBorder(...)
+RectangleBuilder withBackground(...)
+RectangleBuilder withOffsetShadow(...)
+Rectangle build()
+}
+```
+
+Following is an example of the decorator pattern :
+
+```
+interface Network {
+ List<User> getUsers();
+}
+
+class RetryingNetwork implements Network {
+  Network wrapped;
+  RetryingNetwork(Network wrapped) {
+    this.wrapped = wrapped;
+  }
+  
+  List<User> getUsers() {
+    try { return wrapped.getUsers(); }
+    catch (...) { ... }
+  }
+}
+```
+
+Here is an example of a composite class :
+
+```
+interface Item {
+ List<Item> children();
+}
+
+class File implements Item { ... }
+
+class Folder implements Item {
+  List<File> files;
+  List<Folder> folders;
+  ...
+}
+
+class User {
+  Item itemsroot;
+}
+```
+
+You can integrate different components using the adapter :
+
+```
+interface Place {
+  double getLongitude();
+  double getLatitude();
+}
+
+interface WeatherService {
+  int getTemperature(Place place);
+}
+
+interface City {
+  String getName();
+}
+
+class CityPlace implements Place {
+
+  CityPlace(City city) { ... }
+  double getLongitude() { ... }
+  double getLatitude() { ... }
+}
+```
+
+In an observer you invoke a callback, you push essentially an event. 
+
+```
+
