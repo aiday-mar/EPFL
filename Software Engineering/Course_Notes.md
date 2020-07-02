@@ -250,3 +250,79 @@ void add(Runnable handler) { ... }
 
 void remove(Runnable handler) { ... }
 ```
+
+To write a singleton in order to have only one instance of the file, the easiest implementation consists of a private constructor and a field to hold its result, and a static accessor method with a name like getInstance(). The private field can be assigned from within a static initializer block or, more simply, using an initializer. The getInstance( ) method (which must be public) then simply returns this instance.
+
+```
+// File Name: Singleton.java
+public class Singleton {
+
+   private static Singleton singleton = new Singleton( );
+
+   /* A private Constructor prevents any other
+    * class from instantiating.
+    */
+   private Singleton() { }
+
+   /* Static 'instance' method */
+   public static Singleton getInstance( ) {
+      return singleton;
+   }
+
+   /* Other methods protected by singleton-ness */
+   protected static void demoMethod( ) {
+      System.out.println("demoMethod for singleton");
+   }
+}
+```
+
+You can instantiate the singleton as follows :
+
+```
+// File Name: SingletonDemo.java
+public class SingletonDemo {
+
+   public static void main(String[] args) {
+      Singleton tmp = Singleton.getInstance( );
+      tmp.demoMethod( );
+   }
+}
+```
+
+You can check for different path types as follows :
+
+```
+static RecordReader get(String path) {
+  if (path.endsWith(".xml")) {
+    return new XmlRecordReader(path);
+  }
+  // also for JSon and CSV
+}
+
+```
+
+A proxy is used to pretend a remote resource is local. You can do tests on the type as follows : `shape instanceof Square`. You can do a double dispatch using the Visitor method as follows :
+
+```
+interface ShapeVisitor {
+  void visit(Square square);
+  void visit(Triangle triangle);
+  void visit(Circle circle);
+}
+
+interface Shape {
+  void visit(ShapeVisitor visitor);
+}
+
+class Square implements Shape {
+  void visit(ShapeVisitor visitor) {
+    // and since we know that this instabce is a square therefore in the ShapeVisitor we will be using the visit method specifically for the Square. 
+    visitor.visit(this);
+  }
+}
+
+// using the above as follows
+getShape().visit(new DrawingVisitor());
+```
+
+In the MVC pattern the controller creates the view using the model. The MVP pattern is such that the presenter mediates the view and the model. In here the user calls the view, which calls the presenter, which updates the view using the model. This is used in Android and is called MVVM, the model, view and view-model. The view observer the view-model which uses the model. Meaning the view is a function of the view-model. 
