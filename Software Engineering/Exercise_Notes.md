@@ -1308,3 +1308,15 @@ public class App {
     }
 }
 ```
+
+*Exercise 6*
+
+Use the proxy design pattern to restrict access to all the files that contain the word "sensitive" in their filename. For this you can use the string.contains("...") method.
+
+*Exercise 7*
+
+Suppose we have a `private String output = ""`. Then you can add text to this string by writing for example `output += String.format("<b>%s</b>", part.getText())`.
+
+*Exercise 8*
+
+Once the process is finished, you will see several subfolders in the Project view on the left: most notably java where the logic lives, and res which will store our assets and layout declarations.
