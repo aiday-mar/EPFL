@@ -1254,3 +1254,57 @@ public class StarkMember implements Member {
     }
 }
 ```
+
+*Exercise 5*
+
+Now we want to log information into a logger. This logger is a singleton, there is only one instance of this class, so we make the logger a static class, then the constructor for the logger should be private as follows :
+
+```
+public class Logger {
+
+    private static final Logger instance = new Logger();
+    private Logger() {
+    	// meaning we throw an exception because in this case there is already an instance of the logger that exists
+        if (instance != null)
+            throw new IllegalStateException("Already instantiated");
+    }
+
+    public static Logger getInstance() {
+        return instance;
+    }
+
+    protected void print() {
+        System.out.println("Logged");
+    }
+}
+```
+
+Otherwise the second way to create singleton classes is :
+
+```
+public enum Logger2 {
+
+    INSTANCE;
+    public Logger2 getInstance() {
+        return INSTANCE;
+    }
+    
+    protected void print() {
+        System.out.println("Logged");
+    }
+}
+```
+
+And then to use the above two class you can write this in the App java class as follows :
+
+```
+public class App {
+    public static void main(String[] args) {
+        Logger logger = Logger.getInstance();
+        logger.print();
+
+        Logger2 logger2 = Logger2.INSTANCE;
+        logger2.print();
+    }
+}
+```
