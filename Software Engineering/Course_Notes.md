@@ -243,4 +243,10 @@ class CityPlace implements Place {
 In an observer you invoke a callback, you push essentially an event. 
 
 ```
+class Button {
+private List<Runnable> handlers;
 
+void add(Runnable handler) { ... }
+
+void remove(Runnable handler) { ... }
+```
