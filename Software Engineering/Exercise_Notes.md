@@ -1140,3 +1140,43 @@ class AngelListener implements ActionListener {
 ```
 
 **Week 11**
+
+*Exercise 1*
+
+We use a factory design pattern to be able to create different types of pizzas. The Static Factory Method is better suited in this case. Indeed, the goal here is to gain control over object (pizza) creation. This is achieved by delegating object creation from the constructor to static methods which act on behalf of the constructor. You have an abstract public pizza class. In a method prepare pizza you can call all the other methods in the same class for that specific instance :
+
+```
+public void preparePizza(){
+    this.prepare();
+    this.bake();
+    this.cut();
+    this.box();
+}
+```
+
+Now you have the following subclass of the pizza class :
+
+```
+public class PepperoniPizza extends Pizza {
+	public PepperoniPizza() {
+		name = "Pepperoni Pizza";
+		dough = "Crust";
+		sauce = "Marinara sauce";
+		toppings.add("Sliced Pepperoni");
+		toppings.add("Sliced Onion");
+		toppings.add("Grated parmesan cheese");
+	}
+}
+```
+
+Where the pizza class starts with :
+
+```
+abstract public class Pizza {
+    protected String name;
+    protected String dough;
+    protected String sauce;
+    protected ArrayList<String> toppings = new ArrayList<String>();
+    ...
+}
+```
