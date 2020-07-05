@@ -1,5 +1,6 @@
 **Week 1**
 
+```
 from numpy import * 
 from pylab import * 
 
@@ -100,3 +101,4 @@ def LIF_Sinus(I_freq = 0.1, tstart=0,tend=100,dt=0.1, I_offset=0.5,I_amp=0.4):
    plot(t,I,'r:',label=r'$v^\ast(t)$',lw=2) 
    plot([tstart,tend],[1,1],'r--',label='threshold',lw=2) 
    legend()
+```
