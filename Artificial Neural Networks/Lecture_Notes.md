@@ -134,4 +134,13 @@ Repeat :
   Repeat :
     Take action A, observe R, S'
     Choose A' from S' using the policy derived from Q
-    <a href="https://www.codecogs.com/eqnedit.php?latex=Q(s,&space;A)&space;=&space;Q(s,&space;A)&space;&plus;&space;\alpha&space;[R&space;&plus;&space;\sum_{\alpha}&space;\pi(a&space;|&space;S_{t&plus;1})&space;\cdot&space;Q(S_{t&plus;1},&space;a)&space;-&space;Q(S_t,&space;A_t)]" target="_blank"><img src="https://latex.codecogs.com/gif.latex?Q(s,&space;A)&space;=&space;Q(s,&space;A)&space;&plus;&space;\alpha&space;[R&space;&plus;&space;\sum_{\alpha}&space;\pi(a&space;|&space;S_{t&plus;1})&space;\cdot&space;Q(S_{t&plus;1},&space;a)&space;-&space;Q(S_t,&space;A_t)]" title="Q(s, A) = Q(s, A) + \alpha [R + \sum_{\alpha} \pi(a | S_{t+1}) \cdot Q(S_{t+1}, a) - Q(S_t, A_t)]" /></a>
+```
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=Q(s,&space;A)&space;=&space;Q(s,&space;A)&space;&plus;&space;\alpha&space;[R&space;&plus;&space;\sum_{\alpha}&space;\pi(a&space;|&space;S_{t&plus;1})&space;\cdot&space;Q(S_{t&plus;1},&space;a)&space;-&space;Q(S_t,&space;A_t)]" target="_blank"><img src="https://latex.codecogs.com/gif.latex?Q(s,&space;A)&space;=&space;Q(s,&space;A)&space;&plus;&space;\alpha&space;[R&space;&plus;&space;\sum_{\alpha}&space;\pi(a&space;|&space;S_{t&plus;1})&space;\cdot&space;Q(S_{t&plus;1},&space;a)&space;-&space;Q(S_t,&space;A_t)]" title="Q(s, A) = Q(s, A) + \alpha [R + \sum_{\alpha} \pi(a | S_{t+1}) \cdot Q(S_{t+1}, a) - Q(S_t, A_t)]" /></a>
+
+```
+   S <- S'
+   A <- A'
+Until S is terminal 
+```
+
