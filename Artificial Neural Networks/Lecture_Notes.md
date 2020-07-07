@@ -158,4 +158,65 @@ It's basically the averaging over the Q-values where we take into account the ac
 
 <a href="https://www.codecogs.com/eqnedit.php?latex=V(s)&space;=&space;\sum_a&space;\pi(s,A)&space;\sum_{s'}&space;P_{s&space;\rightarrow&space;s'}^a&space;[R^a_{s&space;\rightarrow&space;s'}&space;&plus;&space;\gamma&space;V(s')]" target="_blank"><img src="https://latex.codecogs.com/gif.latex?V(s)&space;=&space;\sum_a&space;\pi(s,A)&space;\sum_{s'}&space;P_{s&space;\rightarrow&space;s'}^a&space;[R^a_{s&space;\rightarrow&space;s'}&space;&plus;&space;\gamma&space;V(s')]" title="V(s) = \sum_a \pi(s,A) \sum_{s'} P_{s \rightarrow s'}^a [R^a_{s \rightarrow s'} + \gamma V(s')]" /></a>
 
+We have the following temporal distance learning :
 
+```
+Input : the policy \pi to be evaluated
+InitiaiLize V(s) arbitrarily
+Repeat :
+  Initialize s
+  Repeat :
+  A <- action gieVen by \pi for s
+  Take action A, observe R, S'
+```
+<a href="https://www.codecogs.com/eqnedit.php?latex=V(s)&space;=&space;V(s)&space;&plus;&space;\alpha[R&space;&plus;&space;\gamma&space;V(s')&space;-&space;V(s)]" target="_blank"><img src="https://latex.codecogs.com/gif.latex?V(s)&space;=&space;V(s)&space;&plus;&space;\alpha[R&space;&plus;&space;\gamma&space;V(s')&space;-&space;V(s)]" title="V(s) = V(s) + \alpha[R + \gamma V(s') - V(s)]" /></a>
+
+```
+  S <- S'
+Until S is terminal 
+```
+
+We have then :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=\Delta&space;V(s)&space;=&space;\eta[r_t&space;&plus;&space;\gamma&space;V(s')&space;-&space;V(s)]" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\Delta&space;V(s)&space;=&space;\eta[r_t&space;&plus;&space;\gamma&space;V(s')&space;-&space;V(s)]" title="\Delta V(s) = \eta[r_t + \gamma V(s') - V(s)]" /></a>
+
+For some reason then you can calculate the return as :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=Return(s)&space;=&space;r_t&space;&plus;&space;\gamma&space;r_{t&plus;1}&space;&plus;&space;\gamma^2&space;r_{t&plus;2}&space;&plus;&space;\gamma^3&space;r_{t&plus;3}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?Return(s)&space;=&space;r_t&space;&plus;&space;\gamma&space;r_{t&plus;1}&space;&plus;&space;\gamma^2&space;r_{t&plus;2}&space;&plus;&space;\gamma^3&space;r_{t&plus;3}" title="Return(s) = r_t + \gamma r_{t+1} + \gamma^2 r_{t+2} + \gamma^3 r_{t+3}" /></a>
+
+This is the return for a single episode. 
+
+Consider the following Monte-Carlo estimation of V-values.
+
+```
+Initialize :
+  \pi <- policy to eb evaluated
+  V <- an arbitrary state-value function
+  Return(s) <- an empty list, for all s in S
+Repeat forever :
+  Generate an episode using \pi
+  For each state s appearing in the episode:
+    G <- the return that follows the first occurence of s
+    Append G to Return(s)
+    V(s) <- average(Returns(s))
+ ```
+ 
+ Now we have the monte carlo estimation of Q-values :
+ 
+ ```
+ Initialize for all s in S, for all a in A(s)
+  Q(s, a) <- arbitrary
+  \pi(s) <- arbitrary
+  Return(s,a) <- empty list
+Repeat forever :
+  Choose s_0 in S, and A_o in A(s_0) such that all the pairs have probability > 0
+  Generate an episode starting from s_0, A_0 following \pi
+  For each pair {s,a} appearing in the episode :
+    G <- the return that follows the first occurence of {s, a}
+    Append G to Returns(s,a)
+    Q(s,a) <- average(Returns(s,a))
+  For each s in the episode :
+    \pi(s) <- argmax_{\alpha} Q(s,a)
+ ```
+ 
+ 
