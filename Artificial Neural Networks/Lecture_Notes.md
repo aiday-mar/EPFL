@@ -120,4 +120,18 @@ Consider the following theorem : suppose the SARSA algorithm has been applied fo
 
 **Lecture 3**
 
-The Q-value is the expectation of the accumulated reward (discounted with a factor gamma smaller than one).
+The Q-value is the expectation of the accumulated reward (discounted with a factor gamma smaller than one). In the balancing probabilities pi(s, A) denotes the probability to choose action A in state S. We have :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=1&space;=&space;\sum_{a'}&space;\pi(s,&space;a')" target="_blank"><img src="https://latex.codecogs.com/gif.latex?1&space;=&space;\sum_{a'}&space;\pi(s,&space;a')" title="1 = \sum_{a'} \pi(s, a')" /></a>
+
+The expected SARSA algorithm is :
+
+```
+Initialize Q(s, a), for all s in S, all a in A(s), and Q(terminate-state, .) = 0
+Repeat :
+  Initialize S
+  Choose A from S using a policy derived from Q
+  Repeat :
+    Take action A, observe R, S'
+    Choose A' from S' using the policy derived from Q
+    <a href="https://www.codecogs.com/eqnedit.php?latex=Q(s,&space;A)&space;=&space;Q(s,&space;A)&space;&plus;&space;\alpha&space;[R&space;&plus;&space;\sum_{\alpha}&space;\pi(a&space;|&space;S_{t&plus;1})&space;\cdot&space;Q(S_{t&plus;1},&space;a)&space;-&space;Q(S_t,&space;A_t)]" target="_blank"><img src="https://latex.codecogs.com/gif.latex?Q(s,&space;A)&space;=&space;Q(s,&space;A)&space;&plus;&space;\alpha&space;[R&space;&plus;&space;\sum_{\alpha}&space;\pi(a&space;|&space;S_{t&plus;1})&space;\cdot&space;Q(S_{t&plus;1},&space;a)&space;-&space;Q(S_t,&space;A_t)]" title="Q(s, A) = Q(s, A) + \alpha [R + \sum_{\alpha} \pi(a | S_{t+1}) \cdot Q(S_{t+1}, a) - Q(S_t, A_t)]" /></a>
