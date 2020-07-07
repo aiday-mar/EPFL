@@ -139,8 +139,23 @@ Repeat :
 <a href="https://www.codecogs.com/eqnedit.php?latex=Q(s,&space;A)&space;=&space;Q(s,&space;A)&space;&plus;&space;\alpha&space;[R&space;&plus;&space;\sum_{\alpha}&space;\pi(a&space;|&space;S_{t&plus;1})&space;\cdot&space;Q(S_{t&plus;1},&space;a)&space;-&space;Q(S_t,&space;A_t)]" target="_blank"><img src="https://latex.codecogs.com/gif.latex?Q(s,&space;A)&space;=&space;Q(s,&space;A)&space;&plus;&space;\alpha&space;[R&space;&plus;&space;\sum_{\alpha}&space;\pi(a&space;|&space;S_{t&plus;1})&space;\cdot&space;Q(S_{t&plus;1},&space;a)&space;-&space;Q(S_t,&space;A_t)]" title="Q(s, A) = Q(s, A) + \alpha [R + \sum_{\alpha} \pi(a | S_{t+1}) \cdot Q(S_{t+1}, a) - Q(S_t, A_t)]" /></a>
 
 ```
-   S <- S'
-   A <- A'
+    S <- S'
+    A <- A'
 Until S is terminal 
 ```
+
+Here we are essentially averaging over all possible next actions with a weight given by policy \pi. Sometimes you can instead use the Q-learning where you perform the average with the best policy, you use the greedy algorithm. Hence instead of the above image in the algorithm, you have the following line. 
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=Q(s,&space;A)&space;=&space;Q(s,&space;A)&space;&plus;&space;\alpha&space;[R&space;&plus;&space;\gamma&space;\cdot&space;max_{\alpha}&space;Q(S',&space;a)&space;-&space;Q(s,A)]" target="_blank"><img src="https://latex.codecogs.com/gif.latex?Q(s,&space;A)&space;=&space;Q(s,&space;A)&space;&plus;&space;\alpha&space;[R&space;&plus;&space;\gamma&space;\cdot&space;max_{\alpha}&space;Q(S',&space;a)&space;-&space;Q(s,A)]" title="Q(s, A) = Q(s, A) + \alpha [R + \gamma \cdot max_{\alpha} Q(S', a) - Q(s,A)]" /></a>
+
+Here you use the greedy policy during the update. You turn off the current policy during the update. IT is a temporal difference algorithm because neighboring states are visited one after the other. 
+
+Now define the state value V(s) of a state s which is the total discounted expected reward the agent gets when starting from state s. Meaning :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=V(s)&space;=&space;\sum_a&space;\pi(s,A)&space;\cdot&space;Q(s,&space;A)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?V(s)&space;=&space;\sum_a&space;\pi(s,A)&space;\cdot&space;Q(s,&space;A)" title="V(s) = \sum_a \pi(s,A) \cdot Q(s, A)" /></a>
+
+It's basically the averaging over the Q-values where we take into account the actions that can be taken starting from state s.
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=V(s)&space;=&space;\sum_a&space;\pi(s,A)&space;\sum_{s'}&space;P_{s&space;\rightarrow&space;s'}^a&space;[R^a_{s&space;\rightarrow&space;s'}&space;&plus;&space;\gamma&space;V(s')]" target="_blank"><img src="https://latex.codecogs.com/gif.latex?V(s)&space;=&space;\sum_a&space;\pi(s,A)&space;\sum_{s'}&space;P_{s&space;\rightarrow&space;s'}^a&space;[R^a_{s&space;\rightarrow&space;s'}&space;&plus;&space;\gamma&space;V(s')]" title="V(s) = \sum_a \pi(s,A) \sum_{s'} P_{s \rightarrow s'}^a [R^a_{s \rightarrow s'} + \gamma V(s')]" /></a>
+
 
