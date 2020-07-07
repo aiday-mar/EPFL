@@ -31,4 +31,29 @@ A_i + B_i = i, and \delta is a uniform random variables on [0,1].
 
 When n is high we have high exploitation. When k is high we have high exploration. 
 
-For most social insects the fundamental ecological unit is the colony. 
+For most social insects the fundamental ecological unit is the colony. A collection of nests or sub-colonies forms what is called a super-colony. Ant colony optimization is the field of study centered around applying ideas from natural systems to digital artificial systems. ACO algorithms are examples of exploitation of swarm intelligence principles as a particular form of distributed intelligence. The travelling salesman problem tries to find the shortest path which allows the salesman to visit once and only once each city in the graph. Ants build solutions probabilistically without updating pheromone trails. Ants deterministically backward retrace the forward path to update the pheromones. Ants deposit a quantity of pheromone function of the quality of the solution that they generate. 
+
+In the TSP problem we have :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=\eta_{ij}&space;=&space;1/d_{ij}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\eta_{ij}&space;=&space;1/d_{ij}" title="\eta_{ij} = 1/d_{ij}" /></a>
+
+which denotes the visibility, this information is static. We have the following AS for the TSP algorithm.
+
+```
+Loop
+  place one ant on each node
+  for k = 1 to m
+    for step = 1 to n
+      choose the next node to move by applying a probabilistic state transition rule
+    end for
+  end for
+until end condition
+```
+
+During a tour T, an ant k at node i decided to move towards j with the following probability :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=p^k_{ij}(t)&space;=&space;0" target="_blank"><img src="https://latex.codecogs.com/gif.latex?p^k_{ij}(t)&space;=&space;0" title="p^k_{ij}(t) = 0" /></a>
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=p^k_{ij}(t)&space;=&space;\frac{[\tau_{ij}(t)]^{\alpha}&space;[\eta_{ij}]^{\beta}}{\sum_{j&space;\in&space;J_i^k}&space;[\tau_{ij}(t)]^{\alpha}[\eta_{ij}]^{\beta}}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?p^k_{ij}(t)&space;=&space;\frac{[\tau_{ij}(t)]^{\alpha}&space;[\eta_{ij}]^{\beta}}{\sum_{j&space;\in&space;J_i^k}&space;[\tau_{ij}(t)]^{\alpha}[\eta_{ij}]^{\beta}}" title="p^k_{ij}(t) = \frac{[\tau_{ij}(t)]^{\alpha} [\eta_{ij}]^{\beta}}{\sum_{j \in J_i^k} [\tau_{ij}(t)]^{\alpha}[\eta_{ij}]^{\beta}}" /></a>
+
+Here we have that alpha is the parameter controlling the includence of the virtual pheromone, whilst beta is the parameter controlling the influence of the local visibility. 
