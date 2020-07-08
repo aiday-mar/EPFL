@@ -1320,3 +1320,15 @@ Suppose we have a `private String output = ""`. Then you can add text to this st
 *Exercise 8*
 
 Once the process is finished, you will see several subfolders in the Project view on the left: most notably java where the logic lives, and res which will store our assets and layout declarations.
+
+*Exercise 10*
+
+The main program is written in such a code as below :
+
+```
+public static void main(String[] args) { ... }
+```
+
+The implementation file of the interface has a private hashmap `private HashMap<Integer, Integer> map`. And all the methods related to this map are public methods. 
+
+The difference is that the name field to Naming.rebind() is parsed as an URL while the Registry.rebind() is the "name to associate with the remote reference". The LocateRegistry.getRegistry() call assumes the registry is on the local host at the default port while the Naming.rebind() allows you to specify what registry to use. You can also choose to print the stack trace related to an exception as follows : `e.printStackTrace();`.
