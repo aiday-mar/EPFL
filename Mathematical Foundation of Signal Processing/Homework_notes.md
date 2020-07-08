@@ -169,3 +169,69 @@ pixel_pos = np.concatenate((pixel_x, pixel_y), axis=-1)
 # Finally, we compute the forward matrix (i.e. the measurement matrix).
 A = construct_forward_matrix(beam_normals, beam_signed_dist, pixel_pos, pixel_r)
 ```
+
+We then have the following code for the Kaczmarz method : 
+
+```
+def kaczmarz(A, b, n_iter, limits=None, randomize=False, f_0=None):
+    """
+    Form image via Kaczmarz's algorithm.
+
+    Parameters
+    ----------
+    A : :py:class:`~numpy.ndarray`
+        (n_beams, n_pixels) measurement matrix.
+    b : :py:class:`~numpy.ndarray`
+        (n_beams,) vector with measurements.
+    n_iter : int
+        Number of iterations to perform.
+    limits : :py:class:`~numpy.ndarray`
+        (2,) pixel value constraints. 
+        Each pixel of the output image must lie in [`limits[0]`, `limits[1]`].
+        If `None`, then the range is not restricted.
+    randomize: bool
+        Apply a ranomization strategy when applying projections.
+    f_0 : :py:class:`~numpy.ndarray`
+        (n_pixels,) initial point of the optimization.
+        If unspecified, the initial point is set to an all-zero vector.
+
+    Returns
+    -------
+    f : :py:class:`~numpy.ndarray`
+        (n_pixels,) vectorized image
+    """
+    
+    # because the shape method returns two values, one for the number of rows and the second for the number of columns 
+    n_beams, n_pixels = A.shape
+    
+    # how come in the following we don't have a second parameter for the shape of the matrix of zeroes ? We are also saying that the type in the matrix is float
+    # also here we initialize the variable and we follow this up with an if else condition
+    f = np.zeros((n_pixels,), dtype=float) if (f_0 is None) else f_0.copy()
+
+    if randomize:
+        norms_sq = np.sum(A * A, axis=-1)
+        probs = norms_sq / sum(norms_sq)
+        # Python random module has a function choice() to randomly choose an item from a list and other sequence types.
+        index = np.random.choice(n_beams, size=n_iter, p=probs)
+    else:
+        # where here we are taking the modulo the number of beams 
+        # Values are generated within the half-open interval [start, stop) (in other words, the interval including start but excluding stop). 
+        # For integer arguments the function is equivalent to the Python built-in range function, but returns an ndarray rather than a list.
+        # when not specified we have here a step size of one 
+        index = np.arange(n_iter) % n_beams
+        
+    for k in tqdm.tqdm(index):
+        n, s = b[k], A[k,:]
+        l = s @ s
+
+        if ~np.isclose(l, 0):
+            # `l` can be very small, in which case it is dangerous to do the rescale. 
+            # We'll simply drop these degenerate basis vectors.
+            scale = (n - s @ f) / l
+            f += scale * s
+        
+        if limits:
+            f = np.clip(f, limits[0], limits[1])
+
+    return f
+ ```
