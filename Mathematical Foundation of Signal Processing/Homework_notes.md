@@ -222,16 +222,66 @@ def kaczmarz(A, b, n_iter, limits=None, randomize=False, f_0=None):
         
     for k in tqdm.tqdm(index):
         n, s = b[k], A[k,:]
+        # between two matrices, it is the matrix multiplication and otherwise it symbolizes the decorator 
+        # a function which can accept a function as an argument and which will return a function Decorators 
+        # are used often in Python to provide modifications to the existing functionality of defined function
         l = s @ s
-
+        
+        # this is the bitwise complement unary operation in python
+        # The isclose() function is used to returns a boolean array where two arrays are element-wise equal within a tolerance.
+        # The tolerance values are positive, typically very small numbers. 
+        # The relative difference (rtol * abs(b)) and the absolute difference atol are added together to compare against the absolute difference between a and b.
         if ~np.isclose(l, 0):
             # `l` can be very small, in which case it is dangerous to do the rescale. 
             # We'll simply drop these degenerate basis vectors.
+            # so here you must be doing element wise division no ?
             scale = (n - s @ f) / l
             f += scale * s
         
         if limits:
+            # Given an interval, values outside the interval are clipped to the interval edges. For example, 
+            # if an interval of [0, 1] is specified, values smaller than 0 become 0, and values larger than 1 become 1.
             f = np.clip(f, limits[0], limits[1])
 
     return f
  ```
+
+We also have the following code in python once again :
+
+```
+# two times the number of rows in this case 
+im0 = kaczmarz(A, b, 2*A.shape[0], randomize=False, limits=None).reshape(ny, nx)
+im1 = kaczmarz(A, b, 2*A.shape[0], randomize=True, limits=None).reshape(ny, nx)
+im2 = kaczmarz(A, b, 2*A.shape[0], randomize=True, limits=[0,1]).reshape(ny, nx)
+
+def plot_image(I, title=None, ax=None):
+    """
+    Plot a 2D mono-chromatic image.
+
+    Parameters
+    ----------
+    I : :py:class:`~numpy.ndarray`
+        (n_height, n_width) image.
+    title : str
+        Optional title to add to figure.
+    ax : :py:class:`~matplotlib.axes.Axes`
+        Optional axes on which to draw figure.
+    """
+    if ax is None:
+        # here we have that the first parameter sent from the subplots() method is not used 
+        _, ax = plt.subplots()
+        
+    # Display data as an image; i.e. on a 2D regular raster.
+    ax.imshow(I, cmap='bone')
+
+    if title is not None:
+        ax.set_title(title)
+
+# you have the three axes as well as the figure, where you go from subplot 1 to 3 
+fig, (ax0, ax1, ax2) = plt.subplots(1,3, figsize = (15,10))
+
+# you plot the different images, they have different titles and we have different corresponding axes 
+plot_image(im0, title='Kaczmarz', ax=ax0)
+plot_image(im1, title='randomized Kaczmarz', ax=ax1)
+plot_image(im2, title='randomized Kaczmarz with box constraints', ax=ax2)
+```
