@@ -61,16 +61,20 @@ def compute_beam_line_params(beam_start, beam_end):
     """
     beam_angles = np.arctan2(beam_end[:,1]-beam_start[:,1], beam_end[:,0]-beam_start[:,0])
     # Rotate by \pi/2 to get the angle of a beam normal (rotation by -\pi/2 would also work).
+    # the below is used to write pi where you make a call to the numpy library
     beam_normals = beam_angles + np.pi / 2
     # Make corrections to have angles in the range [0,\pi], by now they are in [-\pi/2,3\pi/2].
+    # the condition within the square brackets indicates what needs to be verified for us to select the appropriate coordinates
     beam_normals[beam_normals > np.pi] -= 2 * np.pi
     beam_normals[beam_normals < 0] += np.pi
+    # then you apply the cosine function, and the sine function onto all the entries of the vectors below
     beam_vectors = np.stack((np.cos(beam_normals), np.sin(beam_normals)), axis=-1)
     # Distance from any point on a line is the same, so just compute using beam_start.
+    # maybe that means you are computing against the last axis ? 
     beam_dist = np.sum(beam_start * beam_vectors, axis=-1)
-
+    
+    # you can return here various elements
     return beam_vectors, beam_dist
-
 
 def beam_pixel_intersection_length(beam_normals, beam_dist, pix_pos, pix_r):
     """
@@ -85,15 +89,18 @@ def beam_pixel_intersection_length(beam_normals, beam_dist, pix_pos, pix_r):
     Returns:
         Length of the beam segment inside the pixel disc.
     """
+    # meaning we take the absolute value of what is in between the brackets 
     dist = np.abs(np.sum(beam_normals * pix_pos, axis=-1) - beam_dist)
     # Clipping distance to pix_r to simplify length computation.
     dist = np.minimum(dist, pix_r)
+    # here we must be taking the square of all the coordinates in the vector
     intersection_length = 2 * np.sqrt(pix_r**2 - dist**2)
     
     return intersection_length
 
 
 def construct_forward_matrix(beam_normals, beam_dist, pixel_pos, pixel_r):
+    # here we have the description in between triple quotes
     """
     Constructs the forward matrix from beam line parameters and pixel grid parameters.
     
@@ -111,6 +118,7 @@ def construct_forward_matrix(beam_normals, beam_dist, pixel_pos, pixel_r):
     # (a simple and more time-consuming way would use nested for loops).
     # We split the x and y coordinates of beam normals and pixel positions in MxN matrices,
     # which allow us to compute distances with simple matrix elemenet-wise products and sums.
+    # where you take the shape and then you choose the number of rows by writing shape[0]
     beam_x = np.kron(np.reshape(beam_normals[:,0], (-1,1)), np.ones((1, pixel_pos.shape[0])))
     beam_y = np.kron(np.reshape(beam_normals[:,1], (-1,1)), np.ones((1, pixel_pos.shape[0])))
     pixel_x = np.kron(np.reshape(pixel_pos[:,0], (1,-1)), np.ones((beam_normals.shape[0], 1)))
@@ -133,6 +141,7 @@ beam_normals, beam_signed_dist = compute_beam_line_params(beam_start, beam_end)
 # Then we generate the pixel grid. 
 # Hint 1: the number of pixels could be equal to the number of measurements
 # Hint 2: set pixel sizes according to the number of pixels and the size of the reconstructed domain.
+# the length is an integer value
 n_pixels = len(b) 
 
 # Pixel distances along x and y.
@@ -145,12 +154,16 @@ pixel_r = dx / np.sqrt(2)
 pixel_grid_x = np.arange(dx/2, width, dx)
 pixel_grid_y = np.arange(dx/2, length, dx)
 
+# where here you are trying to find the length of this vector 
 nx = len(pixel_grid_x)
 ny = len(pixel_grid_y)
 
+# Kronecker product of two arrays.
 pixel_x = np.kron(np.reshape(pixel_grid_x, (-1,1)), np.ones((pixel_grid_y.shape[0],1)))
 pixel_y = np.kron(np.ones((pixel_grid_x.shape[0],1)), np.reshape(pixel_grid_y, (-1,1)))
 
+# join a sequence of arrays along an existing axis.
+# in which axis=0 along the rows (namely, index in pandas), and axis=1 along the columns
 pixel_pos = np.concatenate((pixel_x, pixel_y), axis=-1)
 
 # Finally, we compute the forward matrix (i.e. the measurement matrix).
