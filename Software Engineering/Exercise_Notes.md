@@ -1332,3 +1332,54 @@ public static void main(String[] args) { ... }
 The implementation file of the interface has a private hashmap `private HashMap<Integer, Integer> map`. And all the methods related to this map are public methods. 
 
 The difference is that the name field to Naming.rebind() is parsed as an URL while the Registry.rebind() is the "name to associate with the remote reference". The LocateRegistry.getRegistry() call assumes the registry is on the local host at the default port while the Naming.rebind() allows you to specify what registry to use. You can also choose to print the stack trace related to an exception as follows : `e.printStackTrace();`.
+
+*Exercise 11*
+
+In order to initialize a new gradle project you can write : `gradle init --type=java-application`. You can also use different compilation modes like : `compile 'io.javalin:javalin:3.6.0'`. Where here you are therefore specifying the version of the compilation. You can launch the web server with gradle run. Then you can access the website by writing : http://localhost:7000/ in the web url. Now suppose that we had a `private final List<ForumThread> data`, and we want to perform some commands on this. Then you can write :
+
+```
+List<String> topics = data.stream().map((thread) -> "<a href='/forum?id=" + thread.uid + "'>" + thread.title + "</a>").collect(Collectors.toList());
+```
+
+So you essentially send a thread to a link <a> which has the appropriate parameters in it. Then you need to collect all this data, using the Collectors interface which allows you to transform this set into a list. We also have the following code when we try to retrieve a set of threads : `private final List<ForumThread> threadsList`. We have an associated method as follows :
+	
+```
+public List<ForumThread> getAllThreads() {
+   // here you are creating an unmodifiable collection which is based upon an arraylist that is initialized to the previous list of threads.
+   return Collections.unmodifiableList(new ArrayList<>(threadsList));
+}
+```   
+You can also try to find a thread as follows :
+
+```
+// it returns an optional because we are not sure the requested thread even exists 
+public Optional<ForumThread> getThread(String threadId) {
+
+// instead of mapping however we are filtering, where we compare the uid parameter of the thread with the threadId that we are given, and then we select the 
+// first that appears 
+return threadsList.stream()
+    .filter(thread -> thread.uid.equals(threadId))
+    .findFirst();
+}
+```
+
+You can convert a Long to a string using the following method : `Long.toString()`. You can even get the bytes which correspond to the string builder as follows : `base.getBytes(StandardCharsets.UTF_8)`. You can print the exception as follows :
+
+```
+catch (Exception e) {
+    System.err.println(e.toString());
+    throw new IllegalStateException("Could not generate unique ID");
+}
+```	
+You can create a string representing the ith hash element with : 
+
+```
+String hex = Integer.toHexString(0xff & hash[i]);
+```
+
+You can render the view as follows :
+
+```
+final View view = new ForumView(state.getAllThreads());
+ctx.html(view.render());
+```	    
