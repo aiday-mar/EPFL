@@ -1383,3 +1383,70 @@ You can render the view as follows :
 final View view = new ForumView(state.getAllThreads());
 ctx.html(view.render());
 ```	    
+
+*Exercise 12*
+
+In general in android applications, the main activity extends the app compat activity `public class MainActivity extends AppCompatActivity`. In there you also have the following code :
+
+```
+@Override
+
+protected void onCreate(Bundle savedInstanceState) {
+	// calling the constructor of the super class
+	super.onCreate(savedInstanceState);
+	// here you are calling a method and inside you need to specify the parameters for a view that you can render
+	setContentView(new RenderableView(this) {
+
+	    @Override
+	    // this must be a method from the super class which we are overriding with our own parameters
+	    public void view() {
+		linearLayout(() -> {
+		    // here we have the parameters which are specified for this linear layout.
+		    size(MATCH, MATCH);
+		    padding(dip(20));
+		    weightSum(1);
+		    // as opposed to for example horizontal
+		    orientation(LinearLayout.VERTICAL);
+		    newItemInput();
+		    itemsList();
+		});
+	    }
+	});
+}
+```
+
+Where in this case the newItempInput is once again a linear layout. You also have the following options in the linear layout : the button and the edit text function.
+
+```
+editText(() -> {
+	size(0, WRAP);
+	weight(1);
+	hint("New item...");
+	// meaning that you dynanmically change the value of this variable as the text is changed in this part of the layout 
+	onTextChanged(s -> newItemCurrentInput = s.toString());
+    });
+
+button(() -> {
+	size(WRAP, WRAP);
+	text("Add");
+
+	// when you click on the button you change the view 
+	onClick((view) -> {
+            // the first input seems to be a string and the second a variable of type status
+	    TodoItem newItem = new TodoItem(newItemCurrentInput, TodoItem.Status.CURRENT);
+	    state.items.add(newItem);
+	    // Here Anvil.render() is automatically called to trigger a view update
+	});
+});
+```
+
+Where status is a parameter of TodoItem, and we have that :
+
+```
+public enum Status {
+	CURRENT,
+	DONE
+}
+```
+
+*Exercise 13*
