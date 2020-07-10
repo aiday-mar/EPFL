@@ -249,7 +249,7 @@ def kaczmarz(A, b, n_iter, limits=None, randomize=False, f_0=None):
 We also have the following code in python once again :
 
 ```
-# two times the number of rows in this case 
+# two times the number of rows in this case where the number of rows is given by the method .shape[0]
 im0 = kaczmarz(A, b, 2*A.shape[0], randomize=False, limits=None).reshape(ny, nx)
 im1 = kaczmarz(A, b, 2*A.shape[0], randomize=True, limits=None).reshape(ny, nx)
 im2 = kaczmarz(A, b, 2*A.shape[0], randomize=True, limits=[0,1]).reshape(ny, nx)
@@ -272,12 +272,15 @@ def plot_image(I, title=None, ax=None):
         _, ax = plt.subplots()
         
     # Display data as an image; i.e. on a 2D regular raster.
+    # cmapstr or Colormap, optional
     ax.imshow(I, cmap='bone')
 
+    # here title is a variable holding the string value of the title that we want to set 
     if title is not None:
         ax.set_title(title)
 
 # you have the three axes as well as the figure, where you go from subplot 1 to 3 
+# you have the digure size which is given as the third parameter and it is a set of proportions
 fig, (ax0, ax1, ax2) = plt.subplots(1,3, figsize = (15,10))
 
 # you plot the different images, they have different titles and we have different corresponding axes 
