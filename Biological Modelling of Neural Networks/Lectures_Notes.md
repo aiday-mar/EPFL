@@ -53,3 +53,16 @@ The membrane potential is as follows :
 <a href="https://www.codecogs.com/eqnedit.php?latex=\tau&space;\frac{du}{dt}&space;=&space;-(u&space;-&space;u_{rest})&space;-&space;g_l&space;(t&space;-&space;t_0)(u&space;-&space;E_l)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\tau&space;\frac{du}{dt}&space;=&space;-(u&space;-&space;u_{rest})&space;-&space;g_l&space;(t&space;-&space;t_0)(u&space;-&space;E_l)" title="\tau \frac{du}{dt} = -(u - u_{rest}) - g_l (t - t_0)(u - E_l)" /></a>
 
 <a href="https://www.codecogs.com/eqnedit.php?latex=g_l&space;(t&space;-&space;t_0)&space;=&space;g_0&space;\frac{t}{\tau}&space;e^{-t/&space;\tau}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?g_l&space;(t&space;-&space;t_0)&space;=&space;g_0&space;\frac{t}{\tau}&space;e^{-t/&space;\tau}" title="g_l (t - t_0) = g_0 \frac{t}{\tau} e^{-t/ \tau}" /></a>
+
+**Week 3**
+
+We can reduce the Hodgkin-Huxley method as follows :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=\tau&space;\frac{du}{dt}&space;=&space;au&space;-&space;w&space;&plus;&space;I_0" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\tau&space;\frac{du}{dt}&space;=&space;au&space;-&space;w&space;&plus;&space;I_0" title="\tau \frac{du}{dt} = au - w + I_0" /></a>
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=\tau_w&space;\frac{du}{dt}&space;=&space;cu&space;-&space;w" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\tau_w&space;\frac{du}{dt}&space;=&space;cu&space;-&space;w" title="\tau_w \frac{du}{dt} = cu - w" /></a>
+
+In the type 1 model we have that :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=\frac{dw}{dt}&space;=&space;-&space;\frac{w&space;-&space;0.5[1&space;&plus;&space;tanh(\frac{u&space;-\theta}{d})]}{\tau_w(u)}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\frac{dw}{dt}&space;=&space;-&space;\frac{w&space;-&space;0.5[1&space;&plus;&space;tanh(\frac{u&space;-\theta}{d})]}{\tau_w(u)}" title="\frac{dw}{dt} = - \frac{w - 0.5[1 + tanh(\frac{u -\theta}{d})]}{\tau_w(u)}" /></a>
+
