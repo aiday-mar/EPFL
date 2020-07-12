@@ -372,3 +372,106 @@ def dhdt(h,u):
     return dhdt
 ```
 
+**Week 3**
+
+```
+# in a pylab environment
+# >> execfile('demo.py')
+# here we are importing the class from another python file
+import TypeX
+
+# then we are calling the two methods below 
+ion()
+figure()
+
+I = 0.0
+dt = 0.5
+
+# v nullcline
+# must be like a lambda function where we specify the parameters v and I that will be needed in it and
+# then we have the actual calculation
+null_v = lambda v,I: v - (v**3)/3 + I
+# this is a vector which has 0.1 as a space between points 
+v = arange(-3.0,3.0,0.1)
+
+# here we have the name of the parameter and the numerical value assigned to the parameter 
+Params = {'a': 1.25, 'tau': 15.6}
+
+# meaning here we are accessing this sort of dictionary and we use the 'a' string to access 
+null_w = lambda v,I: Params['a']*(v+0.7)
+
+subplot(211)
+# where we also specify the specific parameters that will be used in the lambda function
+# there is a parameter specified as well as a corresponding label
+plot(v,null_w(v,I),'g:',lw=2,label='dw/dt=0')
+
+
+axis([-2.5,2.5,-2.0,3.0])
+
+
+# initial v,w
+vw = (0.0,0.0)
+vhist = [0.0]
+whist = [0.0]
+thist = [0.0]
+
+# v,w at next time step
+def iterate(vw,I):
+    # to specify some global parameters you need to write the keyword in front 
+    global Params,dt
+    
+    v = vw[0]
+    w = vw[1]
+    v_next = v + TypeX.dudt(v,w, I)*dt
+    w_next = w + TypeX.dwdt(v, w, Params)*dt
+    
+    # you can return two variables at the same time 
+    return (v_next,w_next)
+
+
+l1, = plot(v,null_v(v,I),'r:',lw=2,label='dv/dt=0',scalex=False,scaley=False)
+l2, = plot([vw[0]],[vw[1]],'ko',lw=2,scalex=False,scaley=False,label='v,w')
+
+# the below must be like the format function in hava meaning you write %.2f and then instead of this
+# you can write the actual value of variable I instead 
+tex1 = figtext(0.5,0.8,'I=%.2f' % I,size=26)
+
+legend()
+
+l4, = plot(vhist,whist,'k-',lw=1,alpha=0.5,scalex=False,scaley=False)
+
+xlabel('v')
+ylabel('w')
+
+subplot(212)
+
+l3, = plot(thist,vhist,'b-',scalex=False,scaley=False,lw=2)
+
+# the labels are given by strings 
+xlabel('t [ms]')
+ylabel('v')
+
+axis([0.0,200.0,-2.0,2.0])
+
+# meaning that the arange function returns a vector and you can make a list out of this vector 
+# what does [0.0] mean though ? like an array with one zero entry 
+for I in [0.0]*100+list(arange(0.0,0.5,0.01))+[0.5]*200:
+    vw = iterate(vw,I)
+    vhist.append(vw[0])
+    whist.append(vw[1])
+    thist.append(thist[-1]+dt)
+    
+    l2.set_data([vw[0]],[vw[1]])
+
+    l4.set_data(vhist,whist)
+
+    # recalc nullcline
+
+    l1.set_ydata(null_v(v,I))
+
+    tex1.set_text('I=%.2f' % I)
+
+    l3.set_data(thist,vhist)
+
+    draw()
+```
