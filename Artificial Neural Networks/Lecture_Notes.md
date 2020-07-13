@@ -238,3 +238,4 @@ Repeat forever :
         For all a in A(s) :
  ```
  
+<a href="https://www.codecogs.com/eqnedit.php?latex=\pi(a&space;|&space;s)&space;\leftarrow&space;\left\{\begin{matrix}&space;1&space;-&space;\epsilon&space;&plus;&space;\epsilon/&space;|A(s)|,&space;&&space;a&space;=&space;A*\\&space;\epsilon/&space;|A(s)|,&space;&&space;a&space;\neq&space;A*&space;\end{matrix}\right." target="_blank"><img src="https://latex.codecogs.com/gif.latex?\pi(a&space;|&space;s)&space;\leftarrow&space;\left\{\begin{matrix}&space;1&space;-&space;\epsilon&space;&plus;&space;\epsilon/&space;|A(s)|,&space;&&space;a&space;=&space;A*\\&space;\epsilon/&space;|A(s)|,&space;&&space;a&space;\neq&space;A*&space;\end{matrix}\right." title="\pi(a | s) \leftarrow \left\{\begin{matrix} 1 - \epsilon + \epsilon/ |A(s)|, & a = A*\\ \epsilon/ |A(s)|, & a \neq A* \end{matrix}\right." /></a>
