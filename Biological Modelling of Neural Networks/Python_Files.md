@@ -600,9 +600,4 @@ def make_image(m,sigma):
     return (1./norm(img))*img
 ```
 
-**Week 4**
-
-Here below we have the equation of the 2-step SARSA :
-
-<a href="https://www.codecogs.com/eqnedit.php?latex=\Delta&space;Q(s_t,&space;a_t)&space;=&space;\eta&space;[r_t&space;&plus;&space;\gamma&space;r_{t&plus;1}&space;&plus;&space;\gamma&space;\gamma&space;Q(s_{t&plus;2},&space;a_{t&plus;2})&space;-&space;Q(s_t,&space;a_t)]" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\Delta&space;Q(s_t,&space;a_t)&space;=&space;\eta&space;[r_t&space;&plus;&space;\gamma&space;r_{t&plus;1}&space;&plus;&space;\gamma&space;\gamma&space;Q(s_{t&plus;2},&space;a_{t&plus;2})&space;-&space;Q(s_t,&space;a_t)]" title="\Delta Q(s_t, a_t) = \eta [r_t + \gamma r_{t+1} + \gamma \gamma Q(s_{t+2}, a_{t+2}) - Q(s_t, a_t)]" /></a>
 
