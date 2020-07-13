@@ -239,3 +239,13 @@ Repeat forever :
  ```
  
 <a href="https://www.codecogs.com/eqnedit.php?latex=\pi(a&space;|&space;s)&space;\leftarrow&space;\left\{\begin{matrix}&space;1&space;-&space;\epsilon&space;&plus;&space;\epsilon/&space;|A(s)|,&space;&&space;a&space;=&space;A*\\&space;\epsilon/&space;|A(s)|,&space;&&space;a&space;\neq&space;A*&space;\end{matrix}\right." target="_blank"><img src="https://latex.codecogs.com/gif.latex?\pi(a&space;|&space;s)&space;\leftarrow&space;\left\{\begin{matrix}&space;1&space;-&space;\epsilon&space;&plus;&space;\epsilon/&space;|A(s)|,&space;&&space;a&space;=&space;A*\\&space;\epsilon/&space;|A(s)|,&space;&&space;a&space;\neq&space;A*&space;\end{matrix}\right." title="\pi(a | s) \leftarrow \left\{\begin{matrix} 1 - \epsilon + \epsilon/ |A(s)|, & a = A*\\ \epsilon/ |A(s)|, & a \neq A* \end{matrix}\right." /></a>
+
+You can decide to update the eligibility for all state-action pairs. The eligibility increases if the pair actually happens, otherwise it becomes smaller by a factor of lambda. 
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=e(s,a)&space;\leftarrow&space;\lambda&space;e(s,a)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?e(s,a)&space;\leftarrow&space;\lambda&space;e(s,a)" title="e(s,a) \leftarrow \lambda e(s,a)" /></a>
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=e(s,a)&space;\leftarrow&space;e(s,a)&space;&plus;&space;1" target="_blank"><img src="https://latex.codecogs.com/gif.latex?e(s,a)&space;\leftarrow&space;e(s,a)&space;&plus;&space;1" title="e(s,a) \leftarrow e(s,a) + 1" /></a>
+
+The second operation is executed when action a is chosen in state s. Eligibility traces make the flow of information from the target back into the graph more rapid.
+
+Another solution is the n-step SARSA. 
