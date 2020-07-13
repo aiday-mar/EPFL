@@ -70,11 +70,11 @@ In the type 1 model we have that :
 
 We will now study Hebbian learning. The rule is that when an axon of cell j repeatedly or persistently takes part in firing cell i, then j’s efficiency as one of the cells firing i is increased. Slow induction of changes is called homeostatis. We study short-term plasticity/fast synaptic dynamics. Hebbian learning is also unsupervised learning. We have :
 
-<a href="https://www.codecogs.com/eqnedit.php?latex=\Delta&space;w_{ij}&space;\quad&space;\alpha&space;\quad&space;F(pre,&space;post)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\Delta&space;w_{ij}&space;\quad&space;\alpha&space;\quad&space;F(pre,&space;post)" title="\Delta w_{ij} \quad \alpha \quad F(pre, post)" /></a>
+<a href="https://www.codecogs.com/eqnedit.php?latex=\Delta&space;w_{ij}&space;\quad&space;\alpha&space;\quad&space;F(pre,&space;post)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\Delta&space;w_{ij}&space;\quad&space;\alpha&space;\quad&space;F(pre,&space;post)" title="\Delta w_{ij} \quad \propto \quad F(pre, post)" /></a>
 
 Reinforcement learning is hebbian learning with a reward. We have :
 
-<a href="https://www.codecogs.com/eqnedit.php?latex=\Delta&space;w_{ij}&space;\quad&space;\alpha&space;\quad&space;F(pre,&space;post,&space;SUCCESS)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\Delta&space;w_{ij}&space;\quad&space;\alpha&space;\quad&space;F(pre,&space;post,&space;SUCCESS)" title="\Delta w_{ij} \quad \alpha \quad F(pre, post, SUCCESS)" /></a>
+<a href="https://www.codecogs.com/eqnedit.php?latex=\Delta&space;w_{ij}&space;\quad&space;\alpha&space;\quad&space;F(pre,&space;post,&space;SUCCESS)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\Delta&space;w_{ij}&space;\quad&space;\alpha&space;\quad&space;F(pre,&space;post,&space;SUCCESS)" title="\Delta w_{ij} \quad \propto \quad F(pre, post, SUCCESS)" /></a>
 
 In the Hebbian learning the rate model says that a high rate implies many spikes per second. We have the following rate-based learning rate :
 
