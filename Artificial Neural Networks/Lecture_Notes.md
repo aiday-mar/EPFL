@@ -219,4 +219,22 @@ Repeat forever :
     \pi(s) <- argmax_{\alpha} Q(s,a)
  ```
  
+ Combine epsilon-greedy policy with Monte-Carlo Q-estimates :
+ 
+ ```
+ Initialize for all s in S, a in A(s) :
+    Q(s,a) <- arbitrary
+    Returns(s,a) <- empty list
+    \pi(a | s) <- an arbitrary epsilon-soft policy
+ 
+ Repeat forever :
+    (a) Generate an episode using \pi
+    (b) For each pair s,a appearing in the episode : 
+        G <- the return follows the first occurence of s,a 
+        Append G to Returns(s,a)
+        Q(s,a) <- average(Returns(s,a))
+    (c) For each s in the episode :
+        A* <- argmax_a Q(s,a)
+        For all a in A(s) :
+ ```
  
