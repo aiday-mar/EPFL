@@ -93,3 +93,5 @@ The BCM rule is :
 And we have :
 
 <a href="https://www.codecogs.com/eqnedit.php?latex=\theta&space;=&space;f(v_i^{post})" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\theta&space;=&space;f(v_i^{post})" title="\theta = f(v_i^{post})" /></a>
+
+
