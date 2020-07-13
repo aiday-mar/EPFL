@@ -75,3 +75,21 @@ We will now study Hebbian learning. The rule is that when an axon of cell j repe
 Reinforcement learning is hebbian learning with a reward. We have :
 
 <a href="https://www.codecogs.com/eqnedit.php?latex=\Delta&space;w_{ij}&space;\quad&space;\alpha&space;\quad&space;F(pre,&space;post,&space;SUCCESS)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\Delta&space;w_{ij}&space;\quad&space;\alpha&space;\quad&space;F(pre,&space;post,&space;SUCCESS)" title="\Delta w_{ij} \quad \alpha \quad F(pre, post, SUCCESS)" /></a>
+
+In the Hebbian learning the rate model says that a high rate implies many spikes per second. We have the following rate-based learning rate :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=\frac{dw_{ij}}{dt}&space;=&space;F(w_{ij},&space;v_j^{pre},&space;v_i^{post})" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\frac{dw_{ij}}{dt}&space;=&space;F(w_{ij},&space;v_j^{pre},&space;v_i^{post})" title="\frac{dw_{ij}}{dt} = F(w_{ij}, v_j^{pre}, v_i^{post})" /></a>
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=\frac{dw_{ij}}{dt}&space;=&space;a_0&space;&plus;&space;a_1^{pre}v_j^{pre}&space;&plus;&space;a_1^{post}v_i^{post}&space;&plus;&space;a_2^{corr}&space;v_j^{pre}&space;v_i^{post}&space;&plus;..." target="_blank"><img src="https://latex.codecogs.com/gif.latex?\frac{dw_{ij}}{dt}&space;=&space;a_0&space;&plus;&space;a_1^{pre}v_j^{pre}&space;&plus;&space;a_1^{post}v_i^{post}&space;&plus;&space;a_2^{corr}&space;v_j^{pre}&space;v_i^{post}&space;&plus;..." title="\frac{dw_{ij}}{dt} = a_0 + a_1^{pre}v_j^{pre} + a_1^{post}v_i^{post} + a_2^{corr} v_j^{pre} v_i^{post} +..." /></a>
+
+The presynaptically gated rule :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=\frac{dw_{ij}}{dt}&space;=&space;a_2^{corr}(v_i^{post}&space;-&space;\theta)&space;v_j^{pre}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\frac{dw_{ij}}{dt}&space;=&space;a_2^{corr}(v_i^{post}&space;-&space;\theta)&space;v_j^{pre}" title="\frac{dw_{ij}}{dt} = a_2^{corr}(v_i^{post} - \theta) v_j^{pre}" /></a>
+
+The BCM rule is :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=\frac{dw_{ij}}{dt}&space;=&space;a_2^{corr}&space;\phi&space;(v_i^{post}&space;-&space;\theta)&space;v_j^{pre}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\frac{dw_{ij}}{dt}&space;=&space;a_2^{corr}&space;\phi&space;(v_i^{post}&space;-&space;\theta)&space;v_j^{pre}" title="\frac{dw_{ij}}{dt} = a_2^{corr} \phi (v_i^{post} - \theta) v_j^{pre}" /></a>
+
+And we have :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=\theta&space;=&space;f(v_i^{post})" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\theta&space;=&space;f(v_i^{post})" title="\theta = f(v_i^{post})" /></a>
