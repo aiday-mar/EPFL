@@ -475,3 +475,25 @@ for I in [0.0]*100+list(arange(0.0,0.5,0.01))+[0.5]*200:
 
     draw()
 ```
+
+Now we also have the following code : 
+
+```
+# where we have v_th is a boolean and now we have v_above_th is maybe a vector of booleans 
+v_above_th = v>v_th
+# Return the indices of the elements that are non-zero.
+# Returns a tuple of arrays, one for each dimension of a, containing the indices of the non-zero elements in that dimension. 
+# The values in a are always tested and returned in row-major, C-style order.
+# select from index 1 to the end, where we have that the value is actually true
+# select from the beginning to the second last where false 
+#  In Python "and" is a logical operator and "&" is a bitwise operator (compare bit by bit)
+numpy.nonzero((v_above_th[:-1]==False)&(v_above_th[1:]==True))
+```
+
+Suppose we have the following array :
+
+```
+x = np.array([[3, 0, 0], [0, 4, 0], [5, 6, 0]])
+np.nonzero(x)
+```
+The above returns : `(array([0, 1, 2, 2]), array([0, 1, 0, 1]))`.
