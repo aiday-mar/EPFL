@@ -497,3 +497,105 @@ x = np.array([[3, 0, 0], [0, 4, 0], [5, 6, 0]])
 np.nonzero(x)
 ```
 The above returns : `(array([0, 1, 2, 2]), array([0, 1, 0, 1]))`.
+
+**Week 4**
+
+```
+from pylab import *
+
+# where we have some parameters with default values 
+def make_cloud(size=10000,ratio=1,angle=0):
+    """
+    DEFINITION
+    builds an oriented elliptic (or circular) gaussian cloud of 2D points
+    
+    INPUT
+    size: the number of points
+    ratio: (std along the short axis) / (std along the long axis)
+    angle: the rotation angle in degrees
+    
+    -G.Hennequin 02.2009.
+    """
+    
+    # we have the value of the parameter ratio
+    if ratio>1: ratio=1/ratio
+    
+    x = randn(size,1)
+    y = ratio * randn(size,1)
+    # you can concatenate the vector with this new scalar
+    z = concatenate((x,y),1)
+    radangle = (180 - angle) * pi / 180
+    # which is a matrix with 4 elements 
+    transfo = [[cos(radangle),sin(radangle)],[-sin(radangle),cos(radangle)]]
+    # we take the dot product and then the transpose of the matrix 
+    data = dot(transfo,z.T).T
+    return data
+
+def learn(cloud,eta=0.001):
+    """
+    DEFINITION
+    run Oja's learning rule on a cloud of datapoints
+    
+    INPUT
+    eta: learning rate
+    cloud: the cloud of datapoints
+    
+    OUTPUT
+    the time course of the weight vector 
+       
+    -G.Hennequin 02.2009.
+    """
+    # an array with two elements in it 
+    w = array([1/sqrt(2),1/sqrt(2)])
+    # we have the dimensions of the zeros matrix and the type is float 
+    # the name of the matrix is wcourse
+    wcourse = zeros((len(cloud),2),float)
+    for i in range(0,len(cloud)):
+        # we have all the elements are initialized the w 
+        wcourse[i] = w
+        y = dot(w,cloud[i]) # output
+        w = w + eta*y*(cloud[i]-y*w) # learning rule        
+    return wcourse
+
+# for internal use
+def circ_dist(n,i,j):
+  if i == j: 
+      return 0.
+  else:
+      if j < i:
+          if (i - j) > (n/2): return (i-n-j)
+          else: return (i-j)
+      # in the below we return this image by the circ_dist method of the given parameters 
+      else: return (-circ_dist(n,j,i))
+
+
+def make_image(m,sigma):
+    """
+    DEFINITION
+    builds an m-by-m matrix featuring a gaussian bump
+    centered randomly
+    NOTA: 
+    - to make this matrix a vector (concatenating all rows),
+    you can use m.flatten()
+    - conversely, if you need to reshape a vector into an 
+    m-by-m matrix, use v.reshape((m,m))
+    
+    INPUT
+    m: the size of the image (m-by-m)
+    sigma: the std of the gaussian bump
+
+    -G.Hennequin 02.2009.
+    """
+    
+    img = zeros((m,m),float)
+    ci = int(m*rand())
+    cj = int(m*rand())
+    for i in range(0,m):
+        di = circ_dist(m,ci,i)
+        for j in range(0,m):
+            dj = circ_dist(m,cj,j)
+            img[i,j] = exp (-(di*di + dj*dj)/(2.0*sigma*sigma))
+    # now we have each element is the inverse of the previous elements there, we
+    # multiply by the scalar img
+    return (1./norm(img))*img
+```
