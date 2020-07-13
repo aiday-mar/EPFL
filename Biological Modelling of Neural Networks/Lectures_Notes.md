@@ -95,3 +95,15 @@ And we have :
 <a href="https://www.codecogs.com/eqnedit.php?latex=\theta&space;=&space;f(v_i^{post})" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\theta&space;=&space;f(v_i^{post})" title="\theta = f(v_i^{post})" /></a>
 
 Hebbian learning leads to specialized Neurons (developmental learning). There is also the receptive field development. 
+
+**Week 5**
+
+Pattern recognition is also the classification by similarity. We consider the following detour :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=S_i(t&plus;1)&space;=&space;sgn[\sum_j&space;w_{ij}S_j(t)]" target="_blank"><img src="https://latex.codecogs.com/gif.latex?S_i(t&plus;1)&space;=&space;sgn[\sum_j&space;w_{ij}S_j(t)]" title="S_i(t+1) = sgn[\sum_j w_{ij}S_j(t)]" /></a>
+
+Where :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=w_{ij}&space;=&space;\sum_{\mu}&space;p_i^{\mu}&space;p_j^{\mu}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?w_{ij}&space;=&space;\sum_{\mu}&space;p_i^{\mu}&space;p_j^{\mu}" title="w_{ij} = \sum_{\mu} p_i^{\mu} p_j^{\mu}" /></a>
+
+**Week 6**
