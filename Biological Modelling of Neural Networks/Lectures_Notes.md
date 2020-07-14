@@ -104,6 +104,15 @@ Pattern recognition is also the classification by similarity. We consider the fo
 
 Where :
 
-<a href="https://www.codecogs.com/eqnedit.php?latex=w_{ij}&space;=&space;\sum_{\mu}&space;p_i^{\mu}&space;p_j^{\mu}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?w_{ij}&space;=&space;\sum_{\mu}&space;p_i^{\mu}&space;p_j^{\mu}" title="w_{ij} = \sum_{\mu} p_i^{\mu} p_j^{\mu}" /></a>
+<a href="https://www.codecogs.com/eqnedit.php?latex=w_{ij}&space;=&space;1/N&space;\sum_{\mu}&space;p_i^{\mu}&space;p_j^{\mu}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?w_{ij}&space;=&space;1/N&space;\sum_{\mu}&space;p_i^{\mu}&space;p_j^{\mu}" title="w_{ij} = 1/N \sum_{\mu} p_i^{\mu} p_j^{\mu}" /></a>
 
 **Week 6**
+
+Consider the following memory retrieval used in the Hopfield model, it also has overlaps. 
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=S_i(t&plus;1)&space;=&space;sgn[\sum_{\mu}&space;p_i^{\mu}&space;m^{\mu}(t)]" target="_blank"><img src="https://latex.codecogs.com/gif.latex?S_i(t&plus;1)&space;=&space;sgn[\sum_{\mu}&space;p_i^{\mu}&space;m^{\mu}(t)]" title="S_i(t+1) = sgn[\sum_{\mu} p_i^{\mu} m^{\mu}(t)]" /></a>
+
+In the attractor networks the dynamics moves the network state to a fixed point. In the Hopfield model, for a small number of patterns, states with overlap 1 are fixed points. The stochastic hopfield model says that neurons may be noisy, and we check what this means for the attractor dynamics. We have the following equation : 
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=Pr\{S_i(t&plus;1)&space;=&space;&plus;1&space;|&space;h_i\}&space;=&space;g[h_i]&space;=&space;g[\sum_j&space;w_{ij}&space;S_j(t)]&space;=&space;g[\sum_{\mu}&space;p_i^{\mu}&space;m^{\mu}(t)]" target="_blank"><img src="https://latex.codecogs.com/gif.latex?Pr\{S_i(t&plus;1)&space;=&space;&plus;1&space;|&space;h_i\}&space;=&space;g[h_i]&space;=&space;g[\sum_j&space;w_{ij}&space;S_j(t)]&space;=&space;g[\sum_{\mu}&space;p_i^{\mu}&space;m^{\mu}(t)]" title="Pr\{S_i(t+1) = +1 | h_i\} = g[h_i] = g[\sum_j w_{ij} S_j(t)] = g[\sum_{\mu} p_i^{\mu} m^{\mu}(t)]" /></a>
+
