@@ -116,3 +116,14 @@ In the attractor networks the dynamics moves the network state to a fixed point.
 
 <a href="https://www.codecogs.com/eqnedit.php?latex=Pr\{S_i(t&plus;1)&space;=&space;&plus;1&space;|&space;h_i\}&space;=&space;g[h_i]&space;=&space;g[\sum_j&space;w_{ij}&space;S_j(t)]&space;=&space;g[\sum_{\mu}&space;p_i^{\mu}&space;m^{\mu}(t)]" target="_blank"><img src="https://latex.codecogs.com/gif.latex?Pr\{S_i(t&plus;1)&space;=&space;&plus;1&space;|&space;h_i\}&space;=&space;g[h_i]&space;=&space;g[\sum_j&space;w_{ij}&space;S_j(t)]&space;=&space;g[\sum_{\mu}&space;p_i^{\mu}&space;m^{\mu}(t)]" title="Pr\{S_i(t+1) = +1 | h_i\} = g[h_i] = g[\sum_j w_{ij} S_j(t)] = g[\sum_{\mu} p_i^{\mu} m^{\mu}(t)]" /></a>
 
+The stochastic hopfield mode is the attractor model. Consider the energy picture, we have :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=E&space;=&space;-\frac{1}{2}\sum_{i,j}&space;w_{ij}&space;S_i&space;S_j" target="_blank"><img src="https://latex.codecogs.com/gif.latex?E&space;=&space;-\frac{1}{2}\sum_{i,j}&space;w_{ij}&space;S_i&space;S_j" title="E = -\frac{1}{2}\sum_{i,j} w_{ij} S_i S_j" /></a>
+
+Here is the attractor model with low activity patterns :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=w_{i,j}&space;=&space;c&space;\sum_{\mu}&space;(\epsilon_i^{\mu}&space;-&space;b)(\epsilon_j^{\mu}&space;-&space;a)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?w_{i,j}&space;=&space;c&space;\sum_{\mu}&space;(\epsilon_i^{\mu}&space;-&space;b)(\epsilon_j^{\mu}&space;-&space;a)" title="w_{i,j} = c \sum_{\mu} (\epsilon_i^{\mu} - b)(\epsilon_j^{\mu} - a)" /></a>
+
+Introduce the overlap :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=m^{\mu}(t)&space;=&space;c&space;\sum_{j}&space;(\epsilon_j^{\mu}&space;-&space;a)S_j(t)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?m^{\mu}(t)&space;=&space;c&space;\sum_{j}&space;(\epsilon_j^{\mu}&space;-&space;a)S_j(t)" title="m^{\mu}(t) = c \sum_{j} (\epsilon_j^{\mu} - a)S_j(t)" /></a>
