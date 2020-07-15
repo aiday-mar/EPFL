@@ -127,3 +127,17 @@ Here is the attractor model with low activity patterns :
 Introduce the overlap :
 
 <a href="https://www.codecogs.com/eqnedit.php?latex=m^{\mu}(t)&space;=&space;c&space;\sum_{j}&space;(\epsilon_j^{\mu}&space;-&space;a)S_j(t)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?m^{\mu}(t)&space;=&space;c&space;\sum_{j}&space;(\epsilon_j^{\mu}&space;-&space;a)S_j(t)" title="m^{\mu}(t) = c \sum_{j} (\epsilon_j^{\mu} - a)S_j(t)" /></a>
+
+**Week 6 old**
+
+Reward-based action learning says that :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=Q(s,a)&space;=&space;\sum_{s'}&space;P^a_{s&space;\rightarrow&space;s'}R^a_{s&space;\rightarrow&space;s'}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?Q(s,a)&space;=&space;\sum_{s'}&space;P^a_{s&space;\rightarrow&space;s'}R^a_{s&space;\rightarrow&space;s'}" title="Q(s,a) = \sum_{s'} P^a_{s \rightarrow s'}R^a_{s \rightarrow s'}" /></a>
+
+The iterative update says that :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=\Delta&space;Q(s,a)&space;=&space;\eta&space;[r&space;-&space;Q(s,a)]" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\Delta&space;Q(s,a)&space;=&space;\eta&space;[r&space;-&space;Q(s,a)]" title="\Delta Q(s,a) = \eta [r - Q(s,a)]" /></a>
+
+Hippocampal place cells is the fuzzy discretisation of continuous space. The external stimuli comes in to the spatial representation and that goes to the action learning. 
+
+
