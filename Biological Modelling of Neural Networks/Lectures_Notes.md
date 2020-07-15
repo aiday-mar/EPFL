@@ -177,3 +177,21 @@ Gain-function g is frequency-current relation. Function g can be calculated anal
 Connectivity schemes are random, for a fixed p, but are balanced. For this we have the following equation :
 
 <a href="https://www.codecogs.com/eqnedit.php?latex=I_i&space;=&space;\sum_{k,f}&space;w_{ik}&space;\alpha^{exc}&space;(t-t_k^f)&space;-&space;\sum_{k,f}&space;w_{ik}&space;\alpha^{inh}&space;(t-t_k^f)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?I_i&space;=&space;\sum_{k,f}&space;w_{ik}&space;\alpha^{exc}&space;(t-t_k^f)&space;-&space;\sum_{k,f}&space;w_{ik}&space;\alpha^{inh}&space;(t-t_k^f)" title="I_i = \sum_{k,f} w_{ik} \alpha^{exc} (t-t_k^f) - \sum_{k,f} w_{ik} \alpha^{inh} (t-t_k^f)" /></a>
+
+**Week 8**
+
+Consider the following spike reponse model :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=u(t)&space;=&space;\int&space;\eta(s)&space;S(t-s)&space;ds&space;&plus;&space;\int_0^{\infty}&space;\kappa(s)I(t-s)ds&space;&plus;&space;u_{rest}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?u(t)&space;=&space;\int&space;\eta(s)&space;S(t-s)&space;ds&space;&plus;&space;\int_0^{\infty}&space;\kappa(s)I(t-s)ds&space;&plus;&space;u_{rest}" title="u(t) = \int \eta(s) S(t-s) ds + \int_0^{\infty} \kappa(s)I(t-s)ds + u_{rest}" /></a>
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=\rho(t)&space;=&space;f(u(t)&space;-&space;\theta(t))" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\rho(t)&space;=&space;f(u(t)&space;-&space;\theta(t))" title="\rho(t) = f(u(t) - \theta(t))" /></a>
+
+Membrane potential caused by the input :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=\tau&space;\frac{dh(t)}{dt}&space;=&space;-h(t)&space;&plus;&space;RI(t)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\tau&space;\frac{dh(t)}{dt}&space;=&space;-h(t)&space;&plus;&space;RI(t)" title="\tau \frac{dh(t)}{dt} = -h(t) + RI(t)" /></a>
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=\tau&space;\frac{dh(t)}{dt}&space;=&space;-h(t)&space;&plus;&space;RI^{ext}(t)&plus;\gamma&space;F(h(t))" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\tau&space;\frac{dh(t)}{dt}&space;=&space;-h(t)&space;&plus;&space;RI^{ext}(t)&plus;\gamma&space;F(h(t))" title="\tau \frac{dh(t)}{dt} = -h(t) + RI^{ext}(t)+\gamma F(h(t))" /></a>
+
+In the continuum model we have the Field equation. 
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=\tau&space;\frac{dh(x,t)}{dt}&space;=&space;-h(x,t)&space;&plus;&space;RI^{ext}(x,t)&plus;d\int&space;w(x-x')F(h(x',t))dx'" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\tau&space;\frac{dh(x,t)}{dt}&space;=&space;-h(x,t)&space;&plus;&space;RI^{ext}(x,t)&plus;d\int&space;w(x-x')F(h(x',t))dx'" title="\tau \frac{dh(x,t)}{dt} = -h(x,t) + RI^{ext}(x,t)+d\int w(x-x')F(h(x',t))dx'" /></a>
