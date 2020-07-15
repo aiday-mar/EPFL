@@ -793,7 +793,7 @@ class alphabet():
             self.__dict__[i]= sign(pix-1)
 ```
 
-*Week 6**
+**Week 6**
 
 ```
 from pylab import *                                                                                                  
@@ -1619,4 +1619,231 @@ class Gridworld:
 		raw_input()
 		close()
 
+```
+
+**Week 7**
+
+```
+import sys
+
+import pylab as plb
+import numpy as np
+import mountaincar
+
+class DummyAgent():
+    """A not so good agent for the mountain-car task.
+    """
+
+    def __init__(self, mountain_car = None, parameter1 = 3.0):
+        
+        if mountain_car is None:
+            self.mountain_car = mountaincar.MountainCar()
+        else:
+            self.mountain_car = mountain_car
+
+        self.parameter1 = parameter1
+
+    def visualize_trial(self, n_steps = 200):
+        """Do a trial without learning, with display.
+
+        Parameters
+        ----------
+        n_steps -- number of steps to simulate for
+        """
+        
+        # prepare for the visualization
+        plb.ion()
+        mv = mountaincar.MountainCarViewer(self.mountain_car)
+        mv.create_figure(n_steps, n_steps)
+        plb.draw()
+            
+        # make sure the mountain-car is reset
+        self.mountain_car.reset()
+
+        for n in range(n_steps):
+            print '\rt =', self.mountain_car.t,
+            sys.stdout.flush()
+            
+            # choose a random action
+            self.mountain_car.apply_force(np.random.randint(3) - 1)
+            # simulate the timestep
+            self.mountain_car.simulate_timesteps(100, 0.01)
+
+            # update the visualization
+            mv.update_figure()
+            plb.draw()            
+            
+            # check for rewards
+            if self.mountain_car.R > 0.0:
+                print "\rreward obtained at t = ", self.mountain_car.t
+                break
+
+    def learn(self):
+        # This is your job!
+        pass
+
+if __name__ == "__main__":
+    d = DummyAgent()
+    d.visualize_trial()
+    plb.show()
+```
+
+The below is a neuron example :
+
+```
+# The python version of the legacy NEURON tutorial
+# 
+# The model consists of an axon and soma with HH channels
+# and 3 passive dendrite cones.
+#
+# Start with
+# $ nrngui -python
+# >>> execfile('neuron_example.py')
+#
+# - E. Muller 03.2009.
+
+
+# import the hoc interpreter object
+from neuron import h
+
+# enable the gui
+from neuron import gui
+
+soma = h.Section()
+axon = h.Section()
+
+axon.L = 1000.0
+axon.diam = 1.0
+axon.nseg = 40
+
+soma.L = 30.0
+soma.diam = 30.0
+soma.nseg = 1
+
+# make a list of 3 dendrites
+dendrites = [h.Section() for x in range(3)]
+
+
+# connect them up
+
+# In [x]: ? soma.connect
+# ...
+# childSection.connect(parentSection, [parentX], [childEnd])
+
+axon.connect(soma,0,0) # hoc equiv: connect soma(0) axon(0)
+
+
+for dend in dendrites:
+    dend.connect(soma,1,0)
+
+
+
+# add Hodgkin-Huxley channels in soma and axon
+soma.insert('hh')
+axon.insert('hh')
+
+# configure dendrites
+
+for d in dendrites:
+    d.L = 200.0 # total length [micrometers]
+    d.insert('pas')  # insert passive current
+
+    d.nseg = 20  # number of spatial discretization segments
+    
+    # loop over segments setting parameters
+    for seg in d:
+        seg.pas.e = -65.0   #[mV]
+        seg.pas.g = 0.002 #[S/cm^2]
+    
+
+    # set diameters as for a code with:
+    # d = 10 at x=0
+    # d = 3 at x=1
+
+    f = lambda x: 5.0*(1-x) + 1.0*(x)
+
+    for seg in d:
+        seg.diam = f(seg.x)
+        
+
+
+#  biophysics
+for sec in h.allsec ():
+    sec.Ra = 100
+    sec.cm = 1
+
+
+
+# Stimulus
+
+stim = h.IClamp(soma(0.5))
+stim.delay = 1.0 # [ms]
+stim.dur = 5 # [ms] duration
+stim.amp = 0.5 # [nA] amplitude
+
+# Record the voltage
+v = h.Vector()
+v.record(soma(0.5)._ref_v)
+
+#v1 = h.Vector()
+#v1.record(axon(1.0)._ref_v)
+
+#v2 = h.Vector()
+#v2.record(dendrites[0](1.0)._ref_v)
+
+
+# set
+h.dt = 0.01
+
+# run for 50 ms
+tstop = 50.0
+
+# Use NEURON's graphing functionality
+# as there may still be issues importing neuron in ipython.
+                                      
+g = h.Graph()
+g.size(0 , 10, -80 , 40)            
+g.addvar('v(0.5)', sec = soma) 
+#g.addvar('v(0.5)', sec=axon)
+#g.addvar('v(1.0)', sec=axon)
+
+#g.addvar('v(0.9)', sec=dendrites[0])
+# run the simulation
+
+def go():
+    h.finitialize()
+
+    g.begin()
+    while h.t<tstop:
+        h.fadvance()
+        # update the graph while simulating
+        g.plot(h.t)
+
+    g.flush()
+
+
+go()
+
+# g.size(0 , tstop, -80 , 40) 
+# stim.amp = 3
+# stim.dur = 20
+# use pylab to get a better plot
+
+def pyplot():
+    global v,tstop
+
+    # convert neuron vector to array
+    v_arr = array(v)
+    # time bins
+    t = linspace(0,tstop,len(v_arr))
+
+    # normal pylab plot
+    plot(t,v_arr)
+
+
+#pyplot()
+#stim.amp = 2
+#stim.dur = 20.0
+#go()
+#pyplot()
 ```
