@@ -140,4 +140,40 @@ The iterative update says that :
 
 Hippocampal place cells is the fuzzy discretisation of continuous space. The external stimuli comes in to the spatial representation and that goes to the action learning. 
 
+...
 
+**Week 7**
+
+The following is the population activity :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=A(t)&space;=&space;\frac{n(t;&space;t&space;&plus;&space;\Delta&space;t)}{N&space;\Delta&space;t}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?A(t)&space;=&space;\frac{n(t;&space;t&space;&plus;&space;\Delta&space;t)}{N&space;\Delta&space;t}" title="A(t) = \frac{n(t; t + \Delta t)}{N \Delta t}" /></a>
+
+Neighboring cells in the visual cortex have a similar preferred orientation, this is called the cortical orientation map. A population is a group of neurons with similar neuronal properties, similar input, similar receptive field, similar connectivity. There are different connectivity schemes : full connectivity or all-to-all or random connectivity with the number K of fixed inputs.
+
+A homogeneous network is such that all neurons are ‘the same’, all synapses are ‘the same’, each neuron receives input from k neurons in the network, each neuron receives the same (mean) external input. Mean-field connectivity, or full-connectivity.
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=I(t)&space;=&space;I^{ext}(t)&space;&plus;&space;I^{net}(t)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?I(t)&space;=&space;I^{ext}(t)&space;&plus;&space;I^{net}(t)" title="I(t) = I^{ext}(t) + I^{net}(t)" /></a>
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=I^{net}(t)&space;=&space;\sum_{j}&space;\sum_{f}&space;w_{ij}&space;\alpha&space;(t-t_j^f)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?I^{net}(t)&space;=&space;\sum_{j}&space;\sum_{f}&space;w_{ij}&space;\alpha&space;(t-t_j^f)" title="I^{net}(t) = \sum_{j} \sum_{f} w_{ij} \alpha (t-t_j^f)" /></a>
+
+We also have the following equality :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=I_i(t)&space;=&space;J_0&space;\int&space;\alpha(s)&space;A(t-s)ds&space;&plus;&space;I^{ext}(t)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?I_i(t)&space;=&space;J_0&space;\int&space;\alpha(s)&space;A(t-s)ds&space;&plus;&space;I^{ext}(t)" title="I_i(t) = J_0 \int \alpha(s) A(t-s)ds + I^{ext}(t)" /></a>
+
+Suppose all the variables are constant in time, we have :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=I_0&space;=&space;J_0&space;A_0&space;\int&space;\alpha(s)&space;ds&space;&plus;&space;I_0^{ext}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?I_0&space;=&space;J_0&space;A_0&space;\int&space;\alpha(s)&space;ds&space;&plus;&space;I_0^{ext}" title="I_0 = J_0 A_0 \int \alpha(s) ds + I_0^{ext}" /></a>
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=v&space;=&space;g(I_0)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?v&space;=&space;g(I_0)" title="v = g(I_0)" /></a>
+
+Which is the frequency v. 
+
+Gain-function g is frequency-current relation. Function g can be calculated analytically or measured in single-neuron simulations/single-neuron experiments. Consider the following equations :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=\tau&space;\frac{du_i}{dt}&space;=&space;-u&space;&plus;&space;I_i" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\tau&space;\frac{du_i}{dt}&space;=&space;-u&space;&plus;&space;I_i" title="\tau \frac{du_i}{dt} = -u + I_i" /></a>
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=I_i&space;=&space;\sum_{k,f}&space;w_{ik}&space;\alpha(t-t_k^f)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?I_i&space;=&space;\sum_{k,f}&space;w_{ik}&space;\alpha(t-t_k^f)" title="I_i = \sum_{k,f} w_{ik} \alpha(t-t_k^f)" /></a>
+
+Connectivity schemes are random, for a fixed p, but are balanced. For this we have the following equation :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=I_i&space;=&space;\sum_{k,f}&space;w_{ik}&space;\alpha^{exc}&space;(t-t_k^f)&space;-&space;\sum_{k,f}&space;w_{ik}&space;\alpha^{inh}&space;(t-t_k^f)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?I_i&space;=&space;\sum_{k,f}&space;w_{ik}&space;\alpha^{exc}&space;(t-t_k^f)&space;-&space;\sum_{k,f}&space;w_{ik}&space;\alpha^{inh}&space;(t-t_k^f)" title="I_i = \sum_{k,f} w_{ik} \alpha^{exc} (t-t_k^f) - \sum_{k,f} w_{ik} \alpha^{inh} (t-t_k^f)" /></a>
