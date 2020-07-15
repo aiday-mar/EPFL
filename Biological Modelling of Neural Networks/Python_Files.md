@@ -1633,9 +1633,7 @@ import mountaincar
 class DummyAgent():
     """A not so good agent for the mountain-car task.
     """
-
     def __init__(self, mountain_car = None, parameter1 = 3.0):
-        
         if mountain_car is None:
             self.mountain_car = mountaincar.MountainCar()
         else:
@@ -1645,9 +1643,6 @@ class DummyAgent():
 
     def visualize_trial(self, n_steps = 200):
         """Do a trial without learning, with display.
-
-        Parameters
-        ----------
         n_steps -- number of steps to simulate for
         """
         
@@ -1692,16 +1687,12 @@ The below is a neuron example :
 
 ```
 # The python version of the legacy NEURON tutorial
-# 
 # The model consists of an axon and soma with HH channels
 # and 3 passive dendrite cones.
-#
 # Start with
 # $ nrngui -python
 # >>> execfile('neuron_example.py')
-#
 # - E. Muller 03.2009.
-
 
 # import the hoc interpreter object
 from neuron import h
@@ -1723,20 +1714,14 @@ soma.nseg = 1
 # make a list of 3 dendrites
 dendrites = [h.Section() for x in range(3)]
 
-
-# connect them up
-
 # In [x]: ? soma.connect
 # ...
 # childSection.connect(parentSection, [parentX], [childEnd])
 
-axon.connect(soma,0,0) # hoc equiv: connect soma(0) axon(0)
-
+axon.connect(soma,0,0) 
 
 for dend in dendrites:
     dend.connect(soma,1,0)
-
-
 
 # add Hodgkin-Huxley channels in soma and axon
 soma.insert('hh')
@@ -1755,7 +1740,6 @@ for d in dendrites:
         seg.pas.e = -65.0   #[mV]
         seg.pas.g = 0.002 #[S/cm^2]
     
-
     # set diameters as for a code with:
     # d = 10 at x=0
     # d = 3 at x=1
@@ -1765,17 +1749,12 @@ for d in dendrites:
     for seg in d:
         seg.diam = f(seg.x)
         
-
-
 #  biophysics
 for sec in h.allsec ():
     sec.Ra = 100
     sec.cm = 1
 
-
-
 # Stimulus
-
 stim = h.IClamp(soma(0.5))
 stim.delay = 1.0 # [ms]
 stim.dur = 5 # [ms] duration
@@ -1790,7 +1769,6 @@ v.record(soma(0.5)._ref_v)
 
 #v2 = h.Vector()
 #v2.record(dendrites[0](1.0)._ref_v)
-
 
 # set
 h.dt = 0.01
@@ -1812,15 +1790,12 @@ g.addvar('v(0.5)', sec = soma)
 
 def go():
     h.finitialize()
-
     g.begin()
     while h.t<tstop:
         h.fadvance()
         # update the graph while simulating
         g.plot(h.t)
-
     g.flush()
-
 
 go()
 
