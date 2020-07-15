@@ -195,3 +195,15 @@ Membrane potential caused by the input :
 In the continuum model we have the Field equation. 
 
 <a href="https://www.codecogs.com/eqnedit.php?latex=\tau&space;\frac{dh(x,t)}{dt}&space;=&space;-h(x,t)&space;&plus;&space;RI^{ext}(x,t)&plus;d\int&space;w(x-x')F(h(x',t))dx'" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\tau&space;\frac{dh(x,t)}{dt}&space;=&space;-h(x,t)&space;&plus;&space;RI^{ext}(x,t)&plus;d\int&space;w(x-x')F(h(x',t))dx'" title="\tau \frac{dh(x,t)}{dt} = -h(x,t) + RI^{ext}(x,t)+d\int w(x-x')F(h(x',t))dx'" /></a>
+
+**Week 9**
+
+We have the MT/V5 part of the brain, and this responds to the direction of motion. There is also the notion of coherence which measures to what extent the neurons fire in the same direction. LIP is somewhere between MT (movement detection) and Frontal Eye Field (saccade control).
+
+In the neurons in LIP we have selective to target of saccade, this increases faster if the signal is stronger, the activity is noisy.
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=\tau&space;\frac{dh_1(t)}{dt}&space;=&space;-h_1(t)&space;&plus;&space;RI_1^{ext}(t)&plus;w_{ee}F(h_1(t))&space;&plus;&space;w_{ei}F(h_{inh}(t))" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\tau&space;\frac{dh_1(t)}{dt}&space;=&space;-h_1(t)&space;&plus;&space;RI_1^{ext}(t)&plus;w_{ee}F(h_1(t))&space;&plus;&space;w_{ei}F(h_{inh}(t))" title="\tau \frac{dh_1(t)}{dt} = -h_1(t) + RI_1^{ext}(t)+w_{ee}F(h_1(t)) + w_{ei}F(h_{inh}(t))" /></a>
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=F(h_{inh}(t))&space;=&space;h_{inh}(t)&space;=&space;w_{ie}(A_{e,1}(t)&space;&plus;&space;A_{e,2}(t))" target="_blank"><img src="https://latex.codecogs.com/gif.latex?F(h_{inh}(t))&space;=&space;h_{inh}(t)&space;=&space;w_{ie}(A_{e,1}(t)&space;&plus;&space;A_{e,2}(t))" title="F(h_{inh}(t)) = h_{inh}(t) = w_{ie}(A_{e,1}(t) + A_{e,2}(t))" /></a>
+
+
