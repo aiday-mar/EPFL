@@ -281,3 +281,11 @@ Repeat (for each episode) :
  Until \tau = T - 1
 ```
 
+(1) 
+<a href="https://www.codecogs.com/eqnedit.php?latex=G&space;\leftarrow&space;\sum_{i&space;=&space;\tau&space;&plus;&space;1}^{min(\tau&space;&plus;&space;n,&space;T)}&space;\gamma^{i&space;-&space;\tau&space;-&space;1}&space;R_i" target="_blank"><img src="https://latex.codecogs.com/gif.latex?G&space;\leftarrow&space;\sum_{i&space;=&space;\tau&space;&plus;&space;1}^{min(\tau&space;&plus;&space;n,&space;T)}&space;\gamma^{i&space;-&space;\tau&space;-&space;1}&space;R_i" title="G \leftarrow \sum_{i = \tau + 1}^{min(\tau + n, T)} \gamma^{i - \tau - 1} R_i" /></a>
+
+(2)
+<a href="https://www.codecogs.com/eqnedit.php?latex=\textrm{If&space;}&space;\tau&space;&plus;&space;n&space;<&space;T,&space;\textrm{&space;then&space;}&space;G&space;\leftarrow&space;G&space;&plus;&space;\gamma^n&space;Q(S_{\tau&space;&plus;&space;n},&space;A_{\tau&space;&plus;&space;n})" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\textrm{If&space;}&space;\tau&space;&plus;&space;n&space;<&space;T,&space;\textrm{&space;then&space;}&space;G&space;\leftarrow&space;G&space;&plus;&space;\gamma^n&space;Q(S_{\tau&space;&plus;&space;n},&space;A_{\tau&space;&plus;&space;n})" title="\textrm{If } \tau + n < T, \textrm{ then } G \leftarrow G + \gamma^n Q(S_{\tau + n}, A_{\tau + n})" /></a>
+
+(3)
+<a href="https://www.codecogs.com/eqnedit.php?latex=Q(S_{\tau},&space;A_{\tau})&space;\leftarrow&space;Q(S_{\tau},&space;A_{\tau})&space;&plus;&space;\alpha&space;[G&space;-&space;Q(S_{\tau},&space;A_{\tau})]" target="_blank"><img src="https://latex.codecogs.com/gif.latex?Q(S_{\tau},&space;A_{\tau})&space;\leftarrow&space;Q(S_{\tau},&space;A_{\tau})&space;&plus;&space;\alpha&space;[G&space;-&space;Q(S_{\tau},&space;A_{\tau})]" title="Q(S_{\tau}, A_{\tau}) \leftarrow Q(S_{\tau}, A_{\tau}) + \alpha [G - Q(S_{\tau}, A_{\tau})]" /></a>
