@@ -293,3 +293,13 @@ Repeat (for each episode) :
 The mapping from input states to actions; or from the input states to value functions can be represented by a model with parameters, typically a neural network with adjustable weights. Today we have seen a large variety of TD algorithms. All of these can be understood as iterative solutions of the Bellman equation. The Bellman equation can be formulated with V-values or with Q-values. Bellman equations normally formulate a self-consistency condition over  one step (nearest neighbors), but can be extended to n steps. Monte Carlo methods do not exploit the ‘bootstrapping’ aspect of the Bellman equation since they do not rely on a self-consistency condition. An n-step SARSA is somewhere intermediate between normal SARSA and MonteCarlo.
 
 Discretization of continuous spaces poses several problems. The first problem is that a rescaling becomes necessary after a change of discretization scheme. This problem is solved by eligibility traces as well as by the n-step TD methods The second problem is that a tabular scheme brakes down for fine discretizations. It is solved by a neural network where we learn the weights. Such a neural network enables generalization by forcing a ‘smooth’ V-value or Q-value. 
+
+**Week 4**
+
+Neural network parameterizes Q-values as a function of continuous state s. One output for one action a. Learn weights by playing against itself. We have that : neural network parameterizes V-values as a function of state s, it has one single output, it learns the weights by playing against itself, it minimizes the TD-error of a V-function and uses eligibility traces.
+
+The following is a consistency conition charaterized by an error function :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=E(w)&space;=&space;\frac{1}{2}[r_t&space;&plus;&space;\gamma&space;V(s'&space;|&space;w)&space;-&space;V(s&space;|w)]^2" target="_blank"><img src="https://latex.codecogs.com/gif.latex?E(w)&space;=&space;\frac{1}{2}[r_t&space;&plus;&space;\gamma&space;V(s'&space;|&space;w)&space;-&space;V(s&space;|w)]^2" title="E(w) = \frac{1}{2}[r_t + \gamma V(s' | w) - V(s |w)]^2" /></a>
+
+TD learning where Q-values are V-values are described by a smooth function, is also called ‘function approximation in TD learning’. The family of functions can be defined by the parameters of a  Neural Network or by the parameters of a linear superposition of basis functions. In all TD learning methods, we have that V-values or Q-values are the central quantities. The actions are taken with the softmax, greedy or the epsilon-greedy policy derived from the Q-values and the V-values.
