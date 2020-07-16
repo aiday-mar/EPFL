@@ -251,3 +251,33 @@ The second operation is executed when action a is chosen in state s. Eligibility
 Another solution is the n-step SARSA. Here below we have the equation of the 2-step SARSA :
 
 <a href="https://www.codecogs.com/eqnedit.php?latex=\Delta&space;Q(s_t,&space;a_t)&space;=&space;\eta&space;[r_t&space;&plus;&space;\gamma&space;r_{t&plus;1}&space;&plus;&space;\gamma&space;\gamma&space;Q(s_{t&plus;2},&space;a_{t&plus;2})&space;-&space;Q(s_t,&space;a_t)]" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\Delta&space;Q(s_t,&space;a_t)&space;=&space;\eta&space;[r_t&space;&plus;&space;\gamma&space;r_{t&plus;1}&space;&plus;&space;\gamma&space;\gamma&space;Q(s_{t&plus;2},&space;a_{t&plus;2})&space;-&space;Q(s_t,&space;a_t)]" title="\Delta Q(s_t, a_t) = \eta [r_t + \gamma r_{t+1} + \gamma \gamma Q(s_{t+2}, a_{t+2}) - Q(s_t, a_t)]" /></a>
+
+Let's define the following n-step SARSA algorithm :
+
+```
+Initialize Q(s,a) arbitrarily, for all s in S, a in A
+Initialize \pi to be \epsilon-greedy with respect to Q, or to a fixed given policy
+Parameters : step size \alpha in (0,1], small \epsilon > 0, a positive integer n
+All store and access operations (for S_t, A_t and R_t) can take their index mod n
+
+Repeat (for each episode) :
+  Initialize and store S_0 != terminal
+  Select and store an action A_0 ~ \pi(. | S_0)
+  T <- \infinity
+  For t = 0,1,2... :
+    If t < T, then :
+      Take action A_t
+      Observe and store the next reward as R_{t+1} and the next state as S_{t+1}
+      If S_{t+1} is terminal, then :
+        T <- t + 1 
+      else :
+        select and store and action A_{t+1} ~ \pi(. | S_{t+1})
+    \tau <- t - n + 1
+    If \tau >= 0 :
+      (1) ...
+      (2) ...
+      (3) ...
+      If \pi is being learned then ensure that \pi(. | S_{\tau}) is epsilon-greedy with respect to Q
+ Until \tau = T - 1
+```
+
