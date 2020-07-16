@@ -206,4 +206,60 @@ In the neurons in LIP we have selective to target of saccade, this increases fas
 
 <a href="https://www.codecogs.com/eqnedit.php?latex=F(h_{inh}(t))&space;=&space;h_{inh}(t)&space;=&space;w_{ie}(A_{e,1}(t)&space;&plus;&space;A_{e,2}(t))" target="_blank"><img src="https://latex.codecogs.com/gif.latex?F(h_{inh}(t))&space;=&space;h_{inh}(t)&space;=&space;w_{ie}(A_{e,1}(t)&space;&plus;&space;A_{e,2}(t))" title="F(h_{inh}(t)) = h_{inh}(t) = w_{ie}(A_{e,1}(t) + A_{e,2}(t))" /></a>
 
+**Week 10**
 
+Sources of variability are intrinsic noise within ion channels ( finite number of channels, finite temperature ). There is also network noise where there is a spike arrival from the other neurons, this is beyond the control of the experimentalists. The integrate and fire models allows you to predict spike initiation times and to predict subthreshold voltage. High connectivity means that the structure is systematic, organized in local populations but seemingly random.
+
+Intrinsically generated fluctuations caused by a finite temperature together with a finite number of ion channels. Individual Ion channels open and close stochastically. We refer to these intrinsically generated fluctuations as ‘intrinsic noise. The probability of finding a spike : 
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=P_F&space;=&space;\rho_0&space;\Delta&space;t" target="_blank"><img src="https://latex.codecogs.com/gif.latex?P_F&space;=&space;\rho_0&space;\Delta&space;t" title="P_F = \rho_0 \Delta t" /></a>
+
+The continuous time model can be written as follows :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=\frac{d&space;S(t_1&space;|&space;t_0)}{dt}&space;=&space;-&space;\rho_0&space;S(t_1&space;|&space;t_0)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\frac{d&space;S(t_1&space;|&space;t_0)}{dt}&space;=&space;-&space;\rho_0&space;S(t_1&space;|&space;t_0)" title="\frac{d S(t_1 | t_0)}{dt} = - \rho_0 S(t_1 | t_0)" /></a>
+
+In the homogeneous (or stationary) Poisson process, the stochastic intensity is constant. In the inhomogeneous  Poisson process, the stochastic intensity is time dependent. The interval distribution of the inhomogeneous Poisson Process is:
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=P(t&space;|&space;\hat{t})&space;=&space;\rho(t)exp(-\int_{\hat{t}}^t&space;\rho(t')&space;dt')" target="_blank"><img src="https://latex.codecogs.com/gif.latex?P(t&space;|&space;\hat{t})&space;=&space;\rho(t)exp(-\int_{\hat{t}}^t&space;\rho(t')&space;dt')" title="P(t | \hat{t}) = \rho(t)exp(-\int_{\hat{t}}^t \rho(t') dt')" /></a>
+
+The survivor function is :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=P(t&space;|&space;\hat{t})&space;=&space;exp(-\int_{\hat{t}}^t&space;\rho(t')&space;dt')" target="_blank"><img src="https://latex.codecogs.com/gif.latex?P(t&space;|&space;\hat{t})&space;=&space;exp(-\int_{\hat{t}}^t&space;\rho(t')&space;dt')" title="P(t | \hat{t}) = exp(-\int_{\hat{t}}^t \rho(t') dt')" /></a>
+
+We have the following equation for the spike count :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=v(t)&space;=&space;\frac{n^{sp}}{T}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?v(t)&space;=&space;\frac{n^{sp}}{T}" title="v(t) = \frac{n^{sp}}{T}" /></a>
+
+We have the following Fano factor also :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=F&space;=&space;\frac{<(n_k^{sp}&space;-&space;<n_k^{sp}>)^2>}{<n_k^{sp}>}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?F&space;=&space;\frac{<(n_k^{sp}&space;-&space;<n_k^{sp}>)^2>}{<n_k^{sp}>}" title="F = \frac{<(n_k^{sp} - <n_k^{sp}>)^2>}{<n_k^{sp}>}" /></a>
+
+We have the following equation :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=PSTH(t)&space;=&space;\frac{n(t;&space;t&space;&plus;&space;\Delta&space;t)}{K&space;\Delta&space;t}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?PSTH(t)&space;=&space;\frac{n(t;&space;t&space;&plus;&space;\Delta&space;t)}{K&space;\Delta&space;t}" title="PSTH(t) = \frac{n(t; t + \Delta t)}{K \Delta t}" /></a>
+
+There are three different definitions of rate. 
+
+1. Rate as a temporal average: spike count for a single neuron over a few hundred milliseconds are a few seconds, divided by the time. Disadvantage: it is too slow to be the biological code.
+2. Rate as an average of several repetitions of the same experiment: spike count in a short time bin (a few milliseconds), summed over repetitions, divided by bin width and number of repetitions. Disadvantage: it is too slow (we need repetitions!) to be the biological code, even though the temporal resolution is high
+3.  Rate as an average over a population: Populations activity A(t) defined earlier. several repetitions of the same experiment. Disadvantage: works best for completely homogeneous populations, but should also work for ‘similar’ neurons such as those within one layer of a cortical column. Advantages: it is a rapid code and averaging over group is natural since every postsynaptic neuron does this.
+
+We have :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=S(t)&space;=&space;\sum_{k=1}^K&space;\sum_f&space;\delta(t&space;-&space;t_k^f)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?S(t)&space;=&space;\sum_{k=1}^K&space;\sum_f&space;\delta(t&space;-&space;t_k^f)" title="S(t) = \sum_{k=1}^K \sum_f \delta(t - t_k^f)" /></a>
+
+The expectation then in this case is :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=<S(t)>&space;=&space;K&space;\rho_0" target="_blank"><img src="https://latex.codecogs.com/gif.latex?<S(t)>&space;=&space;K&space;\rho_0" title="<S(t)> = K \rho_0" /></a>
+
+We have the following two equations :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=RI^{syn}(t)&space;=&space;\sum_k&space;w_k&space;\sum_f&space;\alpha(t-t_k^f)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?RI^{syn}(t)&space;=&space;\sum_k&space;w_k&space;\sum_f&space;\alpha(t-t_k^f)" title="RI^{syn}(t) = \sum_k w_k \sum_f \alpha(t-t_k^f)" /></a>
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=I^{syn}(t)&space;=&space;\frac{1}{R}&space;\sum_k&space;w_k&space;\sum_f&space;\int&space;dt'&space;\alpha(t-t')\delta(t'&space;-&space;t_k^f)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?I^{syn}(t)&space;=&space;\frac{1}{R}&space;\sum_k&space;w_k&space;\sum_f&space;\int&space;dt'&space;\alpha(t-t')\delta(t'&space;-&space;t_k^f)" title="I^{syn}(t) = \frac{1}{R} \sum_k w_k \sum_f \int dt' \alpha(t-t')\delta(t' - t_k^f)" /></a>
+
+The passive membrane is a leaky integrate and fire model without a threshold. We have the following equation : 
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=\tau&space;\frac{du}{dt}&space;=&space;-(u-u_{rest})&space;&plus;&space;RI^{syn}(t)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\tau&space;\frac{du}{dt}&space;=&space;-(u-u_{rest})&space;&plus;&space;RI^{syn}(t)" title="\tau \frac{du}{dt} = -(u-u_{rest}) + RI^{syn}(t)" /></a>
+
+The network noise is often described as stochastic spike arrivals. Suppose that spikes arrive stochastically (according to a Poisson Process) with timedependent  stochastic intensity !. Since input currents sum up linearly, we can calculate the mean input current by ‘averaging over the stochastic spike arrivals’ which is equivalent to ‘taking the expectation over stochasticity of the Poisson process’.Similarly, if the voltage of the neuronal membrane is approximated by a linear model (see week 1, passive membrane, or week 8, input potential), then we can also calculate the mean membrane potential. In both cases taking the expectation is easy since the average of the spike arrivals yields the stochastic intensity. 
