@@ -1822,3 +1822,110 @@ def pyplot():
 #go()
 #pyplot()
 ```
+
+**Week 10**
+
+```
+from pylab import *
+from numpy import *
+from copy import copy
+
+# we define below the constants that will be used in our method 
+dt = 0.5e-5                        # simulation time step
+du = 0.07                          # bin size for u-histograms
+urange = arange(-0.5,1.0+du,du) # range of possible u values
+# which is the length of the vector defined above 
+nbins = len(urange)
+# here we are returning the indices in the range only if the urange element at that index is <= u and the next element is greater than u
+# what does [0] following this return method mean ?
+def index_of(u): return [ i for i in range(0,nbins) if (urange[i]<=u and urange[i+1]>u) ][0]
+
+# LIF
+tau    = 10e-3           # membrane time constant
+theta  = urange[nbins-1] # firing threshold
+itheta = nbins-1
+reset  = 0.0             # reset potential
+# the index of the 0.0 element
+ireset = index_of(reset)
+
+i0      = 0.8    # constant applied current
+nu      = 0.8e3  # shot noise frequency
+w       = 0.07   # absolute jump size
+epsilon = 1      # w/du ratio 
+
+# simulation of a pool of LIF neurons
+def lif_simulate(u,new_u):
+    for i in range(0,len(u)):
+    	# the current element at the ith index 
+        current_u = u[i]
+        if (rand() < (nu*dt)): current_u = current_u + w # shot noise (excitatory)
+        if (rand() < (nu*dt)): current_u = current_u - w # shot noise (excitatory)
+        if current_u > theta: # test threshold
+            current_u = reset       
+        new_u[i] = current_u + (dt/tau)*(i0-current_u)  # LIF dynamics
+    
+
+# numerical integration
+def normalize(v,dv): return v / (dv*sum(v))
+diff = zeros((nbins,nbins),float)
+for i in range(0,nbins-1): diff[i+1,i] = -1.0/2.0/du ; diff[i,i+1] = 1.0/2.0/du
+
+def integrate(pu):
+    dpu  = dot(diff,pu)
+    activity = (1/tau)*(-theta+i0)*pu[itheta] + nu*du*sum(pu[(itheta-epsilon+1):nbins])    
+    puminusw = zeros(nbins)
+    puplusw  = zeros(nbins)
+    for i in range(0,nbins): 
+        j = i-epsilon
+        k = i+epsilon
+        if ((j>=0) and (j<nbins)): puminusw[i] = pu[j]
+        if ((k>=0) and (k<nbins)): puplusw[i] = pu[k]
+    newpu = pu + dt*(pu/tau + (urange-i0)/tau*dpu + nu*(puminusw-pu) + nu*(puplusw-pu))
+    newpu[ireset] = newpu[ireset] + dt/du*activity
+    newpu = maximum(newpu,0)
+    # newpu[nbins-1]=0 # force the last bin to be zero
+    newpu = normalize(newpu,du)
+    return [activity,newpu]
+
+
+
+def run(n,duration=0.1):
+    nsteps = int(duration/dt)
+    u = zeros((nsteps,n),float)
+    u[0,:] = -0.4 + 1.3*rand(n)       # randomizes the initial voltages    
+    pus = ones((nsteps,nbins),float)  # using a uniform distribution
+    pus[0,0:1] = 0 ; pus[0,(nbins-2):(nbins)] = 0 ; # + zero in leftmost and rightmost bins
+    pus[0,:] = normalize(pus[0,:],du)
+    bins = arange(-0.5,1.,0.05)
+    [y,x] = histogram(u[0,:],normed=True,bins=bins)
+    fig1 = figure()
+    subplot(211)
+    plot1 = plot(bins[1:],y,ls='steps')
+    plot2 = plot(urange,pus[0,:])
+    xlabel('membrane potential')
+    ylabel('probability')
+    axis(ymin=0,ymax=4)
+    subplot(212)
+    lines = [ plot([urange[0]],u[0:1,i])[0] for i in range(10) ]
+    axis(xmin=0,xmax=nsteps)
+    xlabel('time steps')
+    ylabel('membrane potential')
+    for t in range(0,nsteps-1): 
+        lif_simulate(u[t,:],u[t+1,:])     # simulation of LIF neurons
+        activity,newpu = integrate(pus[t,:]) 
+        pus[t+1,:] = newpu  # numerical integration of theory
+        if mod(t,int(0.001/dt))==0:
+            plt = subplot(211)
+            plt.clear()
+            xlabel('membrane potential')
+            ylabel('probability')
+            [y,x] = histogram(u[t+1,:],normed=True,bins=bins)
+            plot1 = plot(bins[1:]+0.025,y,ls='steps')
+            plot2 = plot(urange,pus[t+1,:])
+            for i,line in enumerate(lines):
+                line.set_data(range(t+1),u[0:t+1,i])
+            draw()
+
+            
+# run(1000,0.1)
+```
