@@ -60,4 +60,8 @@ During a tour T, an ant k at node i decided to move towards j with the following
 
 Here we have that alpha is the parameter controlling the includence of the virtual pheromone, while beta is the parameter controlling the influence of the local visibility. 
 
-START FROM PAGE 140
+At the end of each tour T, each ant K deposits a quantity of virtual pheromones \Delta \tau_{ij}^k = 0, when (i,j) has not been used during the tour T. And the following quantity when the link (i,j) instead has been used during the tour T. 
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=\Delta&space;\tau_{ij}^k&space;=&space;\frac{Q}{L^k(t)}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\Delta&space;\tau_{ij}^k&space;=&space;\frac{Q}{L^k(t)}" title="\Delta \tau_{ij}^k = \frac{Q}{L^k(t)}" /></a>
+
+Where here we have that : L_k^t is the length of the tour T done by ant k at iteration t, and where Q is the parameter adjusted by heuristic and not sensitive. 
