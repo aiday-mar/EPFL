@@ -311,3 +311,11 @@ We have different policy gradient methods : the 1 step-horizon method, where the
 We have the following choice of actions :
 
 <a href="https://www.codecogs.com/eqnedit.php?latex=\pi(a_1&space;|&space;x,&space;w)&space;=&space;prob(y&space;=&space;1&space;|x,w)&space;=&space;g(\sum_k^n&space;w_k&space;x_k)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\pi(a_1&space;|&space;x,&space;w)&space;=&space;prob(y&space;=&space;1&space;|x,w)&space;=&space;g(\sum_k^n&space;w_k&space;x_k)" title="\pi(a_1 | x, w) = prob(y = 1 |x,w) = g(\sum_k^n w_k x_k)" /></a>
+
+We have the following update parameters used to maximize the rewards. If y = 1, then we have :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=\Delta&space;w_j&space;=&space;\eta&space;\frac{g'}{g}&space;R(1,x)x_j" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\Delta&space;w_j&space;=&space;\eta&space;\frac{g'}{g}&space;R(1,x)x_j" title="\Delta w_j = \eta \frac{g'}{g} R(1,x)x_j" /></a>
+
+Next we also have the following when y = 0 :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=\Delta&space;w_j&space;=&space;\eta&space;\frac{-g'}{1-g}&space;R(0,x)x_j" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\Delta&space;w_j&space;=&space;\eta&space;\frac{-g'}{1-g}&space;R(0,x)x_j" title="\Delta w_j = \eta \frac{-g'}{1-g} R(0,x)x_j" /></a>
