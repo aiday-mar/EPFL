@@ -59,3 +59,5 @@ During a tour T, an ant k at node i decided to move towards j with the following
 <a href="https://www.codecogs.com/eqnedit.php?latex=p^k_{ij}(t)&space;=&space;\frac{[\tau_{ij}(t)]^{\alpha}&space;[\eta_{ij}]^{\beta}}{\sum_{j&space;\in&space;J_i^k}&space;[\tau_{ij}(t)]^{\alpha}[\eta_{ij}]^{\beta}}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?p^k_{ij}(t)&space;=&space;\frac{[\tau_{ij}(t)]^{\alpha}&space;[\eta_{ij}]^{\beta}}{\sum_{j&space;\in&space;J_i^k}&space;[\tau_{ij}(t)]^{\alpha}[\eta_{ij}]^{\beta}}" title="p^k_{ij}(t) = \frac{[\tau_{ij}(t)]^{\alpha} [\eta_{ij}]^{\beta}}{\sum_{j \in J_i^k} [\tau_{ij}(t)]^{\alpha}[\eta_{ij}]^{\beta}}" /></a>
 
 Here we have that alpha is the parameter controlling the includence of the virtual pheromone, while beta is the parameter controlling the influence of the local visibility. 
+
+START FROM PAGE 140
