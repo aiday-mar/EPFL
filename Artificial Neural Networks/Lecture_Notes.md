@@ -303,3 +303,11 @@ The following is a consistency conition charaterized by an error function :
 <a href="https://www.codecogs.com/eqnedit.php?latex=E(w)&space;=&space;\frac{1}{2}[r_t&space;&plus;&space;\gamma&space;V(s'&space;|&space;w)&space;-&space;V(s&space;|w)]^2" target="_blank"><img src="https://latex.codecogs.com/gif.latex?E(w)&space;=&space;\frac{1}{2}[r_t&space;&plus;&space;\gamma&space;V(s'&space;|&space;w)&space;-&space;V(s&space;|w)]^2" title="E(w) = \frac{1}{2}[r_t + \gamma V(s' | w) - V(s |w)]^2" /></a>
 
 TD learning where Q-values are V-values are described by a smooth function, is also called ‘function approximation in TD learning’. The family of functions can be defined by the parameters of a  Neural Network or by the parameters of a linear superposition of basis functions. In all TD learning methods, we have that V-values or Q-values are the central quantities. The actions are taken with the softmax, greedy or the epsilon-greedy policy derived from the Q-values and the V-values.
+
+We have different policy gradient methods : the 1 step-horizon method, where the stimulus is the input vector. We have a single sigmoidal neuron with transfer function g and weight vector w. Define the mean reward as :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=<R>&space;=&space;\sum_x&space;\sum_{y=&space;\{0,1\}}\pi(y&space;|x)p(x)R(y,x)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?<R>&space;=&space;\sum_x&space;\sum_{y=&space;\{0,1\}}\pi(y&space;|x)p(x)R(y,x)" title="<R> = \sum_x \sum_{y= \{0,1\}}\pi(y |x)p(x)R(y,x)" /></a>
+
+We have the following choice of actions :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=\pi(a_1&space;|&space;x,&space;w)&space;=&space;prob(y&space;=&space;1&space;|x,w)&space;=&space;g(\sum_k^n&space;w_k&space;x_k)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\pi(a_1&space;|&space;x,&space;w)&space;=&space;prob(y&space;=&space;1&space;|x,w)&space;=&space;g(\sum_k^n&space;w_k&space;x_k)" title="\pi(a_1 | x, w) = prob(y = 1 |x,w) = g(\sum_k^n w_k x_k)" /></a>
