@@ -1,22 +1,3 @@
-<style TYPE="text/css">
-code.has-jax {font: inherit; font-size: 100%; background: inherit; border: inherit;}
-</style>
-<script type="text/x-mathjax-config">
-MathJax.Hub.Config({
-    tex2jax: {
-        inlineMath: [['$','$'], ['\\(','\\)']],
-        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'] // removed 'code' entry
-    }
-});
-MathJax.Hub.Queue(function() {
-    var all = MathJax.Hub.getAllJax(), i;
-    for(i = 0; i < all.length; i += 1) {
-        all[i].SourceElement().parentNode.className += ' has-jax';
-    }
-});
-</script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS_HTML-full"></script>
-  
 # Artifical Neural Networks Lectures Notes
 
 **Lecture 1**
@@ -381,4 +362,14 @@ Algorithm parameters : step sizes \alpha^{\theta} > 0, \alpha^w > 0
 Initialize the policy parameter &theta \in R^d and state value weights w \in R^d
 
 Loop forever (for each episode) : 
+    Generate an episode S_0, A_0, R_1,...., S_{T-1}, A_{T-1}, R_T, following \pi(.|., \theta)
+    Loop for each step of the episode t = 0,1,..., T-1 : 
 ```
+<a href="https://www.codecogs.com/eqnedit.php?latex=G&space;\leftarrow&space;\sum_{k&space;=&space;t&space;&plus;&space;1}^T&space;\gamma^{k-t-1}&space;R_k" target="_blank"><img src="https://latex.codecogs.com/gif.latex?G&space;\leftarrow&space;\sum_{k&space;=&space;t&space;&plus;&space;1}^T&space;\gamma^{k-t-1}&space;R_k" title="G \leftarrow \sum_{k = t + 1}^T \gamma^{k-t-1} R_k" /></a>
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=\delta&space;\leftarrow&space;G&space;-\hat{v}(S_t,&space;w)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\delta&space;\leftarrow&space;G&space;-\hat{v}(S_t,&space;w)" title="\delta \leftarrow G -\hat{v}(S_t, w)" /></a>
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=w&space;\leftarrow&space;w&space;&plus;&space;\alpha^{w}&space;\gamma^t&space;\delta&space;\triangledown&space;\hat{v}(S_t,&space;w)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?w&space;\leftarrow&space;w&space;&plus;&space;\alpha^{w}&space;\gamma^t&space;\delta&space;\triangledown&space;\hat{v}(S_t,&space;w)" title="w \leftarrow w + \alpha^{w} \gamma^t \delta \triangledown \hat{v}(S_t, w)" /></a>
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=\theta&space;\leftarrow&space;\theta&space;&plus;&space;\alpha^{\theta}&space;\gamma^t&space;\delta&space;\triangledown&space;\ln&space;\pi(A_t&space;|&space;S_t,&space;\theta)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\theta&space;\leftarrow&space;\theta&space;&plus;&space;\alpha^{\theta}&space;\gamma^t&space;\delta&space;\triangledown&space;\ln&space;\pi(A_t&space;|&space;S_t,&space;\theta)" title="\theta \leftarrow \theta + \alpha^{\theta} \gamma^t \delta \triangledown \ln \pi(A_t | S_t, \theta)" /></a>
+
