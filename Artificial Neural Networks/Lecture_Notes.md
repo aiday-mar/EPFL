@@ -373,3 +373,35 @@ Loop forever (for each episode) :
 
 <a href="https://www.codecogs.com/eqnedit.php?latex=\theta&space;\leftarrow&space;\theta&space;&plus;&space;\alpha^{\theta}&space;\gamma^t&space;\delta&space;\triangledown&space;\ln&space;\pi(A_t&space;|&space;S_t,&space;\theta)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\theta&space;\leftarrow&space;\theta&space;&plus;&space;\alpha^{\theta}&space;\gamma^t&space;\delta&space;\triangledown&space;\ln&space;\pi(A_t&space;|&space;S_t,&space;\theta)" title="\theta \leftarrow \theta + \alpha^{\theta} \gamma^t \delta \triangledown \ln \pi(A_t | S_t, \theta)" /></a>
 
+**Week 5**
+
+We need some data for the supervised learning. We have P data points as follows :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=\{&space;(x^{\mu},&space;t^{\mu}),&space;1&space;\leq&space;\mu&space;\leq&space;P\}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\{&space;(x^{\mu},&space;t^{\mu}),&space;1&space;\leq&space;\mu&space;\leq&space;P\}" title="\{ (x^{\mu}, t^{\mu}), 1 \leq \mu \leq P\}" /></a>
+
+Where here we have t^{\mu} can be either equal to one or zero. The task of classification should be that of finding a separating surface in the high dimensional input space which separates points having positive value from those having a value of zero. We have the following equations must be satisfied :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=\hat{y}&space;=&space;0.5[1&space;&plus;&space;sgn(\sum_k&space;w_k&space;x_k&space;-&space;\theta)]" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\hat{y}&space;=&space;0.5[1&space;&plus;&space;sgn(\sum_k&space;w_k&space;x_k&space;-&space;\theta)]" title="\hat{y} = 0.5[1 + sgn(\sum_k w_k x_k - \theta)]" /></a>
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=d(x)&space;=&space;\sum_k&space;w_k&space;x_k&space;-&space;\theta" target="_blank"><img src="https://latex.codecogs.com/gif.latex?d(x)&space;=&space;\sum_k&space;w_k&space;x_k&space;-&space;\theta" title="d(x) = \sum_k w_k x_k - \theta" /></a>
+
+But then you can choose w_{N+1} to be \theta and x_{N+1} to be -1 and then we have :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=d(x)&space;=&space;\sum_{k=1}^{N&plus;1}&space;w_k&space;x_k&space;=&space;0" target="_blank"><img src="https://latex.codecogs.com/gif.latex?d(x)&space;=&space;\sum_{k=1}^{N&plus;1}&space;w_k&space;x_k&space;=&space;0" title="d(x) = \sum_{k=1}^{N+1} w_k x_k = 0" /></a>
+
+After this there is a review of the gradient descent method. We directly start with the Backprop and the multilayer networks. The XOR problem is not linearly separable. In this case you may want to use several layers of neurons to classify the problem. A multilayer perceptron (or multilayer network) has one or serveral hidden layers between input layer and output layer. Below we have a summary of the gradient chain rule :
+
+Step 1 : identify intermediate variables
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=a_k^{(n)}&space;=&space;\sum_l&space;w_{kl}^{(n)}&space;x_l^{(n-1)}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?a_k^{(n)}&space;=&space;\sum_l&space;w_{kl}^{(n)}&space;x_l^{(n-1)}" title="a_k^{(n)} = \sum_l w_{kl}^{(n)} x_l^{(n-1)}" /></a>
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=\delta_k^{(n)}&space;=&space;\frac{\delta&space;E}{\delta&space;a_k^{(n)}}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\delta_k^{(n)}&space;=&space;\frac{\delta&space;E}{\delta&space;a_k^{(n)}}" title="\delta_k^{(n)} = \frac{\delta E}{\delta a_k^{(n)}}" /></a>
+
+Step 2 : we write weight updates 
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=\Delta&space;w_{kl}^{n}&space;=&space;-&space;\gamma&space;\delta_k^{n}&space;x_l^{n-1}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\Delta&space;w_{kl}^{n}&space;=&space;-&space;\gamma&space;\delta_k^{n}&space;x_l^{n-1}" title="\Delta w_{kl}^{n} = - \gamma \delta_k^{n} x_l^{n-1}" /></a>
+
+Step 3 : Analyze the dependency graph
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=\delta_k^{n-1}&space;=&space;\sum_j&space;\delta_j^{n}w_{jk}^n&space;g'" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\delta_k^{n-1}&space;=&space;\sum_j&space;\delta_j^{n}w_{jk}^n&space;g'" title="\delta_k^{n-1} = \sum_j \delta_j^{n}w_{jk}^n g'" /></a>
+
