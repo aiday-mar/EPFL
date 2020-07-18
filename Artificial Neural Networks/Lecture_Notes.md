@@ -319,3 +319,17 @@ We have the following update parameters used to maximize the rewards. If y = 1, 
 Next we also have the following when y = 0 :
 
 <a href="https://www.codecogs.com/eqnedit.php?latex=\Delta&space;w_j&space;=&space;\eta&space;\frac{-g'}{1-g}&space;R(0,x)x_j" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\Delta&space;w_j&space;=&space;\eta&space;\frac{-g'}{1-g}&space;R(0,x)x_j" title="\Delta w_j = \eta \frac{-g'}{1-g} R(0,x)x_j" /></a>
+
+Consider then the following log likelihood trick : 
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=\triangledown_{\theta}&space;J=&space;\int&space;p(H)&space;\triangledown_{\theta}&space;\log&space;p(H)&space;R(H)dH" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\triangledown_{\theta}&space;J=&space;\int&space;p(H)&space;\triangledown_{\theta}&space;\log&space;p(H)&space;R(H)dH" title="\triangledown_{\theta} J= \int p(H) \triangledown_{\theta} \log p(H) R(H)dH" /></a>
+
+Where here you want to optimize the function J. You do optimization by gradient descent. Now we can have the Monte-Carlo approximation of this expectation by taking N trials :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=\triangledown_{\theta}&space;J=&space;E_H[\triangledown_{\theta}&space;\log&space;p(H)&space;R(H)]&space;\approx&space;\frac{1}{N}&space;\sum_{n=1}^N&space;\triangledown_{\theta}&space;\log&space;p(H^n)&space;R(H^n)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\triangledown_{\theta}&space;J=&space;E_H[\triangledown_{\theta}&space;\log&space;p(H)&space;R(H)]&space;\approx&space;\frac{1}{N}&space;\sum_{n=1}^N&space;\triangledown_{\theta}&space;\log&space;p(H^n)&space;R(H^n)" title="\triangledown_{\theta} J= E_H[\triangledown_{\theta} \log p(H) R(H)] \approx \frac{1}{N} \sum_{n=1}^N \triangledown_{\theta} \log p(H^n) R(H^n)" /></a>
+
+We can now summarize the above \Delta w_j in one equation where <y> is the expectation of the output given input vector x. We have :
+  
+<a href="https://www.codecogs.com/eqnedit.php?latex=\Delta&space;w_j&space;=&space;\eta&space;\frac{g'}{g(1-g)}&space;R(y,x)&space;[y&space;-&space;g(\sum_k^N&space;w_k&space;x_k)]&space;x_j" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\Delta&space;w_j&space;=&space;\eta&space;\frac{g'}{g(1-g)}&space;R(y,x)&space;[y&space;-&space;g(\sum_k^N&space;w_k&space;x_k)]&space;x_j" title="\Delta w_j = \eta \frac{g'}{g(1-g)} R(y,x) [y - g(\sum_k^N w_k x_k)] x_j" /></a>
+
+We can interpret this from a biological point of view. The learning rule depends on three factors : the reward given by R(y,x), the state of the postsynaptic neuron [y-<y>] and the presynaptic activity x_j.
