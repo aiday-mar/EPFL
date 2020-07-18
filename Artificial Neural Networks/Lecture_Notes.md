@@ -355,7 +355,6 @@ Where G is the total accumulated reward during the episode starting at S_t. The 
 
 In the following we reinforce the algorithm with a baseline, for estimating \pi_{\theta} \approx \pi_* _
 
-```
 Input : a differentiable policy parametrization pi(a|s, &theta)
 Input : a differentiable state-value function parametrization \hat(v)(s, w)
 Algorithm parameters : step sizes \alpha^{\theta} > 0, \alpha^w > 0
