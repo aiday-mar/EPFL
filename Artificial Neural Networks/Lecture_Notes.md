@@ -332,4 +332,34 @@ We can now summarize the above \Delta w_j in one equation where <y> is the expec
   
 <a href="https://www.codecogs.com/eqnedit.php?latex=\Delta&space;w_j&space;=&space;\eta&space;\frac{g'}{g(1-g)}&space;R(y,x)&space;[y&space;-&space;g(\sum_k^N&space;w_k&space;x_k)]&space;x_j" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\Delta&space;w_j&space;=&space;\eta&space;\frac{g'}{g(1-g)}&space;R(y,x)&space;[y&space;-&space;g(\sum_k^N&space;w_k&space;x_k)]&space;x_j" title="\Delta w_j = \eta \frac{g'}{g(1-g)} R(y,x) [y - g(\sum_k^N w_k x_k)] x_j" /></a>
 
-We can interpret this from a biological point of view. The learning rule depends on three factors : the reward given by R(y,x), the state of the postsynaptic neuron [y-<y>] and the presynaptic activity x_j.
+We can interpret this from a biological point of view. The learning rule depends on three factors : the reward given by R(y,x), the state of the postsynaptic neuron [ y - <y>] and the presynaptic activity x_j. Consider the policy gradient method over multiple time steps. A calculation yiels several terms of the form : 
+  
+<a href="https://www.codecogs.com/eqnedit.php?latex=\Delta&space;\theta_j&space;\propto&space;R_{s_t&space;\rightarrow&space;s_{end}&space;}^{a_t}&space;\cdot&space;\frac{d&space;\ln[\pi&space;(a_t&space;|&space;s_t,&space;\theta)]}{d&space;\theta_j}&space;&plus;&space;\gamma&space;\cdot&space;R^{a_{t&plus;1}}_{s_{t&plus;1}&space;\rightarrow&space;s_{end}}&space;\cdot&space;\frac{d&space;\ln&space;[\pi(a_{t&plus;1}&space;|&space;s_{t&plus;1},&space;\theta)]}{d&space;\theta_j}&space;&plus;&space;..." target="_blank"><img src="https://latex.codecogs.com/gif.latex?\Delta&space;\theta_j&space;\propto&space;R_{s_t&space;\rightarrow&space;s_{end}&space;}^{a_t}&space;\cdot&space;\frac{d&space;\ln[\pi&space;(a_t&space;|&space;s_t,&space;\theta)]}{d&space;\theta_j}&space;&plus;&space;\gamma&space;\cdot&space;R^{a_{t&plus;1}}_{s_{t&plus;1}&space;\rightarrow&space;s_{end}}&space;\cdot&space;\frac{d&space;\ln&space;[\pi(a_{t&plus;1}&space;|&space;s_{t&plus;1},&space;\theta)]}{d&space;\theta_j}&space;&plus;&space;..." title="\Delta \theta_j \propto R_{s_t \rightarrow s_{end} }^{a_t} \cdot \frac{d \ln[\pi (a_t | s_t, \theta)]}{d \theta_j} + \gamma \cdot R^{a_{t+1}}_{s_{t+1} \rightarrow s_{end}} \cdot \frac{d \ln [\pi(a_{t+1} | s_{t+1}, \theta)]}{d \theta_j} + ..." /></a>
+
+Consider the following Monte-Carlo Policy-Gradient Control method :
+
+```
+Input : a differentiable policy parametrization \pi(a | s, \theta)
+Algorithm parameter : step size \alpha > 0
+Initialize policy parameter \theta \in R^d
+
+Loop forever (for each episode) :
+  Generate an episode S_0, A_0, R_1,...,S_{T-1}, A_{T-1}, R_T, following \pi(.|.,\theta)
+  Loop for each step of the episode t = 0,1,...,T-1 :
+```
+<a href="https://www.codecogs.com/eqnedit.php?latex=G&space;\leftarrow&space;\sum_{k=&space;t&space;&plus;&space;1}^T&space;\gamma^{k-t-1}R_k" target="_blank"><img src="https://latex.codecogs.com/gif.latex?G&space;\leftarrow&space;\sum_{k=&space;t&space;&plus;&space;1}^T&space;\gamma^{k-t-1}R_k" title="G \leftarrow \sum_{k= t + 1}^T \gamma^{k-t-1}R_k" /></a>
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=\theta&space;\leftarrow&space;\theta&space;&plus;&space;\alpha&space;\gamma^t&space;G&space;\triangledown&space;\ln&space;\pi(A_t&space;|&space;S_t,&space;\theta)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\theta&space;\leftarrow&space;\theta&space;&plus;&space;\alpha&space;\gamma^t&space;G&space;\triangledown&space;\ln&space;\pi(A_t&space;|&space;S_t,&space;\theta)" title="\theta \leftarrow \theta + \alpha \gamma^t G \triangledown \ln \pi(A_t | S_t, \theta)" /></a>
+
+Where G is the total accumulated reward during the episode starting at S_t. The bias could have different choices. One attractive choice is to take the bias equal to the expectation (or empirical mean). The logic is that if you take an action that gives more accumulated discounted reward than your empirical mean in the past, then this action was good and should be reinforced. If you take an action that gives less accumulated discounted reward than your empirical mean in the past, then this action was not good and should be weakened.
+
+In the following we reinforce the algorithm with a baseline, for estimating \pi_{\theta} \approx \pi_* _
+
+```
+Input : a differentiable policy parametrization pi(a|s, &theta)
+Input : a differentiable state-value function parametrization \hat(v)(s, w)
+Algorithm parameters : step sizes \alpha^{\theta} > 0, \alpha^w > 0
+Initialize the policy parameter &theta \in R^d and state value weights w \in R^d
+
+Loop forever (for each episode) : 
+  
