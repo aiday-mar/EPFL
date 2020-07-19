@@ -509,3 +509,15 @@ We study here bagging which is a traditional and generic method of regularizatio
 <a href="https://www.codecogs.com/eqnedit.php?latex=\hat{y}_{bag}&space;=&space;\frac{1}{K}\sum_{k=1}^K&space;\hat{y}_k" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\hat{y}_{bag}&space;=&space;\frac{1}{K}\sum_{k=1}^K&space;\hat{y}_k" title="\hat{y}_{bag} = \frac{1}{K}\sum_{k=1}^K \hat{y}_k" /></a>
 
 For the classification task y_{bag} is compared with a threshold to assign the class. A bagged output is always better than the output from a single model. It has a smaller quadratic error than a typical individual model, and if all K indiivdual models are uncorrelated, the gain in performane scales as 1/K. 
+
+We have the following bagging theorem. Suppose that we have :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=\delta_k^{\mu}&space;=&space;t^{\mu}&space;-&space;\hat{y}_k^{\mu}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\delta_k^{\mu}&space;=&space;t^{\mu}&space;-&space;\hat{y}_k^{\mu}" title="\delta_k^{\mu} = t^{\mu} - \hat{y}_k^{\mu}" /></a>
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=\delta_{bag}^{\mu}&space;=&space;t^{\mu}&space;-&space;\hat{y}_{bag}^{\mu}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\delta_{bag}^{\mu}&space;=&space;t^{\mu}&space;-&space;\hat{y}_{bag}^{\mu}" title="\delta_{bag}^{\mu} = t^{\mu} - \hat{y}_{bag}^{\mu}" /></a>
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=<\frac{1}{P}&space;\sum_{\mu&space;=&space;1}^P&space;[\delta_k^{\mu}]^2>&space;\geq&space;<\frac{1}{P}&space;\sum_{\mu&space;=&space;1}^P&space;[\delta_{bag}^{\mu}]^2>" target="_blank"><img src="https://latex.codecogs.com/gif.latex?<\frac{1}{P}&space;\sum_{\mu&space;=&space;1}^P&space;[\delta_k^{\mu}]^2>&space;\geq&space;<\frac{1}{P}&space;\sum_{\mu&space;=&space;1}^P&space;[\delta_{bag}^{\mu}]^2>" title="<\frac{1}{P} \sum_{\mu = 1}^P [\delta_k^{\mu}]^2> \geq <\frac{1}{P} \sum_{\mu = 1}^P [\delta_{bag}^{\mu}]^2>" /></a>
+
+Dropout is a regularization method that has been specifically developed for neural networks. It is closely related to bagging. Dropout can be interpreted in two different ways. Either it is an approximation of the bagging, or a tool to enforce representation sharing in the hidden neurons. The difference to standard bagging is that models are not independent, they share weights, the data base is not fixed for each dropout configuration, the output is not a sum over the model outputs. 
+
+Data augmentation is an effective regularization method and is low cost. In the case of images for example you can rotate, flip an image and add it too to the database. You can also pixel noise, elastic deformations or shift the color scheme. 
