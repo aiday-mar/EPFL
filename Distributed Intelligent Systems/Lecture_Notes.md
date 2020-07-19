@@ -64,4 +64,17 @@ At the end of each tour T, each ant K deposits a quantity of virtual pheromones 
 
 <a href="https://www.codecogs.com/eqnedit.php?latex=\Delta&space;\tau_{ij}^k&space;=&space;\frac{Q}{L^k(t)}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\Delta&space;\tau_{ij}^k&space;=&space;\frac{Q}{L^k(t)}" title="\Delta \tau_{ij}^k = \frac{Q}{L^k(t)}" /></a>
 
-Where here we have that : L_k^t is the length of the tour T done by ant k at iteration t, and where Q is the parameter adjusted by heuristic and not sensitive. 
+Where here we have that : L_k^t is the length of the tour T done by ant k at iteration t, and where Q is the parameter adjusted by heuristic and not sensitive. We have the following AS for TSP algorithm. We have :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=\tau_{ij}(t&plus;1)&space;\leftarrow&space;(1-\rho)\tau_{ij}(t)&plus;\sum_{k=1}^m&space;\Delta&space;\tau_{ij}(t)^k" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\tau_{ij}(t&plus;1)&space;\leftarrow&space;(1-\rho)\tau_{ij}(t)&plus;\sum_{k=1}^m&space;\Delta&space;\tau_{ij}(t)^k" title="\tau_{ij}(t+1) \leftarrow (1-\rho)\tau_{ij}(t)+\sum_{k=1}^m \Delta \tau_{ij}(t)^k" /></a>
+
+When we update with elitism : 
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=\tau_{ij}(t&plus;1)&space;\leftarrow&space;(1-\rho)\tau_{ij}(t)&plus;\sum_{k=1}^m&space;\Delta&space;\tau_{ij}(t)^k&space;&plus;&space;e&space;\Delta&space;\tau_{ij}^e&space;(t)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\tau_{ij}(t&plus;1)&space;\leftarrow&space;(1-\rho)\tau_{ij}(t)&plus;\sum_{k=1}^m&space;\Delta&space;\tau_{ij}(t)^k&space;&plus;&space;e&space;\Delta&space;\tau_{ij}^e&space;(t)" title="\tau_{ij}(t+1) \leftarrow (1-\rho)\tau_{ij}(t)+\sum_{k=1}^m \Delta \tau_{ij}(t)^k + e \Delta \tau_{ij}^e (t)" /></a>
+
+Next we also have the following :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=\Delta&space;\tau_{ij}^e&space;(t)&space;=&space;\left\{\begin{matrix}&space;\frac{Q}{L^&plus;}&space;&&space;\textrm{if&space;(i,j)&space;belongs&space;to&space;the&space;best&space;tour&space;T&plus;}&space;\\&space;0&space;&&space;\textrm{otherwise}&space;\end{matrix}\right." target="_blank"><img src="https://latex.codecogs.com/gif.latex?\Delta&space;\tau_{ij}^e&space;(t)&space;=&space;\left\{\begin{matrix}&space;\frac{Q}{L^&plus;}&space;&&space;\textrm{if&space;(i,j)&space;belongs&space;to&space;the&space;best&space;tour&space;T&plus;}&space;\\&space;0&space;&&space;\textrm{otherwise}&space;\end{matrix}\right." title="\Delta \tau_{ij}^e (t) = \left\{\begin{matrix} \frac{Q}{L^+} & \textrm{if (i,j) belongs to the best tour T+} \\ 0 & \textrm{otherwise} \end{matrix}\right." /></a>
+
+**Week 2**
+
