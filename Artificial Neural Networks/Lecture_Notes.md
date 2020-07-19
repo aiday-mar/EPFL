@@ -493,3 +493,19 @@ Pick the weights for results with the optimal \lambda and the lowest validation 
 ```
 
 **Week 6**
+
+The softmax function is given by :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=\hat{y}_k&space;=&space;\frac{exp(a_k)}{\sum_j&space;exp(a_j)}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\hat{y}_k&space;=&space;\frac{exp(a_k)}{\sum_j&space;exp(a_j)}" title="\hat{y}_k = \frac{exp(a_k)}{\sum_j exp(a_j)}" /></a>
+
+We have the folloing exponential linear unit function :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=f(a)&space;=&space;\left\{\begin{matrix}&space;a&space;&&space;a&space;>0\\&space;exp(a)&space;-&space;1&space;&&space;a&space;<&space;0&space;\end{matrix}\right." target="_blank"><img src="https://latex.codecogs.com/gif.latex?f(a)&space;=&space;\left\{\begin{matrix}&space;a&space;&&space;a&space;>0\\&space;exp(a)&space;-&space;1&space;&&space;a&space;<&space;0&space;\end{matrix}\right." title="f(a) = \left\{\begin{matrix} a & a >0\\ exp(a) - 1 & a < 0 \end{matrix}\right." /></a>
+
+We study here bagging which is a traditional and generic method of regularization used in machine learning. The first idea of bagging is to repeat a simple model where each variant is optimized for a different subset of the data. Where here we have :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=\hat{y}_K&space;=&space;0.5[1&space;&plus;&space;tanh(\sum_k&space;w_k&space;x_k&space;-&space;\theta)]" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\hat{y}_K&space;=&space;0.5[1&space;&plus;&space;tanh(\sum_k&space;w_k&space;x_k&space;-&space;\theta)]" title="\hat{y}_K = 0.5[1 + tanh(\sum_k w_k x_k - \theta)]" /></a>
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=\hat{y}_{bag}&space;=&space;\frac{1}{K}\sum_{k=1}^K&space;\hat{y}_k" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\hat{y}_{bag}&space;=&space;\frac{1}{K}\sum_{k=1}^K&space;\hat{y}_k" title="\hat{y}_{bag} = \frac{1}{K}\sum_{k=1}^K \hat{y}_k" /></a>
+
+For the classification task y_{bag} is compared with a threshold to assign the class. A bagged output is always better than the output from a single model. It has a smaller quadratic error than a typical individual model, and if all K indiivdual models are uncorrelated, the gain in performane scales as 1/K. 
