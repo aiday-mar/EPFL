@@ -127,4 +127,5 @@ Loop \* t=0; t:=t+1 \*
   Update pheromone trails
 Update pheromone trails UntilEnd_condition \* e.g., t=tmax \*
 ```
+Now we consider what k-opt Heuristic could be :
 
