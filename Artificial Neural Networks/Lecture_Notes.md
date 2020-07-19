@@ -405,3 +405,8 @@ Step 3 : Analyze the dependency graph
 
 <a href="https://www.codecogs.com/eqnedit.php?latex=\delta_k^{n-1}&space;=&space;\sum_j&space;\delta_j^{n}w_{jk}^n&space;g'" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\delta_k^{n-1}&space;=&space;\sum_j&space;\delta_j^{n}w_{jk}^n&space;g'" title="\delta_k^{n-1} = \sum_j \delta_j^{n}w_{jk}^n g'" /></a>
 
+The following is the defintion of the BackProp algorithm :
+
+0. Initialization of weights
+1. Choose pattern x^{\mu}, input is x^{(0)}_k = x^{\mu}_k
+2. 
