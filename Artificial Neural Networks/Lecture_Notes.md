@@ -471,3 +471,25 @@ Plot the mean training and the validation error
 Pick the optimal number of layers and the hidden neurons 
 ```
 
+Flexibility is a measure of the number of free parameters. Changing the flexibility also means changing the network structure or the number of hidden neurons. Regularization controls the flexibility without changing the explicit number of free parameters. For this we minimize the following training set on the modified error function :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=\tilde{E}(w)&space;=&space;\frac{1}{2}&space;\sum_{\mu&space;=&space;1}^{P_1}&space;[t^{\mu}&space;-&space;\hat{y}^{\mu}]^2&space;&plus;&space;\lambda&space;\sum_k&space;(w_k)^2" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\tilde{E}(w)&space;=&space;\frac{1}{2}&space;\sum_{\mu&space;=&space;1}^{P_1}&space;[t^{\mu}&space;-&space;\hat{y}^{\mu}]^2&space;&plus;&space;\lambda&space;\sum_k&space;(w_k)^2" title="\tilde{E}(w) = \frac{1}{2} \sum_{\mu = 1}^{P_1} [t^{\mu} - \hat{y}^{\mu}]^2 + \lambda \sum_k (w_k)^2" /></a>
+
+We have the following algorithm used to the control the flexibility by the regularizer :
+
+```
+Change the flexibility several times
+Choose \lambda
+  Split the data base into the training set and the validation set
+    Optimize the parameters several times :
+    Initialize the weights
+      Iterate until convergence
+      Gradient descent on modified
+      Training error \tilde{E}(w)
+    Report training error E and test error E^{val} on the validation set
+  Report mean training and test error and standard deviation
+Plot the mean training and the test error 
+Pick the weights for results with the optimal \lambda and the lowest validation error 
+```
+
+**Week 6**
