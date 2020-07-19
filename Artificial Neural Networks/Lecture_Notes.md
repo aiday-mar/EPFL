@@ -409,4 +409,38 @@ The following is the defintion of the BackProp algorithm :
 
 0. Initialization of weights
 1. Choose pattern x^{\mu}, input is x^{(0)}_k = x^{\mu}_k
-2. 
+2. Knowing the activity in layer n, we calculate the activity in layer n+1 and store the result. We have : x^{(n-1)}_k -> x^{(n)}_j.
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=x_j^{(n)}&space;=&space;g^{(n)}(a^{(n)}_j)&space;=&space;g^{(n)}(\sum&space;w_{jk}^{(n)}x_k^{(n-1)})" target="_blank"><img src="https://latex.codecogs.com/gif.latex?x_j^{(n)}&space;=&space;g^{(n)}(a^{(n)}_j)&space;=&space;g^{(n)}(\sum&space;w_{jk}^{(n)}x_k^{(n-1)})" title="x_j^{(n)} = g^{(n)}(a^{(n)}_j) = g^{(n)}(\sum w_{jk}^{(n)}x_k^{(n-1)})" /></a>
+
+The output is :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=\hat{y}_i^{\mu}&space;=&space;x_i^{\eta_{max}}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\hat{y}_i^{\mu}&space;=&space;x_i^{\eta_{max}}" title="\hat{y}_i^{\mu} = x_i^{\eta_{max}}" /></a>
+
+3. Then we compute the errors in the output as follows
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=\delta_i^{\eta_{max}}&space;=&space;g'(a_i^{(\eta_{max})})[\hat{y}_i^{\mu}&space;-&space;t_i^{\mu}]" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\delta_i^{\eta_{max}}&space;=&space;g'(a_i^{(\eta_{max})})[\hat{y}_i^{\mu}&space;-&space;t_i^{\mu}]" title="\delta_i^{\eta_{max}} = g'(a_i^{(\eta_{max})})[\hat{y}_i^{\mu} - t_i^{\mu}]" /></a>
+
+4. There is a backward propagation of the errors, we have \delta_i^{(n)} -> \delta_j^{(n-1)}
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=\delta_j^{(n-1)}&space;=&space;g'^{(n-1)}(a^{(n-1)})\sum_i&space;w_{ij}\delta_i^{(n)}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\delta_j^{(n-1)}&space;=&space;g'^{(n-1)}(a^{(n-1)})\sum_i&space;w_{ij}\delta_i^{(n)}" title="\delta_j^{(n-1)} = g'^{(n-1)}(a^{(n-1)})\sum_i w_{ij}\delta_i^{(n)}" /></a>
+
+5. Then we update the weights for all (i,j) and all layers (n) :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=\Delta&space;w_{ij}^{(n)}&space;=&space;-&space;\gamma&space;\delta_i^{(n)}&space;x_j^{(n-1)}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\Delta&space;w_{ij}^{(n)}&space;=&space;-&space;\gamma&space;\delta_i^{(n)}&space;x_j^{(n-1)}" title="\Delta w_{ij}^{(n)} = - \gamma \delta_i^{(n)} x_j^{(n-1)}" /></a>
+
+6. Return to step 1
+
+
+We consider instead now the direct numerical differentiation. We calculate the following :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=E(w)&space;=&space;\frac{1}{2}&space;\sum_{\mu&space;=&space;1}^P&space;\sum_i&space;[t_i^{\mu}&space;-&space;\hat{y}_i^{\mu}]^2" target="_blank"><img src="https://latex.codecogs.com/gif.latex?E(w)&space;=&space;\frac{1}{2}&space;\sum_{\mu&space;=&space;1}^P&space;\sum_i&space;[t_i^{\mu}&space;-&space;\hat{y}_i^{\mu}]^2" title="E(w) = \frac{1}{2} \sum_{\mu = 1}^P \sum_i [t_i^{\mu} - \hat{y}_i^{\mu}]^2" /></a>
+
+1. Calculate \hat{y}_i^{\mu} for one pattern, where each weight is touched once
+2. For each change of the weights, we evaluate E twice as follows :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=\Delta&space;w_{jk}^{(1)}&space;=&space;-&space;\gamma&space;\frac{dE(w_{jk}^{(1)}&space;&plus;&space;\epsilon)&space;-&space;dE(w_{jk}^{(1)}&space;-&space;\epsilon)}{2&space;\epsilon}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\Delta&space;w_{jk}^{(1)}&space;=&space;-&space;\gamma&space;\frac{dE(w_{jk}^{(1)}&space;&plus;&space;\epsilon)&space;-&space;dE(w_{jk}^{(1)}&space;-&space;\epsilon)}{2&space;\epsilon}" title="\Delta w_{jk}^{(1)} = - \gamma \frac{dE(w_{jk}^{(1)} + \epsilon) - dE(w_{jk}^{(1)} - \epsilon)}{2 \epsilon}" /></a>
+
+3. For the n weights, the order is then n-square
+
+Therefore multilayer perceptrons are more powerful than simple perceptrons and can be trained using backprop, a gradient descent algorithm. These can implement flexible separating surfaces. The aim of a neural network is that in the end it can make correct predictions on new patterns. 
