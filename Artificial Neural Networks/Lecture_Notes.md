@@ -523,11 +523,15 @@ Dropout is a regularization method that has been specifically developed for neur
 Data augmentation is an effective regularization method and is low cost. In the case of images for example you can rotate, flip an image and add it too to the database. You can also pixel noise, elastic deformations or shift the color scheme. Data set augmentations avoid overfitting. We have the following initialization :
 
 (1)
+
 <a href="https://www.codecogs.com/eqnedit.php?latex=<x_j>&space;=&space;\frac{1}{P}\sum_{\mu&space;=&space;1}^P&space;x_j^{\mu}&space;=&space;0" target="_blank"><img src="https://latex.codecogs.com/gif.latex?<x_j>&space;=&space;\frac{1}{P}\sum_{\mu&space;=&space;1}^P&space;x_j^{\mu}&space;=&space;0" title="<x_j> = \frac{1}{P}\sum_{\mu = 1}^P x_j^{\mu} = 0" /></a>
 
 (2)
+
 <a href="https://www.codecogs.com/eqnedit.php?latex=<(x_j)^2>&space;=&space;\frac{1}{P}\sum_{\mu&space;=&space;1}^P&space;(x_j^{\mu})(x_j^{\mu})&space;=&space;1" target="_blank"><img src="https://latex.codecogs.com/gif.latex?<(x_j)^2>&space;=&space;\frac{1}{P}\sum_{\mu&space;=&space;1}^P&space;(x_j^{\mu})(x_j^{\mu})&space;=&space;1" title="<(x_j)^2> = \frac{1}{P}\sum_{\mu = 1}^P (x_j^{\mu})(x_j^{\mu}) = 1" /></a>
 
 (3)
+
 <a href="https://www.codecogs.com/eqnedit.php?latex=<w_{ij}^{(n)}>&space;=&space;0" target="_blank"><img src="https://latex.codecogs.com/gif.latex?<w_{ij}^{(n)}>&space;=&space;0" title="<w_{ij}^{(n)}> = 0" /></a>
 
+Suppose that we work with the sigmoidal unit (black). If all the patterns cause activations in the range [-\epsilon, \epsilon] then all the patterns fall in the linear regims of the gain function g. 
