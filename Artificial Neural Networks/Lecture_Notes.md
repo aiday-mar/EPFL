@@ -444,3 +444,30 @@ We consider instead now the direct numerical differentiation. We calculate the f
 3. For the n weights, the order is then n-square
 
 Therefore multilayer perceptrons are more powerful than simple perceptrons and can be trained using backprop, a gradient descent algorithm. These can implement flexible separating surfaces. The aim of a neural network is that in the end it can make correct predictions on new patterns. 
+
+In the case of classification/approximations of functions, we have that flexibility is bad for noisy data, there is a danger of overfitting. The control of flexibility requires a split of the data in two or three subgroups. We start with a split in two groups : the training base and the validation base. Hence we have the following split of the data.
+
+Training base used to optimize the parameters :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=\{&space;(x^{\mu},&space;t^{\mu}),&space;1&space;\leq&space;\mu&space;\leq&space;P_1&space;\}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\{&space;(x^{\mu},&space;t^{\mu}),&space;1&space;\leq&space;\mu&space;\leq&space;P_1&space;\}" title="\{ (x^{\mu}, t^{\mu}), 1 \leq \mu \leq P_1 \}" /></a>
+
+Validation base, used to mimic future data : 
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=\{&space;(x^{\mu},&space;t^{\mu}),&space;P_1&space;&plus;&space;1&space;\leq&space;\mu&space;\leq&space;P&space;\}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\{&space;(x^{\mu},&space;t^{\mu}),&space;P_1&space;&plus;&space;1&space;\leq&space;\mu&space;\leq&space;P&space;\}" title="\{ (x^{\mu}, t^{\mu}), P_1 + 1 \leq \mu \leq P \}" /></a>
+
+The data above is used to test the performance (but not to change the weights). An error on the validation base that is much larger than the error on the training base is a signature of overfitting. More generally, the correct flexibility of the network is the one where the error on the validation set is minimal. We give the following algorithm which is used to control the flexibility with artificial neural networks :
+
+```
+Change the flexibility, several times
+Choose the number of hidden neurons and the number of layers
+  Split thedata base into a training base and a validation base 
+    Optimize the parameters (several times) :
+    Initialize the weights
+      Iterate until convergence
+      Gradient descent on the training error
+    Report the training error and the validation error
+  Report the meaning of the trining and the validation error and the standard deviation
+Plot the mean training and the validation error
+Pick the optimal number of layers and the hidden neurons 
+```
+
