@@ -78,3 +78,53 @@ Next we also have the following :
 
 **Week 2**
 
+The approximate solution of NP-hard combinatorial optimization problems in the coupling of a constructive heuristic (generate solutions from scratch by iteratively adding solution components), local search (start from some initial solution and repeatedly tries to improve by local changes). There are two extensions of the AS algorithm - there is the ant colony system algorithm, and the ACS-3-opt. We have the following ant-colony system algorithm : 
+
+```
+Loop \* t=0; t:=t+1 \* 
+  Place one ant on each node \*there are n nodes \* 
+  Fork := 1 to m \* each ant builds a solution, in this case m=n\* 
+    For step := 1 to n \* each ant adds a node to its path \* 
+      Choose the next city to move by applying a probabilistic solution construction rule 
+    End-for 
+  End-for 
+Update pheromone trails UntilEnd_condition \* e.g., t=tmax \*
+```
+
+An ant k on city i chooses city k to move according to the following rule :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=j&space;=&space;\left\{\begin{matrix}&space;arg&space;max_{u&space;\in&space;J_i^k}&space;\{&space;[\tau_{iu}(t)][\eta_{iu}]^{\beta}\}&space;&&space;\textrm{if&space;q&space;is&space;less&space;than&space;or&space;equal&space;to&space;q0}&space;\\&space;J&space;&&space;\textrm{if&space;q&space;is&space;greater&space;that&space;q0}&space;\end{matrix}\right." target="_blank"><img src="https://latex.codecogs.com/gif.latex?j&space;=&space;\left\{\begin{matrix}&space;arg&space;max_{u&space;\in&space;J_i^k}&space;\{&space;[\tau_{iu}(t)][\eta_{iu}]^{\beta}\}&space;&&space;\textrm{if&space;q&space;is&space;less&space;than&space;or&space;equal&space;to&space;q0}&space;\\&space;J&space;&&space;\textrm{if&space;q&space;is&space;greater&space;that&space;q0}&space;\end{matrix}\right." title="j = \left\{\begin{matrix} arg max_{u \in J_i^k} \{ [\tau_{iu}(t)][\eta_{iu}]^{\beta}\} & \textrm{if q is less than or equal to q0} \\ J & \textrm{if q is greater that q0} \end{matrix}\right." /></a>
+
+Where J is in J_i^k being a city that is randomly selected according to the following rule :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=p_{iJ}^k(t)&space;=&space;\frac{[\tau_{iJ}(t)][\eta_{iJ}]^{\beta}}{\sum_{l&space;\in&space;J_i^k}[\tau_{il}(t)][\eta_{il}]^{\beta}}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?p_{iJ}^k(t)&space;=&space;\frac{[\tau_{iJ}(t)][\eta_{iJ}]^{\beta}}{\sum_{l&space;\in&space;J_i^k}[\tau_{il}(t)][\eta_{il}]^{\beta}}" title="p_{iJ}^k(t) = \frac{[\tau_{iJ}(t)][\eta_{iJ}]^{\beta}}{\sum_{l \in J_i^k}[\tau_{il}(t)][\eta_{il}]^{\beta}}" /></a>
+
+AS : all ants can update the pheromone trails in the same way 
+EAS : all ants update pheromone trails, extra amount for the best tour
+ACS :  the global update is performed exclusively by theant that generated the best tourfrom the beginning of the trial; it updates only the edges of the best tour T^+ of length L^+ since the beginning of the trial
+
+The update rule for (i,j) edges belonging to T^+ where :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=\tau_{ij}(t&plus;1)&space;\leftarrow&space;(1-\rho)&space;\tau_{ij}(t)&space;&plus;&space;\rho&space;\Delta&space;\tau_{ij}(t)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\tau_{ij}(t&plus;1)&space;\leftarrow&space;(1-\rho)&space;\tau_{ij}(t)&space;&plus;&space;\rho&space;\Delta&space;\tau_{ij}(t)" title="\tau_{ij}(t+1) \leftarrow (1-\rho) \tau_{ij}(t) + \rho \Delta \tau_{ij}(t)" /></a>
+
+where
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=\Delta&space;\tau_{ij}(t)&space;=&space;\frac{1}{L^&plus;}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\Delta&space;\tau_{ij}(t)&space;=&space;\frac{1}{L^&plus;}" title="\Delta \tau_{ij}(t) = \frac{1}{L^+}" /></a>
+
+A candidate list is a list of cities of length cl where cl is the algorithmic parameter, to be visited from a given city. The cities are ranked according to th inverse of their distance. An ant retricts the choice of the next city to those in the candidate list. 
+
+We have the next ACS algorithm with local search :
+
+```
+Loop \* t=0; t:=t+1 \* 
+  Place one ant on each node \*there are n nodes \* 
+  Fork := 1 to m \* each ant builds a solution, in this case m=n\* 
+    For step := 1 to n \* each ant adds a node to its path \* 
+      Choose the next city to move by applying a probabilistic solution construction rule 
+    End-for 
+  Apply local search
+  End-for 
+  Update pheromone trails
+Update pheromone trails UntilEnd_condition \* e.g., t=tmax \*
+```
+
