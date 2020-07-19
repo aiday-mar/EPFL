@@ -129,3 +129,24 @@ Update pheromone trails UntilEnd_condition \* e.g., t=tmax \*
 ```
 Now we consider what k-opt Heuristic could be :
 
+Take a give tour and delete up to k mutually disjoint edges. Each fragment endpoint can be connected to 2k-2 other possibilities. Reassemble the remainin fragments into a tour, leaving no disjoint subtours. Do the following systematically : generate the set of all candidate solutions possible by exchanging in all possible ways up to k edges. Local search is complementary to ant pheromone mechanisms. This lacks in good starting solutions on which it can perform combinatorial optimization.
+
+Ant-based control algorithm ABC. Node i has maximal capacity C_i and spare capacity S_i (capacity available for new connections). Once a call is set-up between destinationdand source s, each node in the route is decreased in its spare capacity by one connection (multiple connections if the node is used by multiple routes). The routing table was such that for node i we have :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=R_i&space;=&space;[r^i_{n,d}(t)]_{k_i,&space;N-1}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?R_i&space;=&space;[r^i_{n,d}(t)]_{k_i,&space;N-1}" title="R_i = [r^i_{n,d}(t)]_{k_i, N-1}" /></a>
+
+Here we have that r_{n,d}^i(t) for ants is the probability that an ant with destination d will be routed from i to neighbor n, and similarly for calls we have a deterministic path. We have the sum of those over n we get one. Each visited node's routing table is updated according to :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=r^{i}_{i-1,s}(t&plus;1)&space;=&space;\frac{r^{i}_{i-1,s}(t)&space;&plus;&space;\delta&space;r}{1&space;&plus;&space;\delta&space;r}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?r^{i}_{i-1,s}(t&plus;1)&space;=&space;\frac{r^{i}_{i-1,s}(t)&space;&plus;&space;\delta&space;r}{1&space;&plus;&space;\delta&space;r}" title="r^{i}_{i-1,s}(t+1) = \frac{r^{i}_{i-1,s}(t) + \delta r}{1 + \delta r}" /></a>
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=r^{i}_{n,s}(t&plus;1)&space;=&space;\frac{r^{i}_{n,s}(t)}{1&space;&plus;&space;\delta&space;r}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?r^{i}_{n,s}(t&plus;1)&space;=&space;\frac{r^{i}_{n,s}(t)}{1&space;&plus;&space;\delta&space;r}" title="r^{i}_{n,s}(t+1) = \frac{r^{i}_{n,s}(t)}{1 + \delta r}" /></a>
+
+Where here \delta r is the reinforcement parameter, and i-1 is the neighbor node the ant came from before joining i. We have the following form for \delta r where a and b are parameters and T is the absolute time spent in the network : 
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=\delta&space;r&space;=&space;\frac{a}{T}&space;&plus;&space;b" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\delta&space;r&space;=&space;\frac{a}{T}&space;&plus;&space;b" title="\delta r = \frac{a}{T} + b" /></a>
+
+A delay is imposed on an ant reaching a give node i, where c and d are parameters and S_i is the spare capacity :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=D_i&space;=&space;c&space;e^{-d&space;S_i}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?D_i&space;=&space;c&space;e^{-d&space;S_i}" title="D_i = c e^{-d S_i}" /></a>
+
+We have the following AntNet algorithm : 
