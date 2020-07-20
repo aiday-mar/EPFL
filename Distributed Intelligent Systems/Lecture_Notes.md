@@ -149,4 +149,8 @@ A delay is imposed on an ant reaching a give node i, where c and d are parameter
 
 <a href="https://www.codecogs.com/eqnedit.php?latex=D_i&space;=&space;c&space;e^{-d&space;S_i}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?D_i&space;=&space;c&space;e^{-d&space;S_i}" title="D_i = c e^{-d S_i}" /></a>
 
-We have the following AntNet algorithm : 
+We have the following AntNet algorithm : ants are launched from each node and they build their paths wih a probability function of artificial pheromone values and heuristic values, ants memorize the visited nodes and elapsed times, once reached their destination nodes, ants retraces their paths backwards and update the phereomone trails and trip vectors. We have the following equation :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=p_{ijd}^k&space;(t)&space;=&space;f(\tau_{ijd}(t),&space;\eta_{ij}(t))" target="_blank"><img src="https://latex.codecogs.com/gif.latex?p_{ijd}^k&space;(t)&space;=&space;f(\tau_{ijd}(t),&space;\eta_{ij}(t))" title="p_{ijd}^k (t) = f(\tau_{ijd}(t), \eta_{ij}(t))" /></a>
+
+Where here \tau_{ijd} is the pheromone trail normalized to one for all possible neighboring nodes. Also \eta_{ij} is a heuristic evaluation of link (i,j) which introduces problem specific information. We have routing table element R_i which memorizes the probabilities of choosing each neighbor nodes for each possible final destination. The trip vectors \Gamma_i, contains 
