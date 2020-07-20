@@ -535,3 +535,30 @@ Data augmentation is an effective regularization method and is low cost. In the 
 <a href="https://www.codecogs.com/eqnedit.php?latex=<w_{ij}^{(n)}>&space;=&space;0" target="_blank"><img src="https://latex.codecogs.com/gif.latex?<w_{ij}^{(n)}>&space;=&space;0" title="<w_{ij}^{(n)}> = 0" /></a>
 
 Suppose that we work with the sigmoidal unit (black). If all the patterns cause activations in the range [-\epsilon, \epsilon] then all the patterns fall in the linear regims of the gain function g. 
+
+
+Suppose that we work with the ReLu function. If all the patterns cause activations in the range [\epsilon, \alpha] then all the patterns fall in the linear regims of the gain function g. 
+
+To exploit non linearities in the neurons of the multilayer network you need to male sure that the initial choice of the weights is such that each unit has a range of activation values that touch the non linear regime. During the training the weights remain in a regime such that each unit has a range of activation values that touche the non linear regime. 
+
+In the backward pass, the vanishing gradient algorithm, we have the following equality :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=\delta_i^{(n-1)}&space;=&space;\sum_j&space;w_{ji}^{(n)}g'^{(n-1)}(a_i^{(n-1)})\delta_j^{(n)}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\delta_i^{(n-1)}&space;=&space;\sum_j&space;w_{ji}^{(n)}g'^{(n-1)}(a_i^{(n-1)})\delta_j^{(n)}" title="\delta_i^{(n-1)} = \sum_j w_{ji}^{(n)}g'^{(n-1)}(a_i^{(n-1)})\delta_j^{(n)}" /></a>
+
+We now want to include the weight update. The update formula of the BackProp Algorithm is :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=\Delta&space;w_{i,j}^{(n-1)}&space;=&space;\delta_i^{(n-1)}x_j^{(n-2)}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\Delta&space;w_{i,j}^{(n-1)}&space;=&space;\delta_i^{(n-1)}x_j^{(n-2)}" title="\Delta w_{i,j}^{(n-1)} = \delta_i^{(n-1)}x_j^{(n-2)}" /></a>
+
+The shifted exponential linear unit : 
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=g(a)=&space;\left\{\begin{matrix}&space;\beta&space;a&space;&&space;a&space;>&space;0\\&space;\gamma&space;[exp(a)-1]&space;&&space;a&space;<0&space;\end{matrix}\right." target="_blank"><img src="https://latex.codecogs.com/gif.latex?g(a)=&space;\left\{\begin{matrix}&space;\beta&space;a&space;&&space;a&space;>&space;0\\&space;\gamma&space;[exp(a)-1]&space;&&space;a&space;<0&space;\end{matrix}\right." title="g(a)= \left\{\begin{matrix} \beta a & a > 0\\ \gamma [exp(a)-1] & a <0 \end{matrix}\right." /></a>
+
+After the update of the activation coefficients :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=a_i^{(n)}&space;=&space;\sum_j&space;[w_{ij}^{(n)}&space;&plus;&space;\Delta&space;w_{ij}^{(n)}]x_j^{(n-1)}&space;-&space;\theta" target="_blank"><img src="https://latex.codecogs.com/gif.latex?a_i^{(n)}&space;=&space;\sum_j&space;[w_{ij}^{(n)}&space;&plus;&space;\Delta&space;w_{ij}^{(n)}]x_j^{(n-1)}&space;-&space;\theta" title="a_i^{(n)} = \sum_j [w_{ij}^{(n)} + \Delta w_{ij}^{(n)}]x_j^{(n-1)} - \theta" /></a>
+
+We normalize the input on each line :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=\hat{x}_j^k&space;=&space;\frac{x_j^k&space;-&space;E[x_j^k]}{\sqrt{Var[x_j^k]}}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\hat{x}_j^k&space;=&space;\frac{x_j^k&space;-&space;E[x_j^k]}{\sqrt{Var[x_j^k]}}" title="\hat{x}_j^k = \frac{x_j^k - E[x_j^k]}{\sqrt{Var[x_j^k]}}" /></a>
+
+**Week 7**
