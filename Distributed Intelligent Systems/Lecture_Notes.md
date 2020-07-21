@@ -153,4 +153,24 @@ We have the following AntNet algorithm : ants are launched from each node and th
 
 <a href="https://www.codecogs.com/eqnedit.php?latex=p_{ijd}^k&space;(t)&space;=&space;f(\tau_{ijd}(t),&space;\eta_{ij}(t))" target="_blank"><img src="https://latex.codecogs.com/gif.latex?p_{ijd}^k&space;(t)&space;=&space;f(\tau_{ijd}(t),&space;\eta_{ij}(t))" title="p_{ijd}^k (t) = f(\tau_{ijd}(t), \eta_{ij}(t))" /></a>
 
-Where here \tau_{ijd} is the pheromone trail normalized to one for all possible neighboring nodes. Also \eta_{ij} is a heuristic evaluation of link (i,j) which introduces problem specific information. We have routing table element R_i which memorizes the probabilities of choosing each neighbor nodes for each possible final destination. The trip vectors \Gamma_i, contains 
+Where here \tau_{ijd} is the pheromone trail normalized to one for all possible neighboring nodes. Also \eta_{ij} is a heuristic evaluation of link (i,j) which introduces problem specific information. We have routing table element R_i which memorizes the probabilities of choosing each neighbor nodes for each possible final destination. The trip vectors \Gamma_i, contains statistics about ants' trip times from current node i to each destination node d. 
+
+Standard measures of performance are the throughput which have units bits/sec, and the average packet delay in seconds. Non-max throughput means retransmissions, error notifications, augmented congestions. Why do ant-based systems work ? There are three important components. The time, because a shorter path receives pheromones quicker, the quality, a shorter path receives more pheromones.
+
+A metaheuristicis a set of algorithmic concepts that can be used to define or organize heuristic methods applicable to a wide set of different problems. Ant System and AntNet have been extended so that they can be applied to any shortest path problems on graphs. The resulting extension is called the Ant Colony Optimization metaheuristic. The corresponding procedure is as follows :
+
+```
+procedure ACO-metaheuristics()
+  while (non termination criterion)
+    schedule sub-procedures
+      generate-&-manage-ants()
+      execute-daemon-actions()
+      update-pheromones()
+    end schedule sub-procedures
+  end while
+end procedure
+```
+
+**Week 3**
+
+There are different degrees in the autonomy. We see that the more the task is complex the more the humans must guide the robots. The perception to action loop is reactive and deliberative. We have that the sensors perceive, there is a computation done, an action taken and the environment is affected. We have different types of sensors : propioceptive which are related to the body and exteroceptive related to the environment. There are passive and active sensors which actually interact with the environment. Examples include tactile sensors, wheel and motor sensors and heading sensors, ground-based beacons, motion/speed sensors and vision-based sensors.
