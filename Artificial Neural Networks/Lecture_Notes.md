@@ -562,3 +562,9 @@ We normalize the input on each line :
 <a href="https://www.codecogs.com/eqnedit.php?latex=\hat{x}_j^k&space;=&space;\frac{x_j^k&space;-&space;E[x_j^k]}{\sqrt{Var[x_j^k]}}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\hat{x}_j^k&space;=&space;\frac{x_j^k&space;-&space;E[x_j^k]}{\sqrt{Var[x_j^k]}}" title="\hat{x}_j^k = \frac{x_j^k - E[x_j^k]}{\sqrt{Var[x_j^k]}}" /></a>
 
 **Week 7**
+
+In two and more dimensions it is possible that the curvature is positive in one direction and negative in the other, this is a saddle point. In a network with m hidden layers with n neurons each there are :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=n!^m" target="_blank"><img src="https://latex.codecogs.com/gif.latex?n!^m" title="n!^m" /></a>
+
+Equivalent solutions. There are many permutation symmetries in the weights space. At the saddle point the gradient descent is slow. There are many more saddle points than minima. We now have a point is stable if all the eignevalues are positive for the hessian matrix evaluated at that point. Suppose we have N-1 eigenvalues that are positive and one is negative then we have a first-order saddle. Suppose N-2 eigenvalues are negative and 2 are positive, this means in N-2 dimensions the surface does up and in 2 dimensions it goes down, in which case we have a second-order saddle.
