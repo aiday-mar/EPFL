@@ -605,4 +605,64 @@ Require : Small constant \delta, usually 10^{-6}, used to stabilite division by 
   Intiialize accumulation variables r = 0
   while stopping criterion not met do
     sample a minibatch of m examples from the training set {x^{(1)}, ..., x^{(m)}} with corresponding targets y^{(i)}
+    compute gradient : 
+```
+<a href="https://www.codecogs.com/eqnedit.php?latex=g&space;\leftarrow&space;\frac{1}{m}&space;\triangledown_{\theta}&space;\sum_i&space;L(f(x^{(i)};&space;\theta),&space;y^{(i)})" target="_blank"><img src="https://latex.codecogs.com/gif.latex?g&space;\leftarrow&space;\frac{1}{m}&space;\triangledown_{\theta}&space;\sum_i&space;L(f(x^{(i)};&space;\theta),&space;y^{(i)})" title="g \leftarrow \frac{1}{m} \triangledown_{\theta} \sum_i L(f(x^{(i)}; \theta), y^{(i)})" /></a>
+```
+    accumulate squared gradient :
+```
+<a href="https://www.codecogs.com/eqnedit.php?latex=r&space;\leftarrow&space;\rho&space;r&space;&plus;&space;(1-\rho)g\odot&space;g" target="_blank"><img src="https://latex.codecogs.com/gif.latex?r&space;\leftarrow&space;\rho&space;r&space;&plus;&space;(1-\rho)g\odot&space;g" title="r \leftarrow \rho r + (1-\rho)g\odot g" /></a>
+```
+    compute the parameter update :
+```
+<a href="https://www.codecogs.com/eqnedit.php?latex=\Delta&space;\theta&space;=&space;-\frac{\epsilon}{\sqrt{\delta&space;&plus;&space;r}}&space;\odot&space;g" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\Delta&space;\theta&space;=&space;-\frac{\epsilon}{\sqrt{\delta&space;&plus;&space;r}}&space;\odot&space;g" title="\Delta \theta = -\frac{\epsilon}{\sqrt{\delta + r}} \odot g" /></a>
+```
+    apply the update :
+```
+<a href="https://www.codecogs.com/eqnedit.php?latex=\theta&space;\leftarrow&space;\theta&space;&plus;&space;\Delta&space;\theta" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\theta&space;\leftarrow&space;\theta&space;&plus;&space;\Delta&space;\theta" title="\theta \leftarrow \theta + \Delta \theta" /></a>
+```
+end while
+```
+
+Next we have the Adam algorithm :
+
+```
+Require : step size \epsilon
+Require : Exponential decay rates for moment estimates, \rho_1 and \rho_2 in [0,1)
+Require : Small constant \elta used for numerical stabilization
+Require : Initial parameters \theta
+  Initialize 1st and 2nd moment variables s=0, r=0
+  Initialize time step t=0
+  while stopping criterion not met do
+    sample a minibatch of m examples from the training set {x^{(1)},...,x^{(m)}} with corresponding targets y^{(i)}
+    compute gradient :
+```
+<a href="https://www.codecogs.com/eqnedit.php?latex=g&space;\leftarrow&space;\frac{1}{m}&space;\triangledown_{\theta}&space;\sum_i&space;L(f(x^{(i)};&space;\theta),&space;y^{(i)})" target="_blank"><img src="https://latex.codecogs.com/gif.latex?g&space;\leftarrow&space;\frac{1}{m}&space;\triangledown_{\theta}&space;\sum_i&space;L(f(x^{(i)};&space;\theta),&space;y^{(i)})" title="g \leftarrow \frac{1}{m} \triangledown_{\theta} \sum_i L(f(x^{(i)}; \theta), y^{(i)})" /></a>
+```
+    t = t+1
+    update biased first moment estimate :
+```
+<a href="https://www.codecogs.com/eqnedit.php?latex=s&space;\leftarrow&space;\rho_1&space;s&space;&plus;&space;(1-\rho_1)g" target="_blank"><img src="https://latex.codecogs.com/gif.latex?s&space;\leftarrow&space;\rho_1&space;s&space;&plus;&space;(1-\rho_1)g" title="s \leftarrow \rho_1 s + (1-\rho_1)g" /></a>
+```
+    update biased second moment estimate :
+```
+<a href="https://www.codecogs.com/eqnedit.php?latex=r&space;\leftarrow&space;\rho_2&space;r&space;&plus;&space;(1-\rho_2)g&space;\odot&space;g" target="_blank"><img src="https://latex.codecogs.com/gif.latex?r&space;\leftarrow&space;\rho_2&space;r&space;&plus;&space;(1-\rho_2)g&space;\odot&space;g" title="r \leftarrow \rho_2 r + (1-\rho_2)g \odot g" /></a>
+```
+    correct bias in the first moment :
+```
+<a href="https://www.codecogs.com/eqnedit.php?latex=\hat{s}&space;\leftarrow&space;\frac{s}{1-\rho_1^t}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\hat{s}&space;\leftarrow&space;\frac{s}{1-\rho_1^t}" title="\hat{s} \leftarrow \frac{s}{1-\rho_1^t}" /></a>
+```
+    correct bias in the second moment :
+```
+<a href="https://www.codecogs.com/eqnedit.php?latex=\hat{r}&space;\leftarrow&space;\frac{r}{1-\rho_2^t}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\hat{r}&space;\leftarrow&space;\frac{r}{1-\rho_2^t}" title="\hat{r} \leftarrow \frac{r}{1-\rho_2^t}" /></a>
+```
+    compute the update 
+```
+<a href="https://www.codecogs.com/eqnedit.php?latex=\Delta&space;\theta&space;=&space;-\epsilon&space;\frac{\hat{s}}{\sqrt{\hat{r}&space;&plus;&space;\delta}}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\Delta&space;\theta&space;=&space;-\epsilon&space;\frac{\hat{s}}{\sqrt{\hat{r}&space;&plus;&space;\delta}}" title="\Delta \theta = -\epsilon \frac{\hat{s}}{\sqrt{\hat{r} + \delta}}" /></a>
+```
+    Apply the update
+```
+<a href="https://www.codecogs.com/eqnedit.php?latex=\theta&space;\leftarrow&space;\theta&space;&plus;&space;\Delta&space;\theta" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\theta&space;\leftarrow&space;\theta&space;&plus;&space;\Delta&space;\theta" title="\theta \leftarrow \theta + \Delta \theta" /></a>
+```
+end while
 ```
