@@ -687,3 +687,17 @@ Minimizing the above leads to the following output :
 
 <a href="https://www.codecogs.com/eqnedit.php?latex=\hat{y}&space;\approx&space;\frac{\eta_1(x)}{\eta_0(x)&space;&plus;&space;\eta_1(x)}&space;\approx&space;P(C|x)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\hat{y}&space;\approx&space;\frac{\eta_1(x)}{\eta_0(x)&space;&plus;&space;\eta_1(x)}&space;\approx&space;P(C|x)" title="\hat{y} \approx \frac{\eta_1(x)}{\eta_0(x) + \eta_1(x)} \approx P(C|x)" /></a>
 
+An interpretation of the networks outputs as probabilities implies that the outputs of the network must sum to one :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=\sum_{k=1}^K&space;\hat{y}_1^{\mu}&space;=&space;1" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\sum_{k=1}^K&space;\hat{y}_1^{\mu}&space;=&space;1" title="\sum_{k=1}^K \hat{y}_1^{\mu} = 1" /></a>
+
+In addition the predicted output labels must also sum to one.
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=\sum_{k=1}^K&space;\hat{t}_k^{\mu}&space;=&space;1" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\sum_{k=1}^K&space;\hat{t}_k^{\mu}&space;=&space;1" title="\sum_{k=1}^K \hat{t}_k^{\mu} = 1" /></a>
+
+Consider the cross-entropy error function for mutually exclusive classes, which is a generalization of the cross-entropy formula for single class. 
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=E(w)&space;=&space;-\sum_{k=1}^K&space;\sum_{\mu}[t_k^{\mu}&space;ln&space;\hat{y}_k^{\mu}]" target="_blank"><img src="https://latex.codecogs.com/gif.latex?E(w)&space;=&space;-\sum_{k=1}^K&space;\sum_{\mu}[t_k^{\mu}&space;ln&space;\hat{y}_k^{\mu}]" title="E(w) = -\sum_{k=1}^K \sum_{\mu}[t_k^{\mu} ln \hat{y}_k^{\mu}]" /></a>
+
+**Week 9**
+
