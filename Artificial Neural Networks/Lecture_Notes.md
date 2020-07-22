@@ -672,3 +672,5 @@ The no free lunch theorem states that any two optimization algorithms are equiva
 <a href="https://www.codecogs.com/eqnedit.php?latex=\sum_{j=0}^d&space;\bigl(\begin{smallmatrix}&space;n\\&space;j&space;\end{smallmatrix}\bigr)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\sum_{j=0}^d&space;\bigl(\begin{smallmatrix}&space;n\\&space;j&space;\end{smallmatrix}\bigr)" title="\sum_{j=0}^d \bigl(\begin{smallmatrix} n\\ j \end{smallmatrix}\bigr)" /></a>
 
 We assign arbitrary class labels {+1,0} to each region.
+
+**Week 8**
