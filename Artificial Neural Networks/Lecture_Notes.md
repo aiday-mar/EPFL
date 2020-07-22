@@ -674,3 +674,5 @@ The no free lunch theorem states that any two optimization algorithms are equiva
 We assign arbitrary class labels {+1,0} to each region.
 
 **Week 8**
+
+A neural network should be seen as a generative model that predicts labels probabilistically.
