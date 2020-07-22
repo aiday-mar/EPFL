@@ -568,3 +568,14 @@ In two and more dimensions it is possible that the curvature is positive in one 
 <a href="https://www.codecogs.com/eqnedit.php?latex=n!^m" target="_blank"><img src="https://latex.codecogs.com/gif.latex?n!^m" title="n!^m" /></a>
 
 Equivalent solutions. There are many permutation symmetries in the weights space. At the saddle point the gradient descent is slow. There are many more saddle points than minima. We now have a point is stable if all the eignevalues are positive for the hessian matrix evaluated at that point. Suppose we have N-1 eigenvalues that are positive and one is negative then we have a first-order saddle. Suppose N-2 eigenvalues are negative and 2 are positive, this means in N-2 dimensions the surface does up and in 2 dimensions it goes down, in which case we have a second-order saddle.
+
+Two arguments to explain that there are many more saddle points than minima is that there is a statistical argument and a geometric one. Permutation minima are connected by saddle points. We slowly decrease the distance between two weight vectors, we let the other weight vetors equilibrate to minimum-loss configuration. Once two weight vectors have merged, exchange the labels and relax back on the same path. 
+
+For first-order permutation points, we have to place n vector indices onto n-1 locations that define the configuration with n-1 neurons in the hidden layer that we found by our shifting-of-weight-vector construction. The number of saddle points increases rapidly with the number of neurons in the hidden layer. A layer with n neurons generates at least a factor of :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=\frac{1}{2^K}\begin{pmatrix}&space;n&space;-&space;K\\&space;K&space;\end{pmatrix}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\frac{1}{2^K}\begin{pmatrix}&space;n&space;-&space;K\\&space;K&space;\end{pmatrix}" title="\frac{1}{2^K}\begin{pmatrix} n - K\\ K \end{pmatrix}" /></a>
+
+In a network with m hidden layers and n neurons per hidden layer, we have found one global minimum. There are at least n!^m minima with the same loss and at least :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=\frac{m}{2^K}\begin{pmatrix}&space;n&space;-&space;K\\&space;K&space;\end{pmatrix}&space;n!^m" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\frac{m}{2^K}\begin{pmatrix}&space;n&space;-&space;K\\&space;K&space;\end{pmatrix}&space;n!^m" title="\frac{m}{2^K}\begin{pmatrix} n - K\\ K \end{pmatrix} n!^m" /></a>
+
