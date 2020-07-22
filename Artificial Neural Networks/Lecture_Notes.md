@@ -586,4 +586,23 @@ We have the following standard gradient descent equality :
 
 <a href="https://www.codecogs.com/eqnedit.php?latex=\Delta&space;w_{i,j}^{(n)}(m)&space;=&space;-\gamma&space;\frac{dE(w(m))}{dw_{i,j}^{(n)}}&space;&plus;&space;\alpha&space;\Delta&space;w_{i,j}^{(n)}(m-1)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\Delta&space;w_{i,j}^{(n)}(m)&space;=&space;-\gamma&space;\frac{dE(w(m))}{dw_{i,j}^{(n)}}&space;&plus;&space;\alpha&space;\Delta&space;w_{i,j}^{(n)}(m-1)" title="\Delta w_{i,j}^{(n)}(m) = -\gamma \frac{dE(w(m))}{dw_{i,j}^{(n)}} + \alpha \Delta w_{i,j}^{(n)}(m-1)" /></a>
 
-A momentum term keeps information about the previous direction. It suppresses therefore these oscillation while giving rise to a speed-up in the directions where the gradient does not change. 
+A momentum term keeps information about the previous direction. It suppresses therefore these oscillation while giving rise to a speed-up in the directions where the gradient does not change. The following here is the Nesterov momentum :
+
+We have below the running mean :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=v_{i,j}^{(n)}(m)&space;=&space;\frac{dE(w(m))}{dw_{i,j}^{(n)}}&space;&plus;&space;\rho_1&space;v_{i,j}^{(n)}(m-1)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?v_{i,j}^{(n)}(m)&space;=&space;\frac{dE(w(m))}{dw_{i,j}^{(n)}}&space;&plus;&space;\rho_1&space;v_{i,j}^{(n)}(m-1)" title="v_{i,j}^{(n)}(m) = \frac{dE(w(m))}{dw_{i,j}^{(n)}} + \rho_1 v_{i,j}^{(n)}(m-1)" /></a>
+
+Then we also have the running second momentum as follows :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=r_{i,j}^{(n)}(m)&space;=&space;(1-\rho_2)\frac{dE(w(m))}{dw_{i,j}^{(n)}}\frac{dE(w(m))}{dw_{i,j}^{(n)}}&space;&plus;&space;\rho_2&space;r_{i,j}^{(n)}(m-1)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?r_{i,j}^{(n)}(m)&space;=&space;(1-\rho_2)\frac{dE(w(m))}{dw_{i,j}^{(n)}}\frac{dE(w(m))}{dw_{i,j}^{(n)}}&space;&plus;&space;\rho_2&space;r_{i,j}^{(n)}(m-1)" title="r_{i,j}^{(n)}(m) = (1-\rho_2)\frac{dE(w(m))}{dw_{i,j}^{(n)}}\frac{dE(w(m))}{dw_{i,j}^{(n)}} + \rho_2 r_{i,j}^{(n)}(m-1)" /></a>
+
+Consider the following RMSProp algorithm :
+
+```
+Require : global learning rate \epsilon, decay rate \rho
+Require : initial parameter \theta
+Require : Small constant \delta, usually 10^{-6}, used to stabilite division by small numbers
+  Intiialize accumulation variables r = 0
+  while stopping criterion not met do
+    sample a minibatch of m examples from the training set {x^{(1)}, ..., x^{(m)}} with corresponding targets y^{(i)}
+```
