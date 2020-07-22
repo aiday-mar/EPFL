@@ -180,3 +180,5 @@ When we talk about sensors, the dynamic range is the ratio between the lower and
 The webots principles are that the simulator process leads to the controller process, which lead to the controller code. A proximal architecture is close to sensors and actuators, it has a high flexibility in shaping the behavior and it is difficult to engineer in a human-guided way. Distal architectures have self-contained behavioral blocks, there is less flexibillity in shaping the behavior.
 
 The subsumption architecture is such that the input lines go into the behavioral module, the inhibitor blocks the transmission, there are output lines which also some pass through the supressor. The supressor blocks the transmission and replaces the signal with the suppressing message. The subsumption has support for parallelism, each behavioral layer can run independently and asynchronously.
+
+**Week 4**
