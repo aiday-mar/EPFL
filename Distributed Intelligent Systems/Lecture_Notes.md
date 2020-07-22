@@ -182,3 +182,7 @@ The webots principles are that the simulator process leads to the controller pro
 The subsumption architecture is such that the input lines go into the behavioral module, the inhibitor blocks the transmission, there are output lines which also some pass through the supressor. The supressor blocks the transmission and replaces the signal with the suppressing message. The subsumption has support for parallelism, each behavioral layer can run independently and asynchronously.
 
 **Week 4**
+
+An introduction to localization methods for mobile robots. Robot localization is a key task for path planning, mapping, referencing, coordination. There are indoor positioning sytems : motion capture systems MCSs, Impulse Radio Ultra Wide Band (IR-UWB). There are also overhead multi-camera systems. The MCSs consist of 10-50 cameras, with 4 to 5 passive markers per object to be tracked needed. The IR-UWB system on the other hand is based on the time-of-flight system. Emitters can be unsynchronized, positioning can be fed back to the robots using a standard narrow-band channel. In infrared and radio technology, there is a belt of IR emitters LED and receivers (photodiodes). The range is the measurement of the received signal strength intensity RSSI. The bearing is the signal correlation over multiple receivers.
+
+Let's study now the Global Positioning System GPS. The location of any GPS receiver is determined through a time of flight measurement. 
