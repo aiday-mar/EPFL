@@ -666,3 +666,9 @@ Require : Initial parameters \theta
 ```
 end while
 ```
+
+The no free lunch theorem states that any two optimization algorithms are equivalent when their performance is averaged across all possible problems. We have the following distributed multi-region representation, where the number of regions cut out by n hyperplanes, in an d-dimensional input space :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=\sum_{j=0}^d&space;\bigl(\begin{smallmatrix}&space;n\\&space;j&space;\end{smallmatrix}\bigr)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\sum_{j=0}^d&space;\bigl(\begin{smallmatrix}&space;n\\&space;j&space;\end{smallmatrix}\bigr)" title="\sum_{j=0}^d \bigl(\begin{smallmatrix} n\\ j \end{smallmatrix}\bigr)" /></a>
+
+We assign arbitrary class labels {+1,0} to each region.
