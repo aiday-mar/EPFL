@@ -579,3 +579,11 @@ In a network with m hidden layers and n neurons per hidden layer, we have found 
 
 <a href="https://www.codecogs.com/eqnedit.php?latex=\frac{m}{2^K}\begin{pmatrix}&space;n&space;-&space;K\\&space;K&space;\end{pmatrix}&space;n!^m" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\frac{m}{2^K}\begin{pmatrix}&space;n&space;-&space;K\\&space;K&space;\end{pmatrix}&space;n!^m" title="\frac{m}{2^K}\begin{pmatrix} n - K\\ K \end{pmatrix} n!^m" /></a>
 
+We have the following standard gradient descent equality :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=\Delta&space;w_{i,j}^{(n)}(1)&space;=&space;-\gamma&space;\frac{dE(w(1))}{dw_{i,j}^{(n)}}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\Delta&space;w_{i,j}^{(n)}(1)&space;=&space;-\gamma&space;\frac{dE(w(1))}{dw_{i,j}^{(n)}}" title="\Delta w_{i,j}^{(n)}(1) = -\gamma \frac{dE(w(1))}{dw_{i,j}^{(n)}}" /></a>
+
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=\Delta&space;w_{i,j}^{(n)}(m)&space;=&space;-\gamma&space;\frac{dE(w(m))}{dw_{i,j}^{(n)}}&space;&plus;&space;\alpha&space;\Delta&space;w_{i,j}^{(n)}(m-1)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\Delta&space;w_{i,j}^{(n)}(m)&space;=&space;-\gamma&space;\frac{dE(w(m))}{dw_{i,j}^{(n)}}&space;&plus;&space;\alpha&space;\Delta&space;w_{i,j}^{(n)}(m-1)" title="\Delta w_{i,j}^{(n)}(m) = -\gamma \frac{dE(w(m))}{dw_{i,j}^{(n)}} + \alpha \Delta w_{i,j}^{(n)}(m-1)" /></a>
+
+A momentum term keeps information about the previous direction. It suppresses therefore these oscillation while giving rise to a speed-up in the directions where the gradient does not change. 
