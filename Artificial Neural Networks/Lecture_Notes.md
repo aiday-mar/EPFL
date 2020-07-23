@@ -714,3 +714,26 @@ With a convolutional layer, even if the training set had a certain feature only 
 You should realize now that we have total equivalence to a convolutional layer. But instead of keeping different neurons with the same weight vectors we replace all the neurons in one feature map with a single filter and instead of data augmentation, we move this filter over all patches of the image. A convolutional layer brings two intuitions in the form of an inductive bias : 1. independence to the translation of the filter, 2. local features are useful to understand images.
 
 The complex layer terminology on the left says that one layer consist of a convolution, nonlinearity and a pooling stage. A second component that is often used in convolutional networks is max-pooling. A max-pooling layer thus implements an inductive bias that small translations should not have a large effect on the output of the neural network.
+
+Invariance to small translations with some probability f(x) is invariant to local translations T if f(T(x)) = f(x). Note that when I say ‘shift by one step’ it really means ‘shift the original image at the entrance to the convolutional layer by an amount that corresponds to the stride in the  convolutional layer’. So if the first convolutional layer has a stride of 2 then this means we shift the original image by 2 pixels. Thus a sequence of convolutional filter followed by nonlinearity followed by maxpooling implements an (approximate) local invariance to a translation by two pixels.
+
+Deep Convolutional Networks arise in the framework of probabilistic generative models called DRMM if local translation variance is a part of the generative process. The gradient is taken across the max-pooling layer. Consider the following automatic differentiation :
+
+1. Determine children nodes of weight variables
+2. Find a backward schedule
+3. Start with the top node and run through the reverse schedule
+4. Look up primitive operations. Define intermediate variables.
+5. Sum over children and multiply.
+
+The idea of skip connections is to allow the network to “dynamically choose the number of layers” (see blackboard). The layers within the skip-connections learn the residual F(x), the part that is not yet learned by the network up to layer n (which has the output x). Thus, the function F(x) can be used to adapt to special cases, exceptions, fine-tuning etc – without affecting the main network function (which is just copied to layer n+2 via the skip connections).
+
+Note that, when calculating the gradients, the skip connection contributes no derivative g’, so that multiplication of small gradients is avoided along the skip connections: the skip connection = identity/copy has always a gradient of one. This also means that the combined vanishing gradient problem/linearity problem/bias problem is avoided. The skip connection acts linear (and avoids the vanishing gradient and bias problem) and the F(x_0) avoids the linearity problem because for some data the nonlinearity F might come into play (if that extra layer is needed).
+
+Transfering learning in the training of deep networks helps to reduce the energy consumption. Consider the example where the style of a famous image is applied to a photo. How does this work ?
+
+A trained convolutional neural network is activated with an input image p. The activity P^I in each feature layer I in response to this input can then be used to reconstruct the image. This is done in the following way: start with a new input of random pixel values x and compare the feature response Fl to Pl. Now we minimize the difference between Fl and Pl with gradient descent to find back a reconstruction of p. When using the features in the lower layers the reconstruction is almost perfect.
+
+Convolutional networks together with recurrent neural networks have also enabled better automatic caption generators. On the left the image is given as input and the caption is generated as the output from recurrent neural network that received as input abstract features extracted with a convolutional neural network.
+
+**Week 10**
+
