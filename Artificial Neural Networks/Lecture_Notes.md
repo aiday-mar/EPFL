@@ -701,3 +701,12 @@ Consider the cross-entropy error function for mutually exclusive classes, which 
 
 **Week 9**
 
+Networks with convolutional layers reach significantly better training and test perfomances than those without, and converge more rapidly. We now study what are inductive biases, which is the prior preference for specific rules (functions). We can have inductive bias through both either transfer learning or data augmentation. Convolutional networks provide an excellent inductive bias for image recognition. Neural networks with convolutional layers work better than networks with only dense layers. Thus we may conclude that convolutional layers provide a better explicit inductive bias.
+
+Note that in contrast to a “standard neuron” that would take the full image as input and compute one activation value, we get multiple activation values with a “convolutional neuron” (filter): there is one value for each position at which the filter (neuron) is applied. One convolutional layer is usually composed of multiple filters. Since each feature map is two-dimensional we can think of the output of a convolutional layer as a three-dimensional object.
+
+Consider the following equality related to the convolution :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=a_{ijk}&space;=&space;b_k&space;&plus;&space;\sum_{x=1}^5&space;\sum_{y=1}^5&space;\sum_{c=1}^3&space;I_{i&plus;x-1,&space;j&plus;y-1,c}&space;w_{xyck}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?a_{ijk}&space;=&space;b_k&space;&plus;&space;\sum_{x=1}^5&space;\sum_{y=1}^5&space;\sum_{c=1}^3&space;I_{i&plus;x-1,&space;j&plus;y-1,c}&space;w_{xyck}" title="a_{ijk} = b_k + \sum_{x=1}^5 \sum_{y=1}^5 \sum_{c=1}^3 I_{i+x-1, j+y-1,c} w_{xyck}" /></a>
+
+With a convolutional layer, even if the training set had a certain feature only in one part of the images – say, always in the upper part of the images – it will be detected in a test image also when it appears in another region. Since the filters are typically much smaller than the full image, they are sensitive only to the configuration of pixels in a small neighborhood. With dense layers one could achieve something similar to a convolutional layer with setting for each neuron all weights to zero except those in a small region of the input space and using data augmentation.
