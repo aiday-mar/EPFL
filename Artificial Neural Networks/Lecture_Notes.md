@@ -713,4 +713,4 @@ With a convolutional layer, even if the training set had a certain feature only 
 
 You should realize now that we have total equivalence to a convolutional layer. But instead of keeping different neurons with the same weight vectors we replace all the neurons in one feature map with a single filter and instead of data augmentation, we move this filter over all patches of the image. A convolutional layer brings two intuitions in the form of an inductive bias : 1. independence to the translation of the filter, 2. local features are useful to understand images.
 
-The complex layer terminology on the left says that one layer consist of a convolution, nonlinearity and a pooling stage.
+The complex layer terminology on the left says that one layer consist of a convolution, nonlinearity and a pooling stage. A second component that is often used in convolutional networks is max-pooling. A max-pooling layer thus implements an inductive bias that small translations should not have a large effect on the output of the neural network.
