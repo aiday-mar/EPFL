@@ -206,3 +206,6 @@ There are non-deterministic error sources in odometry based on wheel encoders. T
 Actuator noise leads to poise noise. First we precompute \Sigma_{\Delta}, compute the mapping actuator-to-poise noise incremental F_{\Delta rl}, and compute the mapping pose propagation noise over step F_p. We then have the following equation:
 
 <a href="https://www.codecogs.com/eqnedit.php?latex=\Sigma_p^{(t=(k&plus;1)\Delta&space;t)}&space;=&space;F_p&space;\Sigma_p^{(t=k\Delta&space;t)}F_p^T&space;&plus;&space;F_{\Delta&space;rl}&space;\Sigma_{\Delta}&space;F_{\Delta&space;rl}^T" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\Sigma_p^{(t=(k&plus;1)\Delta&space;t)}&space;=&space;F_p&space;\Sigma_p^{(t=k\Delta&space;t)}F_p^T&space;&plus;&space;F_{\Delta&space;rl}&space;\Sigma_{\Delta}&space;F_{\Delta&space;rl}^T" title="\Sigma_p^{(t=(k+1)\Delta t)} = F_p \Sigma_p^{(t=k\Delta t)}F_p^T + F_{\Delta rl} \Sigma_{\Delta} F_{\Delta rl}^T" /></a>
+
+**Week 5**
+
