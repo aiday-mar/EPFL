@@ -209,3 +209,6 @@ Actuator noise leads to poise noise. First we precompute \Sigma_{\Delta}, comput
 
 **Week 5**
 
+The flocking phenomenon is such that there are no collisions between members, there are reactivities to predators and obstacles. The benefits of flocking are that energy is saved, navigation accuracy. Boid's flight model says that there is momentum conservation, maximal acceleration, maximal speed via viscuous friction, some gravity and aerodynamic lift, wings flapping independently. We have the following Reynolds' rules for flocking : separation (avoid collisions with nearby flockmates), alignment (attempt to match velocity), cohesion (attempt to stay close to nearby flockmates).
+
+The arbitraring rules say that time-constant linear weighted sum did not work in front of obstacles, whilst time-varying nonlinear weighted sum worked much better. Here we have that separation is more important than alignment which is more important than cohesion. Consider the sensory system for teammate detection. Here we have local, almost omni-directional sensory systems. Here we have the perfect relative range and bearing system. We have one perception-to-action loop, a homogeneous system and natural nonlinearities.
