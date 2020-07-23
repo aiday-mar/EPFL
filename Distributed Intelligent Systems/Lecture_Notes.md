@@ -185,4 +185,24 @@ The subsumption architecture is such that the input lines go into the behavioral
 
 An introduction to localization methods for mobile robots. Robot localization is a key task for path planning, mapping, referencing, coordination. There are indoor positioning sytems : motion capture systems MCSs, Impulse Radio Ultra Wide Band (IR-UWB). There are also overhead multi-camera systems. The MCSs consist of 10-50 cameras, with 4 to 5 passive markers per object to be tracked needed. The IR-UWB system on the other hand is based on the time-of-flight system. Emitters can be unsynchronized, positioning can be fed back to the robots using a standard narrow-band channel. In infrared and radio technology, there is a belt of IR emitters LED and receivers (photodiodes). The range is the measurement of the received signal strength intensity RSSI. The bearing is the signal correlation over multiple receivers.
 
-Let's study now the Global Positioning System GPS. The location of any GPS receiver is determined through a time of flight measurement. Odometry is the us of proprioceptive sensory data influenced by the movement of actuators to estimate change in pose over time.
+Let's study now the Global Positioning System GPS. The location of any GPS receiver is determined through a time of flight measurement. Odometry is the us of proprioceptive sensory data influenced by the movement of actuators to estimate change in pose over time. Odometry can be studied with wheel encoders. Optical encoders measure the displacement of the wheels. Recall the following rule for mechanical physics :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=v&space;=&space;\omega&space;r&space;=&space;\dot{\phi}&space;r" target="_blank"><img src="https://latex.codecogs.com/gif.latex?v&space;=&space;\omega&space;r&space;=&space;\dot{\phi}&space;r" title="v = \omega r = \dot{\phi} r" /></a>
+
+Where here omega is the rotational speed and the derivative of phi is the derivative of the rotation angle. Here v is the tangential speed. We have the following linear speed for the car with two wheels :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=v&space;=&space;\frac{r&space;\dot{\phi}_1}{2}&space;&plus;&space;\frac{r&space;\dot{\phi}_2}{2}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?v&space;=&space;\frac{r&space;\dot{\phi}_1}{2}&space;&plus;&space;\frac{r&space;\dot{\phi}_2}{2}" title="v = \frac{r \dot{\phi}_1}{2} + \frac{r \dot{\phi}_2}{2}" /></a>
+
+We also have the following rotational speed for the car with two wheels :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=\omega&space;=&space;\frac{r&space;\dot{\phi}_1}{2l}&space;&plus;&space;\frac{-r&space;\dot{\phi}_2}{2l}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\omega&space;=&space;\frac{r&space;\dot{\phi}_1}{2l}&space;&plus;&space;\frac{-r&space;\dot{\phi}_2}{2l}" title="\omega = \frac{r \dot{\phi}_1}{2l} + \frac{-r \dot{\phi}_2}{2l}" /></a>
+
+Given the kinematic forward model and assuming no slip on both wheels we have : 
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=\epsilon_I(T)&space;=&space;\epsilon_{I_0}&space;&plus;&space;\int_0^T&space;\dot{\epsilon_I}&space;dt&space;=&space;\epsilon_{I_0}&space;&plus;&space;\int_0^T&space;R^{-1}(\theta)&space;\dot{\epsilon}_R&space;dt" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\epsilon_I(T)&space;=&space;\epsilon_{I_0}&space;&plus;&space;\int_0^T&space;\dot{\epsilon_I}&space;dt&space;=&space;\epsilon_{I_0}&space;&plus;&space;\int_0^T&space;R^{-1}(\theta)&space;\dot{\epsilon}_R&space;dt" title="\epsilon_I(T) = \epsilon_{I_0} + \int_0^T \dot{\epsilon_I} dt = \epsilon_{I_0} + \int_0^T R^{-1}(\theta) \dot{\epsilon}_R dt" /></a>
+
+There are non-deterministic error sources in odometry based on wheel encoders. This is because of the variation of the contact point of the wheel, and because there is unequal floor contact due to the wheel slip, nonplanar surfaces. There are three types of odometric error types : range error (sum of the wheel movements), turn error (difference of wheel motion), drift error (difference between wheel errors lead to heading error).
+
+Actuator noise leads to poise noise. First we precompute \Sigma_{\Delta}, compute the mapping actuator-to-poise noise incremental F_{\Delta rl}, and compute the mapping pose propagation noise over step F_p. We then have the following equation:
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=\Sigma_p^{(t=(k&plus;1)\Delta&space;t)}&space;=&space;F_p&space;\Sigma_p^{(t=k\Delta&space;t)}F_p^T&space;&plus;&space;F_{\Delta&space;rl}&space;\Sigma_{\Delta}&space;F_{\Delta&space;rl}^T" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\Sigma_p^{(t=(k&plus;1)\Delta&space;t)}&space;=&space;F_p&space;\Sigma_p^{(t=k\Delta&space;t)}F_p^T&space;&plus;&space;F_{\Delta&space;rl}&space;\Sigma_{\Delta}&space;F_{\Delta&space;rl}^T" title="\Sigma_p^{(t=(k+1)\Delta t)} = F_p \Sigma_p^{(t=k\Delta t)}F_p^T + F_{\Delta rl} \Sigma_{\Delta} F_{\Delta rl}^T" /></a>
