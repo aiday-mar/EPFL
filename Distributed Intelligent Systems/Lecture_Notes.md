@@ -226,3 +226,16 @@ Let's study the continuous consensus algorithms, the graph-based distributed con
 Define I in R^{|V| x |E|} as :
 
 <a href="https://www.codecogs.com/eqnedit.php?latex=I(i,j)&space;=&space;\left\{\begin{matrix}&space;-1&space;&&space;\textrm{if&space;ej&space;leaves&space;ni}\\&space;&plus;1&space;&&space;\textrm{if&space;ej&space;enters&space;ni}\\&space;0&space;&&space;\textrm{otherwise}&space;\end{matrix}\right." target="_blank"><img src="https://latex.codecogs.com/gif.latex?I(i,j)&space;=&space;\left\{\begin{matrix}&space;-1&space;&&space;\textrm{if&space;ej&space;leaves&space;ni}\\&space;&plus;1&space;&&space;\textrm{if&space;ej&space;enters&space;ni}\\&space;0&space;&&space;\textrm{otherwise}&space;\end{matrix}\right." title="I(i,j) = \left\{\begin{matrix} -1 & \textrm{if ej leaves ni}\\ +1 & \textrm{if ej enters ni}\\ 0 & \textrm{otherwise} \end{matrix}\right." /></a>
+
+We define the following weight matrix, where W in R^{|E| x |E|} as :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=W(i,j)&space;=&space;\left\{\begin{matrix}&space;w_i&space;&&space;\textrm{if&space;i=j}\\&space;0&space;&&space;\textrm{otherwise}&space;\end{matrix}\right." target="_blank"><img src="https://latex.codecogs.com/gif.latex?W(i,j)&space;=&space;\left\{\begin{matrix}&space;w_i&space;&&space;\textrm{if&space;i=j}\\&space;0&space;&&space;\textrm{otherwise}&space;\end{matrix}\right." title="W(i,j) = \left\{\begin{matrix} w_i & \textrm{if i=j}\\ 0 & \textrm{otherwise} \end{matrix}\right." /></a>
+
+Consider the laplacian matrix where L in R^{|V| x |V|} as :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=L&space;=&space;I&space;\cdot&space;W&space;\cdot&space;I^T" target="_blank"><img src="https://latex.codecogs.com/gif.latex?L&space;=&space;I&space;\cdot&space;W&space;\cdot&space;I^T" title="L = I \cdot W \cdot I^T" /></a>
+
+One way to solve the rendez-vous problem is to use the laplacian matrix and write:
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=\dot{x}(t)&space;=&space;-L&space;x(t)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\dot{x}(t)&space;=&space;-L&space;x(t)" title="\dot{x}(t) = -L x(t)" /></a>
+
