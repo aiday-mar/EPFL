@@ -215,4 +215,14 @@ The arbitraring rules say that time-constant linear weighted sum did not work in
 
 In general homogeneous systems impossible, immediate response impossible. Identifier for each teammate possible but scalability issues. Depending on the system used for range and bearing : occlusion is possible. Nonlinearities are determined by the underlying technology. We have motor-schema-based formation control where you move to the goal, avoid static obstacles, avoid the robot and maintain the formation. The formtion taxonomy can be as follows : unit-center-referenced, leader-referenced, neighbor-referenced.
 
-Fredslung and Mataric have said in 2002 that the architecture is neighbor-references and is based on an on-board relative positioning, single leader always.
+Fredslung and Mataric have said in 2002 that the architecture is neighbor-references and is based on an on-board relative positioning, single leader always. In 2002 Fredslung and Mataric have created a combined use of laser range finder LRF and a pan camera. Formations can be divided into two categories : location-based (robots group must maintain fixed locations between teammates), heading-based (robots must maintain fixed location nd headings relative to teammates). We have the following modes for the formation localization modes. 
+
+Mode 1 : no relative positioning - robots follow pre-programmed course with no closed-loop feedback
+Mode 2 : relative positionning - robots observe teammates with relative positioning module and attempt to maintain proper locations
+Mode 3 : relative positioning with communication - robots observe and share information with leader robot using relative positioning and wireless radio
+
+Let's study the continuous consensus algorithms, the graph-based distributed control. Consider the following definition of the incidence matrix :
+
+Define I in R^{|V| x |E|} as :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=I(i,j)&space;=&space;\left\{\begin{matrix}&space;-1&space;&&space;\textrm{if&space;ej&space;leaves&space;ni}\\&space;&plus;1&space;&&space;\textrm{if&space;ej&space;enters&space;ni}\\&space;0&space;&&space;\textrm{otherwise}&space;\end{matrix}\right." target="_blank"><img src="https://latex.codecogs.com/gif.latex?I(i,j)&space;=&space;\left\{\begin{matrix}&space;-1&space;&&space;\textrm{if&space;ej&space;leaves&space;ni}\\&space;&plus;1&space;&&space;\textrm{if&space;ej&space;enters&space;ni}\\&space;0&space;&&space;\textrm{otherwise}&space;\end{matrix}\right." title="I(i,j) = \left\{\begin{matrix} -1 & \textrm{if ej leaves ni}\\ +1 & \textrm{if ej enters ni}\\ 0 & \textrm{otherwise} \end{matrix}\right." /></a>
