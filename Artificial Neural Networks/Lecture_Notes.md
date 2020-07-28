@@ -757,3 +757,6 @@ The networks structure remains the same as before. There is an actor (action net
 
 <a href="https://www.codecogs.com/eqnedit.php?latex=\delta&space;=&space;\eta&space;[r_t&space;&plus;&space;\gamma&space;V(s_{t&plus;1})-V(s_t)]" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\delta&space;=&space;\eta&space;[r_t&space;&plus;&space;\gamma&space;V(s_{t&plus;1})-V(s_t)]" title="\delta = \eta [r_t + \gamma V(s_{t+1})-V(s_t)]" /></a>
 
+In both algorithms, actor-critic and reinfore with baseline, the actor learns actions via the policy gradient. In the REINFORCE algorithm the baseline estimator learns the V-value via Monte-Carlo sampling of full episodes. In the REINFOCE algorithm the mismatch between actual return and estimated V-value  (‘RETURN error’) is  used as the learning signal for  the policy gradient.
+
+It turns out that policy gradient algorithm have an intimate link to eligibility traces. In fact, eligibility traces arise naturally for policy gradient algorithms. Hence when we have an actor-critic with eligibility traces, then the actor learns by the policy gradient, the critic learns by TD-learning, for each parameter there is one eligibility trace, you update eligibility traces while moving, you update the weights of the actor and the critic.
