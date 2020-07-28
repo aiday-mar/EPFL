@@ -737,3 +737,14 @@ Convolutional networks together with recurrent neural networks have also enabled
 
 **Week 10**
 
+The error function for the SARSA algorithm is :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=E&space;=&space;0.5[r&space;&plus;&space;\gamma&space;Q(s',a')&space;-&space;Q(s,a)]^2" target="_blank"><img src="https://latex.codecogs.com/gif.latex?E&space;=&space;0.5[r&space;&plus;&space;\gamma&space;Q(s',a')&space;-&space;Q(s,a)]^2" title="E = 0.5[r + \gamma Q(s',a') - Q(s,a)]^2" /></a>
+
+Deep Q-Learning uses a deep network which transforms the state into Q-values in the output. Actions are chosen for example by softmax or epsilon-greedy methods on the Q-values in the output. Weights are learned by taking the semi-gradient on the error function :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=E&space;=&space;0.5[r&space;&plus;&space;\gamma&space;max_{a'}&space;Q(s',a')&space;-&space;Q(s,a)]^2" target="_blank"><img src="https://latex.codecogs.com/gif.latex?E&space;=&space;0.5[r&space;&plus;&space;\gamma&space;max_{a'}&space;Q(s',a')&space;-&space;Q(s,a)]^2" title="E = 0.5[r + \gamma max_{a'} Q(s',a') - Q(s,a)]^2" /></a>
+
+Policy gradient methods are an alternative to TD methods. In the following we subtract a reward baseline, a bias b. The update rule has terms :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=\Delta&space;\theta_j&space;\propto&space;[R^{a_t}_{s_t&space;\rightarrow&space;s_{end}}&space;-&space;b(s_t)]&space;\frac{d}{d&space;\theta_j}&space;ln[\pi&space;(a_t&space;|&space;s_t,&space;\theta)]&space;&plus;&space;\gamma&space;[R^{a_{t&plus;1}}_{s_{t&plus;1}&space;\rightarrow&space;s_{end}}&space;-&space;b(s_{t&plus;1})]&space;\frac{d}{d&space;\theta_j}&space;ln[\pi&space;(a_{t&plus;1}&space;|&space;s_{t&plus;1},&space;\theta)]&space;&plus;&space;..." target="_blank"><img src="https://latex.codecogs.com/gif.latex?\Delta&space;\theta_j&space;\propto&space;[R^{a_t}_{s_t&space;\rightarrow&space;s_{end}}&space;-&space;b(s_t)]&space;\frac{d}{d&space;\theta_j}&space;ln[\pi&space;(a_t&space;|&space;s_t,&space;\theta)]&space;&plus;&space;\gamma&space;[R^{a_{t&plus;1}}_{s_{t&plus;1}&space;\rightarrow&space;s_{end}}&space;-&space;b(s_{t&plus;1})]&space;\frac{d}{d&space;\theta_j}&space;ln[\pi&space;(a_{t&plus;1}&space;|&space;s_{t&plus;1},&space;\theta)]&space;&plus;&space;..." title="\Delta \theta_j \propto [R^{a_t}_{s_t \rightarrow s_{end}} - b(s_t)] \frac{d}{d \theta_j} ln[\pi (a_t | s_t, \theta)] + \gamma [R^{a_{t+1}}_{s_{t+1} \rightarrow s_{end}} - b(s_{t+1})] \frac{d}{d \theta_j} ln[\pi (a_{t+1} | s_{t+1}, \theta)] + ..." /></a>
