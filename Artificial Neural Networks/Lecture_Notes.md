@@ -760,3 +760,43 @@ The networks structure remains the same as before. There is an actor (action net
 In both algorithms, actor-critic and reinfore with baseline, the actor learns actions via the policy gradient. In the REINFORCE algorithm the baseline estimator learns the V-value via Monte-Carlo sampling of full episodes. In the REINFOCE algorithm the mismatch between actual return and estimated V-value  (‘RETURN error’) is  used as the learning signal for  the policy gradient.
 
 It turns out that policy gradient algorithm have an intimate link to eligibility traces. In fact, eligibility traces arise naturally for policy gradient algorithms. Hence when we have an actor-critic with eligibility traces, then the actor learns by the policy gradient, the critic learns by TD-learning, for each parameter there is one eligibility trace, you update eligibility traces while moving, you update the weights of the actor and the critic.
+
+We study now the eligibility traces in the policy gradient. The idea is that you keep the memory of the previous candidate updates. You update the eligibility trace for each parameter \theta_k . 
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=z_k&space;\leftarrow&space;z_k&space;\lambda" target="_blank"><img src="https://latex.codecogs.com/gif.latex?z_k&space;\leftarrow&space;z_k&space;\lambda" title="z_k \leftarrow z_k \lambda" /></a>
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=z_k&space;\leftarrow&space;z_k&space;&plus;&space;\frac{d}{d&space;\theta_k}&space;ln[\pi(a&space;|&space;s,&space;\theta_k)]" target="_blank"><img src="https://latex.codecogs.com/gif.latex?z_k&space;\leftarrow&space;z_k&space;&plus;&space;\frac{d}{d&space;\theta_k}&space;ln[\pi(a&space;|&space;s,&space;\theta_k)]" title="z_k \leftarrow z_k + \frac{d}{d \theta_k} ln[\pi(a | s, \theta_k)]" /></a>
+
+We update the parameters of the actor network :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=\Delta&space;\theta_k&space;=&space;\eta&space;[r_t&space;-&space;V(s_t)&space;&plus;&space;\gamma&space;V(s_{t&plus;1})]&space;z_k" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\Delta&space;\theta_k&space;=&space;\eta&space;[r_t&space;-&space;V(s_t)&space;&plus;&space;\gamma&space;V(s_{t&plus;1})]&space;z_k" title="\Delta \theta_k = \eta [r_t - V(s_t) + \gamma V(s_{t+1})] z_k" /></a>
+
+For each parameter \theta_k of the network we have a shadow parameter z_k, which is the eligibility trace. The actor network is learned by policy gradient with eligibility traces. The critic network by TD learning with eligibility traces. We have the following actor-critic with eligibility traces algorithm for estimating \pi_{\theta} \approx \pi_* :
+
+```
+Input : a differentiable policy parametrization \pi(a | s, \theta)
+Input : a differentiable state-value function parametrization \hat{v}(s, w)
+Algorithm parameters : \lambda^{w} \in [0,1], \lambda^{\theta} \in [0,1], \alpha^{w} > 0, \alpha^{\theta} > 0
+
+Initialize state-value weights w \in R^d and policy parameter \theta \in R^{d'}
+Initialize S in S 
+
+z^w \leftarrow 0
+z^{\theta} \leftarrow 0
+Loop forever :
+```
+<a href="https://www.codecogs.com/eqnedit.php?latex=A&space;\sim&space;\pi(.|&space;S,&space;\theta)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?A&space;\sim&space;\pi(.|&space;S,&space;\theta)" title="A \sim \pi(.| S, \theta)" /></a>
+```
+  Take action A, observe S', r
+```
+<a href="https://www.codecogs.com/eqnedit.php?latex=\delta&space;\leftarrow&space;r&space;&plus;&space;\gamma&space;\hat{v}(S',w)&space;-&space;\hat{v}(S,w)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\delta&space;\leftarrow&space;r&space;&plus;&space;\gamma&space;\hat{v}(S',w)&space;-&space;\hat{v}(S,w)" title="\delta \leftarrow r + \gamma \hat{v}(S',w) - \hat{v}(S,w)" /></a>
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=z^{w}&space;\leftarrow&space;\lambda^w&space;z^w&space;&plus;&space;\triangledown&space;\hat{v}(S,w)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?z^{w}&space;\leftarrow&space;\lambda^w&space;z^w&space;&plus;&space;\triangledown&space;\hat{v}(S,w)" title="z^{w} \leftarrow \lambda^w z^w + \triangledown \hat{v}(S,w)" /></a>
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=z^{\theta}&space;\leftarrow&space;\lambda^{\theta}&space;z^{\theta}&space;&plus;&space;\triangledown&space;\ln&space;\pi(A&space;|S,&space;\theta)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?z^{\theta}&space;\leftarrow&space;\lambda^{\theta}&space;z^{\theta}&space;&plus;&space;\triangledown&space;\ln&space;\pi(A&space;|S,&space;\theta)" title="z^{\theta} \leftarrow \lambda^{\theta} z^{\theta} + \triangledown \ln \pi(A |S, \theta)" /></a>
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=w&space;\leftarrow&space;w&space;&plus;&space;\alpha^w&space;\delta&space;z^w" target="_blank"><img src="https://latex.codecogs.com/gif.latex?w&space;\leftarrow&space;w&space;&plus;&space;\alpha^w&space;\delta&space;z^w" title="w \leftarrow w + \alpha^w \delta z^w" /></a>
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=\theta&space;\leftarrow&space;\theta&space;&plus;&space;\alpha^{\theta}&space;\delta&space;z^{\theta}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\theta&space;\leftarrow&space;\theta&space;&plus;&space;\alpha^{\theta}&space;\delta&space;z^{\theta}" title="\theta \leftarrow \theta + \alpha^{\theta} \delta z^{\theta}" /></a>
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=S&space;\leftarrow&space;S'" target="_blank"><img src="https://latex.codecogs.com/gif.latex?S&space;\leftarrow&space;S'" title="S \leftarrow S'" /></a>
