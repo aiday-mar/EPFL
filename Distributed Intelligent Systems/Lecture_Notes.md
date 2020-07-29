@@ -239,3 +239,20 @@ One way to solve the rendez-vous problem is to use the laplacian matrix and writ
 
 <a href="https://www.codecogs.com/eqnedit.php?latex=\dot{x}(t)&space;=&space;-L&space;x(t)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\dot{x}(t)&space;=&space;-L&space;x(t)" title="\dot{x}(t) = -L x(t)" /></a>
 
+Holonomic robots is such that the total number of degrees of freedom is the number of controllable degrees of freedom. A robot is holonomic if it can move in any direction at any point in time. The Laplacian method gives the direction vector at each point in time.
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=\left\{\begin{matrix}&space;u&space;=&space;K_u&space;\sqrt{\dot{x}^2&space;&plus;&space;\dot{y}^2}&space;cos(atan2(\dot{y},&space;\dot{x}))\\&space;w&space;=&space;K_w&space;atan2(\dot{y},&space;\dot{x})&space;\end{matrix}\right." target="_blank"><img src="https://latex.codecogs.com/gif.latex?\left\{\begin{matrix}&space;u&space;=&space;K_u&space;\sqrt{\dot{x}^2&space;&plus;&space;\dot{y}^2}&space;cos(atan2(\dot{y},&space;\dot{x}))\\&space;w&space;=&space;K_w&space;atan2(\dot{y},&space;\dot{x})&space;\end{matrix}\right." title="\left\{\begin{matrix} u = K_u \sqrt{\dot{x}^2 + \dot{y}^2} cos(atan2(\dot{y}, \dot{x}))\\ w = K_w atan2(\dot{y}, \dot{x}) \end{matrix}\right." /></a>
+
+We can also use the relative range and bearing in the non-holonomicity as follows:
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=\left\{\begin{matrix}&space;u&space;=&space;K_u&space;e&space;cos&space;\alpha\\&space;w&space;=&space;K_w&space;\alpha&space;\end{matrix}\right." target="_blank"><img src="https://latex.codecogs.com/gif.latex?\left\{\begin{matrix}&space;u&space;=&space;K_u&space;e&space;cos&space;\alpha\\&space;w&space;=&space;K_w&space;\alpha&space;\end{matrix}\right." title="\left\{\begin{matrix} u = K_u e cos \alpha\\ w = K_w \alpha \end{matrix}\right." /></a>
+
+By adding a bias vector, we can modify the state (or assumed position) as follows:
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=\dot{x}&space;=&space;-&space;L(x(t)&space;-&space;B)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\dot{x}&space;=&space;-&space;L(x(t)&space;-&space;B)" title="\dot{x} = - L(x(t) - B)" /></a>
+
+In obstacle avoidance, each robot updates its neighbors list if necessary by adding a repulsive agent.  Positive weights will attract vehicles together, negative weights will create a repulsion mechanism. The proportional, integral controller says that :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=\left\{\begin{matrix}&space;u&space;=&space;K_u&space;e&space;cos&space;\alpha&space;&plus;&space;K_I&space;\int_0^t&space;e&space;dt\\&space;w&space;=&space;K_w&space;\alpha&space;\end{matrix}\right." target="_blank"><img src="https://latex.codecogs.com/gif.latex?\left\{\begin{matrix}&space;u&space;=&space;K_u&space;e&space;cos&space;\alpha&space;&plus;&space;K_I&space;\int_0^t&space;e&space;dt\\&space;w&space;=&space;K_w&space;\alpha&space;\end{matrix}\right." title="\left\{\begin{matrix} u = K_u e cos \alpha + K_I \int_0^t e dt\\ w = K_w \alpha \end{matrix}\right." /></a>
+
+**Week 6**
