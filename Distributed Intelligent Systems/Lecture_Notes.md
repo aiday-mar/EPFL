@@ -270,3 +270,9 @@ Then we have the following equality :
 Where here n and n' are the states of the agents (all the possible states at each instant), and where N_n is the average fraction of agents in state n at time t. Where we have the following equality :
 
 <a href="https://www.codecogs.com/eqnedit.php?latex=W(n&space;|&space;n',&space;t)&space;=&space;\lim_{\Delta&space;t&space;\rightarrow&space;0}&space;\frac{p(n,&space;t&plus;\Delta&space;t&space;|&space;n',t)}{\Delta&space;t}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?W(n&space;|&space;n',&space;t)&space;=&space;\lim_{\Delta&space;t&space;\rightarrow&space;0}&space;\frac{p(n,&space;t&plus;\Delta&space;t&space;|&space;n',t)}{\Delta&space;t}" title="W(n | n', t) = \lim_{\Delta t \rightarrow 0} \frac{p(n, t+\Delta t | n',t)}{\Delta t}" /></a>
+
+We have the following time-discrete rate equation :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=N_n((k&plus;1)T)&space;=&space;N_n(kT)&space;&plus;&space;\sum_{n'}&space;TW(n&space;|&space;n',&space;kT)&space;N_{n'}(kT)&space;-&space;\sum_{n'}&space;TW(n'&space;|&space;n,&space;kT)&space;N_n(kT)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?N_n((k&plus;1)T)&space;=&space;N_n(kT)&space;&plus;&space;\sum_{n'}&space;TW(n&space;|&space;n',&space;kT)&space;N_{n'}(kT)&space;-&space;\sum_{n'}&space;TW(n'&space;|&space;n,&space;kT)&space;N_n(kT)" title="N_n((k+1)T) = N_n(kT) + \sum_{n'} TW(n | n', kT) N_{n'}(kT) - \sum_{n'} TW(n' | n, kT) N_n(kT)" /></a>
+
+Where k is the iteration index, T is the time step, TW is the transition probability per time step. Consider the time disretization algorithm : assess what’s the time resolution needed for your system performance metrics, choose whenever possible the most computationally efficient model,  a single common sampling rate can be defined among different modeling levels. 
