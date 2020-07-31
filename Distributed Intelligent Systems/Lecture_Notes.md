@@ -315,7 +315,35 @@ Where here \beta = N_0 / M_0 is the ratio of robots to sticks.
 
 **Week 7**
 
-So today we learn Multi-Level Modeling: Calibration and Combination with Machine Learning. The submicroscopic model says that the libraries and APIs or middleware intrefaces such as ROS are usually provided in standard open-source
-simulators. State granularity arbitrary but (non spatial) performance metrics
-must be computable explicitly at all modeling levels. Exploit conservation laws (e.g. # of robots in an enclosed arena) to simplify the representation of the
-dynamical system.
+So today we learn Multi-Level Modeling: Calibration and Combination with Machine Learning. The submicroscopic model says that the libraries and APIs or middleware intrefaces such as ROS are usually provided in standard open-source simulators. State granularity arbitrary but (non spatial) performance metrics must be computable explicitly at all modeling levels. Exploit conservation laws (e.g. # of robots in an enclosed arena) to simplify the representation of the dynamical system. Measure all interaction times of interest in your system, i.e. those which might influence the system performance metrics. Geometric probabilities can be considered normalized detection areas (normalized over the total area of the experiment). Calculate the encountering rate ri [s-1] for the object i from the geometric probabilities gi.
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=r_i&space;=&space;\frac{v&space;W_s}{A_s}&space;g_i" target="_blank"><img src="https://latex.codecogs.com/gif.latex?r_i&space;=&space;\frac{v&space;W_s}{A_s}&space;g_i" title="r_i = \frac{v W_s}{A_s} g_i" /></a>
+
+Where A_s is the detection area of the smallest object, v is the mean robot speed, W_s is the robot's detection width for the smallest object. . For time-discrete models, calculate the encountering probabilities pi (per time step) from the encountering rates:
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=p_i&space;=&space;r_iT" target="_blank"><img src="https://latex.codecogs.com/gif.latex?p_i&space;=&space;r_iT" title="p_i = r_iT" /></a>
+
+Geometric probability g: example of transition in space from search to obstacle avoidance. The seed-assembling case study says that there is Reactive, non- communicating, nonadaptive behavior. State granularity choices say that you split the search state in search (loaded) and search(free) and keep dedicated avoidance/interferences states for each of the split states. The motivation is that the status loaded (carrying a seed) or free (not carrying a seed) can only change in a deterministic fashion (e.g., cannot be changed by an avoidance operation) and only by going to one of the seed dropping or picking states → can be explicitly represented with
+a larger state space and deterministic transitions. Such enlarged state space facilitates the writing of the ODEs.
+
+In the examples of assembled structures the noise in S&A and poor navigation
+capabilities do not allow for precise, controllable structure building. The rationale for the combined methods is that. Any level of modeling (submicro, micro, or macro) allow us to consider certain parameters and leave others; models, as expression of reality abstraction, can be considered as more or less coarse “filters” of the reality.
+
+We can analyze the entropy as follows. We have the simple entropy :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=H(R)&space;=&space;-&space;\sum_{i=1}^m&space;p_i&space;log&space;p_i" target="_blank"><img src="https://latex.codecogs.com/gif.latex?H(R)&space;=&space;-&space;\sum_{i=1}^m&space;p_i&space;log&space;p_i" title="H(R) = - \sum_{i=1}^m p_i log p_i" /></a>
+
+Where p_i is the proportion of the agents in cluster i. And m is the number of clusters in total. And h is the taxonomic level parameter. The social entropy is :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=D(R)&space;=&space;\int_0^{\infty}&space;H(R,&space;h)&space;dh" target="_blank"><img src="https://latex.codecogs.com/gif.latex?D(R)&space;=&space;\int_0^{\infty}&space;H(R,&space;h)&space;dh" title="D(R) = \int_0^{\infty} H(R, h) dh" /></a>
+
+The euclidean distance can be described as follows :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=D_{eu}&space;=&space;\frac{1}{N(N-1)}&space;\sum_a&space;[\sum_{b&space;\neq&space;a}&space;d(a,b)]" target="_blank"><img src="https://latex.codecogs.com/gif.latex?D_{eu}&space;=&space;\frac{1}{N(N-1)}&space;\sum_a&space;[\sum_{b&space;\neq&space;a}&space;d(a,b)]" title="D_{eu} = \frac{1}{N(N-1)} \sum_a [\sum_{b \neq a} d(a,b)]" /></a>
+
+Social entropy is looking for possible clustering of the vectors (looking for
+possible castes) while Euclidian diversity is just looking how spread
+out/diverse in general are the vectors.
+
+**Week 8**
+
