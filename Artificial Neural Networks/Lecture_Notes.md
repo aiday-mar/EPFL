@@ -800,3 +800,40 @@ Loop forever :
 <a href="https://www.codecogs.com/eqnedit.php?latex=\theta&space;\leftarrow&space;\theta&space;&plus;&space;\alpha^{\theta}&space;\delta&space;z^{\theta}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\theta&space;\leftarrow&space;\theta&space;&plus;&space;\alpha^{\theta}&space;\delta&space;z^{\theta}" title="\theta \leftarrow \theta + \alpha^{\theta} \delta z^{\theta}" /></a>
 
 <a href="https://www.codecogs.com/eqnedit.php?latex=S&space;\leftarrow&space;S'" target="_blank"><img src="https://latex.codecogs.com/gif.latex?S&space;\leftarrow&space;S'" title="S \leftarrow S'" /></a>
+
+There is a difference between episodic and continuous RL scenario. In this section I want to show that eligibility traces arises naturally in the context of
+policy gradient when we optimize the expected return. Eligibility traces are a compact form for rewriting a policy gradient algorithm. Policy gradient model with softmax policy and eligibility trace says that :
+
+```
+First we update the eligibility trace for each weight :
+```
+<a href="https://www.codecogs.com/eqnedit.php?latex=z_{ik}&space;\leftarrow&space;z_{ik}&space;\lambda" target="_blank"><img src="https://latex.codecogs.com/gif.latex?z_{ik}&space;\leftarrow&space;z_{ik}&space;\lambda" title="z_{ik} \leftarrow z_{ik} \lambda" /></a>
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=z_{ik}&space;\leftarrow&space;z_{ik}&space;&plus;&space;\frac{d&space;ln[\pi(a_i&space;|&space;x)]}{d&space;w_{ik}}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?z_{ik}&space;\leftarrow&space;z_{ik}&space;&plus;&space;\frac{d&space;ln[\pi(a_i&space;|&space;x)]}{d&space;w_{ik}}" title="z_{ik} \leftarrow z_{ik} + \frac{d ln[\pi(a_i | x)]}{d w_{ik}}" /></a>
+
+Next we update the weights as follows :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=\Delta&space;w_{ik}&space;=&space;\eta&space;[r_t&space;-&space;b]&space;z_{ik}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\Delta&space;w_{ik}&space;=&space;\eta&space;[r_t&space;-&space;b]&space;z_{ik}" title="\Delta w_{ik} = \eta [r_t - b] z_{ik}" /></a>
+
+Linear activation model with softmax policy:
+
+```
+Choose action a_i in {0,1}.
+Update eligibility trace 
+```
+<a href="https://www.codecogs.com/eqnedit.php?latex=z_{ik}&space;\leftarrow&space;z_{ik}&space;\lambda" target="_blank"><img src="https://latex.codecogs.com/gif.latex?z_{ik}&space;\leftarrow&space;z_{ik}&space;\lambda" title="z_{ik} \leftarrow z_{ik} \lambda" /></a>
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=z_{ik}&space;\leftarrow&space;z_{ik}&space;&plus;&space;y_k(x)[a_i&space;-&space;\pi(a_i&space;|&space;x)]" target="_blank"><img src="https://latex.codecogs.com/gif.latex?z_{ik}&space;\leftarrow&space;z_{ik}&space;&plus;&space;y_k(x)[a_i&space;-&space;\pi(a_i&space;|&space;x)]" title="z_{ik} \leftarrow z_{ik} + y_k(x)[a_i - \pi(a_i | x)]" /></a>
+
+```
+Update now the weights
+```
+<a href="https://www.codecogs.com/eqnedit.php?latex=\Delta&space;w_{ik}&space;=&space;\eta&space;[r_t&space;-&space;b]&space;z_{ik}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\Delta&space;w_{ik}&space;=&space;\eta&space;[r_t&space;-&space;b]&space;z_{ik}" title="\Delta w_{ik} = \eta [r_t - b] z_{ik}" /></a>
+
+Eligibility trace is set by joint activity of presynaptic and postsynaptic neuron. Three factor rule needs : Activity of presynaptic neuron, Activity of postsynaptic neuron, Broadcasted success signal: reward minus baseline. Policy gradient with one hidden layer and linear softmax readout yields a 3-factor rule.  A policy gradient algorithm in a network where the output layer has a linear drive with softmax output leads to a three-factor learning rule for the connections between neurons in the hidden layer and the output. Recent experiments on the three-factor rule says that : co-activation sets eligibility trace, eligibility trace decays over time, eligibility trace translated into weight change.
+
+The third factor in a three-factor learning rule should be the global factor signaling
+success or reward. We said that the third factor could be a neuromodulator such
+as dopamine. Actor-critic with spiking neurons :  Learns in a few trials (assuming good representation), Works in continuous time, No artificial ‘events’ or ‘time steps’, Works in continuous space and for continuous actions, Uses a biologically plausible 3-factor learning rule, Critic implements value function, TD signal calculated by critic, Actor neurons interact via synaptic connections, No need for algorithmic ‘softmax'. Reinforcement learning is model-free, if the agent does not learn a model of the environment. Model-free learning is such that the agent learns directly and only
+the Q-values. Model-based learning is such that the agent learns the Q-values
+and also the transition probabilities. The advantages of model-based reinforcement learning is that : the agent can readapt if the reward-scheme changes, the agent can explore potential future paths in its ‘mind’, the agent can update Q-values in the background. 
