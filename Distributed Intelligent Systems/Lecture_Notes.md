@@ -314,3 +314,8 @@ We have that T^{opt}_g can be computed analytically as follows :
 Where here \beta = N_0 / M_0 is the ratio of robots to sticks. 
 
 **Week 7**
+
+So today we learn Multi-Level Modeling: Calibration and Combination with Machine Learning. The submicroscopic model says that the libraries and APIs or middleware intrefaces such as ROS are usually provided in standard open-source
+simulators. State granularity arbitrary but (non spatial) performance metrics
+must be computable explicitly at all modeling levels. Exploit conservation laws (e.g. # of robots in an enclosed arena) to simplify the representation of the
+dynamical system.
