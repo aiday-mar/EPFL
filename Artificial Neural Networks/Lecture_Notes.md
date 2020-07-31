@@ -837,3 +837,6 @@ success or reward. We said that the third factor could be a neuromodulator such
 as dopamine. Actor-critic with spiking neurons :  Learns in a few trials (assuming good representation), Works in continuous time, No artificial ‘events’ or ‘time steps’, Works in continuous space and for continuous actions, Uses a biologically plausible 3-factor learning rule, Critic implements value function, TD signal calculated by critic, Actor neurons interact via synaptic connections, No need for algorithmic ‘softmax'. Reinforcement learning is model-free, if the agent does not learn a model of the environment. Model-free learning is such that the agent learns directly and only
 the Q-values. Model-based learning is such that the agent learns the Q-values
 and also the transition probabilities. The advantages of model-based reinforcement learning is that : the agent can readapt if the reward-scheme changes, the agent can explore potential future paths in its ‘mind’, the agent can update Q-values in the background. 
+
+**Week 11**
+
