@@ -276,3 +276,41 @@ We have the following time-discrete rate equation :
 <a href="https://www.codecogs.com/eqnedit.php?latex=N_n((k&plus;1)T)&space;=&space;N_n(kT)&space;&plus;&space;\sum_{n'}&space;TW(n&space;|&space;n',&space;kT)&space;N_{n'}(kT)&space;-&space;\sum_{n'}&space;TW(n'&space;|&space;n,&space;kT)&space;N_n(kT)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?N_n((k&plus;1)T)&space;=&space;N_n(kT)&space;&plus;&space;\sum_{n'}&space;TW(n&space;|&space;n',&space;kT)&space;N_{n'}(kT)&space;-&space;\sum_{n'}&space;TW(n'&space;|&space;n,&space;kT)&space;N_n(kT)" title="N_n((k+1)T) = N_n(kT) + \sum_{n'} TW(n | n', kT) N_{n'}(kT) - \sum_{n'} TW(n' | n, kT) N_n(kT)" /></a>
 
 Where k is the iteration index, T is the time step, TW is the transition probability per time step. Consider the time disretization algorithm : assess what’s the time resolution needed for your system performance metrics, choose whenever possible the most computationally efficient model,  a single common sampling rate can be defined among different modeling levels. 
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=N_n(k&plus;1)&space;=&space;N_n(k)&space;&plus;&space;\sum_{n'}&space;P(n&space;|&space;n',&space;k)&space;N_{n'}(k)&space;-&space;\sum_{n'}&space;P(n'&space;|&space;n,k)&space;N_n(k)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?N_n(k&plus;1)&space;=&space;N_n(k)&space;&plus;&space;\sum_{n'}&space;P(n&space;|&space;n',&space;k)&space;N_{n'}(k)&space;-&space;\sum_{n'}&space;P(n'&space;|&space;n,k)&space;N_n(k)" title="N_n(k+1) = N_n(k) + \sum_{n'} P(n | n', k) N_{n'}(k) - \sum_{n'} P(n' | n,k) N_n(k)" /></a>
+
+There are time-discrete vs time-continuous models. Assess what’s the time resolution needed for your system's performance metrics. Advantage of time-discrete models: a single common sampling rate can be defined among different modeling levels. The model parameters have incremental calibration. There are different methods for this : ad hoc experiments, system identification techniques, statistical verification techniques. Micro and macroscopic models have essentially two parameter types : state durations, state transition probabilities. Linear model has a probabilistic delay :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=N_s(k&plus;1)&space;=&space;N_s(k)&space;-&space;p_a&space;N_s(k)&space;&plus;&space;p_s&space;N_a(k)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?N_s(k&plus;1)&space;=&space;N_s(k)&space;-&space;p_a&space;N_s(k)&space;&plus;&space;p_s&space;N_a(k)" title="N_s(k+1) = N_s(k) - p_a N_s(k) + p_s N_a(k)" /></a>
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=N_a(k&plus;1)&space;=&space;N_0&space;-&space;N_s(k&plus;1)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?N_a(k&plus;1)&space;=&space;N_0&space;-&space;N_s(k&plus;1)" title="N_a(k+1) = N_0 - N_s(k+1)" /></a>
+
+The steady state analysis would require that : N_n(k+1) = N_n(k) for all the states of the system n.
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=N^*_s&space;=&space;\frac{N_0}{1&plus;p_a&space;T_a}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?N^*_s&space;=&space;\frac{N_0}{1&plus;p_a&space;T_a}" title="N^*_s = \frac{N_0}{1+p_a T_a}" /></a>
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=N^*_a&space;=&space;\frac{N_0&space;p_a&space;T_a}{1&plus;p_a&space;T_a}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?N^*_a&space;=&space;\frac{N_0&space;p_a&space;T_a}{1&plus;p_a&space;T_a}" title="N^*_a = \frac{N_0 p_a T_a}{1+p_a T_a}" /></a>
+
+We consider the swarm performance metric. We have the following mean number of collaborations at iteration k :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=C(k)&space;=&space;p_{g2}&space;N_s&space;(k&space;-&space;T_{ca})&space;N_g&space;(&space;k&space;-&space;T_{ca})" target="_blank"><img src="https://latex.codecogs.com/gif.latex?C(k)&space;=&space;p_{g2}&space;N_s&space;(k&space;-&space;T_{ca})&space;N_g&space;(&space;k&space;-&space;T_{ca})" title="C(k) = p_{g2} N_s (k - T_{ca}) N_g ( k - T_{ca})" /></a>
+
+We have the following mean collaboration rate over T_e :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=C_t&space;(k)&space;=&space;\frac{&space;\sum_{k=0}^{T_e}&space;C(k)}{T_e}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?C_t&space;(k)&space;=&space;\frac{&space;\sum_{k=0}^{T_e}&space;C(k)}{T_e}" title="C_t (k) = \frac{ \sum_{k=0}^{T_e} C(k)}{T_e}" /></a>
+
+We have the following reduced macroscopic model :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=N_s(k&plus;1)&space;=&space;N_s(k)&space;-&space;p_{gl}[M_0&space;-&space;N_g(k)]&space;N_s(k)&space;&plus;&space;p_{g2}&space;N_g(k)N_s(k)&space;&plus;&space;p_{gl}&space;[M_0&space;-&space;N_g(k-T_g)]\Gamma(k;0)&space;N_s(k-T_g)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?N_s(k&plus;1)&space;=&space;N_s(k)&space;-&space;p_{gl}[M_0&space;-&space;N_g(k)]&space;N_s(k)&space;&plus;&space;p_{g2}&space;N_g(k)N_s(k)&space;&plus;&space;p_{gl}&space;[M_0&space;-&space;N_g(k-T_g)]\Gamma(k;0)&space;N_s(k-T_g)" title="N_s(k+1) = N_s(k) - p_{gl}[M_0 - N_g(k)] N_s(k) + p_{g2} N_g(k)N_s(k) + p_{gl} [M_0 - N_g(k-T_g)]\Gamma(k;0) N_s(k-T_g)" /></a>
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=N_g(k&plus;1)&space;=&space;N_0&space;-&space;N_s(k&plus;1)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?N_g(k&plus;1)&space;=&space;N_0&space;-&space;N_s(k&plus;1)" title="N_g(k+1) = N_0 - N_s(k+1)" /></a>
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=\Gamma&space;(k;0)&space;=&space;\prod_{j&space;=&space;k&space;-&space;T_g}^k&space;[1&space;-&space;p_{g2}&space;N_s(j)]" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\Gamma&space;(k;0)&space;=&space;\prod_{j&space;=&space;k&space;-&space;T_g}^k&space;[1&space;-&space;p_{g2}&space;N_s(j)]" title="\Gamma (k;0) = \prod_{j = k - T_g}^k [1 - p_{g2} N_s(j)]" /></a>
+
+We have that T^{opt}_g can be computed analytically as follows :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=T_g^{opt}&space;=&space;\frac{1}{ln(1&space;-&space;p_{g1}&space;R_g&space;\frac{N_0}{2})}&space;ln&space;\frac{1&space;-&space;\beta/2(1&plus;R_g)}{1-\beta/2}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?T_g^{opt}&space;=&space;\frac{1}{ln(1&space;-&space;p_{g1}&space;R_g&space;\frac{N_0}{2})}&space;ln&space;\frac{1&space;-&space;\beta/2(1&plus;R_g)}{1-\beta/2}" title="T_g^{opt} = \frac{1}{ln(1 - p_{g1} R_g \frac{N_0}{2})} ln \frac{1 - \beta/2(1+R_g)}{1-\beta/2}" /></a>
+
+Where here \beta = N_0 / M_0 is the ratio of robots to sticks. 
+
+**Week 7**
