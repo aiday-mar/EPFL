@@ -403,3 +403,29 @@ Faithful realistic simulators enable to explore design solution which encompasse
 
 **Week 9**
 
+Two fundamental reasons making robot control optimization expensive in terms of time: Time for evaluation of candidate solutions, Noisy performance evaluations disrupt the
+optimization process and require multiple evaluations for assessing the actual performance of a candidate solution. Suppose you want to reduce the evaluation time. You can exploit more abstracted, calibrated representations. Noise comes from sensors,
+actuators, initial conditions, other robots. Noise causes decreased convergence speed and residual error. In particular in a population-based optimization method (but similar
+mechanisms are applicable to hill-climbing evaluative learning), we want to dedicate more computational time to evaluate promising solutions and eliminate as quickly as possible the “lucky” ones.  Use dedicated functions for aggregating multiple evaluations: e.g., minimum and average or more generalized aggregation functions
+(e.g., quasi-linear weighted means), perhaps combined with a statistical test for comparing resulting aggregated performances. The Bernoulli noise model says that :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=f_i^b&space;(x)&space;=&space;\frac{f_i(x)}{\max&space;f_i}&space;&plus;&space;A&space;\cdot&space;B(p)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?f_i^b&space;(x)&space;=&space;\frac{f_i(x)}{\max&space;f_i}&space;&plus;&space;A&space;\cdot&space;B(p)" title="f_i^b (x) = \frac{f_i(x)}{\max f_i} + A \cdot B(p)" /></a>
+
+Extended-time optimization requires a fair test: same total evaluation time
+for all the algorithms. Hibrid optimization moves from high-fidelity simulation (Webots) to real robots after 90% of the total number of iterations. Noise-resistance helps manage transition. There are three axes for co-optimization : performance evaluation (individual vs group), solution sharing (private vs republic), team diversity (homogeneous vs heterogeneous). Heterogeneity allowed but eventually roughly homogeneous solution via shuffle around of candidate solutions. The distributed optimization has a new approach: distributed also the population manager on the robots (on-board) and share candidate solutions within the neighborhood through communication channels.
+
+Increasing Number of Robots: Impact of Noise Resistance. Performance decreases with
+number of robots (more difficult to avoid in overcrowded arenas). Noise-resistance make the difference in high density (i.e. noisier) scenarios. Impact of limited-time optimization : 1. Evaluation span include at least 1 interaction, 2. Swarm size = dimension of parameter space, 3. Use noise-resistant algorithms, 4. Dedicate max time budget to iterations. Consider the following PSO pbest algorithm :
+
+```
+Initialize particles
+For N_i iterations do
+  For N_p particles do
+    Update particle position
+    Evaluate particle
+    Re-evaluate personal best
+    Aggregate previous best
+    Share personal best
+  End for
+End for
+```
