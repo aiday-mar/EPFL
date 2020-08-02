@@ -429,3 +429,38 @@ For N_i iterations do
   End for
 End for
 ```
+
+Consider the third approach called OCBA :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=\frac{N_i}{N_j}&space;=&space;(\frac{\sigma_i&space;/&space;\delta_{b,i}}{\sigma_j&space;/&space;\delta_{b,j}}),&space;i&space;\neq&space;j&space;\neq&space;b" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\frac{N_i}{N_j}&space;=&space;(\frac{\sigma_i&space;/&space;\delta_{b,i}}{\sigma_j&space;/&space;\delta_{b,j}}),&space;i&space;\neq&space;j&space;\neq&space;b" title="\frac{N_i}{N_j} = (\frac{\sigma_i / \delta_{b,i}}{\sigma_j / \delta_{b,j}}), i \neq j \neq b" /></a>
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=N_b&space;=&space;\sigma_b&space;\sqrt{\sum_{i=1,&space;i&space;\neq&space;b}^k&space;\frac{N_i^2}{\sigma_i^2}}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?N_b&space;=&space;\sigma_b&space;\sqrt{\sum_{i=1,&space;i&space;\neq&space;b}^k&space;\frac{N_i^2}{\sigma_i^2}}" title="N_b = \sigma_b \sqrt{\sum_{i=1, i \neq b}^k \frac{N_i^2}{\sigma_i^2}}" /></a>
+
+Proven that maximizes probability of correct selection of best candidate b for infinite total number of samples (evaluations) T. Consider the following Centralized PSO OCBA.
+ 
+```
+Initialize particles
+For N_i iterations do
+  For N_p particles do
+    Evaluate new particle position n_0 times
+  End for
+  remaining budget := iteration budget - n_0 N_p
+  while remaining budget > 0 do
+    allocate delta samples among current positions and personal bests using OCBA
+    evaluate allocated samples
+    recalculate mean and variance for new evaluations
+    remaining budget := remaining budget - delta
+  end while
+  For N_p particles do
+    Update personal best
+    Update neighborhood best
+    Update particle position
+  End for
+End for
+```
+
+**Week 10**
+
+The division of labor and control.Talking about division of labor means that there is a potential redundancy in the role/contribution of individuals and coordination in
+role/task allocation helps in decreasing redundancy and increasing efficiency as a group. We have three castes : physical, temporal (temporal polyethism) and behavioral. Temporal polyethism says that young individuals work on internal tasks (brood care
+and nest maintenance). Older individuals forage for food and defend the nest. The flexibility of social roles : the number of individuals performing different tasks and the nature of the tasks to be done are subject to constant change in the course of the life of a colony.
