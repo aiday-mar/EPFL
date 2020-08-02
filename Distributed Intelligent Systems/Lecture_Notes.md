@@ -347,3 +347,59 @@ out/diverse in general are the vectors.
 
 **Week 8**
 
+There are metaheuristic methods. There are design and optimization techniques
+robust to noise, nonlinearities, discontinuities, non-convexity, multi-modal functions. There are different machine learning techniques. We have the classification axis 1 method. Here in supervised learning, training and test data are separated. In Unsupervised learning, no distinction between training and test data set; structure extraction from the data set. Reinforcement-based learning tries out possible design solutions, does mistakes, and tries to learn from its mistakes. The classification axis 2 says that there is in simulation techniques (reproduces the real scenario in simulation and applies there machine-learning techniques), hybrid, hardware-in-loop. There is a third classification axis : on-board, off-board (the machine-learning algorithm runs off-board and the system to be learned just serves as embodied
+implementation of a candidate solution). The fourth classification axis says that : it can be population-based (population of candidate solutions is maintained by the algorithm, for instance Genetic Algorithms (individuals), Particle Swarm Optimization (particles), Particle Filter (particles), Ant Colony Optimization (ants/tours)), or it can be hill-climbing (the machine-learning algorithm work on a single candidate solution and try to improve on it).
+
+There is particle swarm optimization, it is a competitive metaheuristic especially on
+continuous optimization problems, it appears to deliver competitive results with
+population sizes smaller than those of other metaheuristic methods. We have the following terminology related to particle swarm optimization.
+
+- Swarm: pool of candidate solutions tested in one time step, consists of m
+particles (typical # of particles: 20 to 50).
+- Particle: represents a candidate solution; it is characterized by a velocity vector
+v and a position vector x in the hyperspace of dimension D.
+- Neighborhood: set of particles with which a given particle share performance
+information
+- Iteration: at the end of an iteration, a new pool of candidate solutions after the
+metaheuristic operators have been applied is available (typical # of iterations:
+50, 100, 1000).
+- Fitness function: measurement of efficacy of a given candidate solution during
+the evaluation span.
+- Evaluation span: evaluation period of each candidate solution during a single
+time step (algorithm iteration); the evaluation span might take more or less time
+depending on the experimental scenario.
+- Life span: number of iterations a candidate solution is present in the pool.
+- Swarm manager: update velocities and position for each particle according to
+the main PSO loop
+
+The main PSO loop says that :
+
+```
+At each iteration t
+  At each particle i
+    For each component j
+      Update the velocity as follows
+```
+<a href="https://www.codecogs.com/eqnedit.php?latex=v_{ij}(t&plus;1)&space;=&space;w&space;v_{ij}(t)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?v_{ij}(t&plus;1)&space;=&space;w&space;v_{ij}(t)" title="v_{ij}(t+1) = w v_{ij}(t)" /></a>
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=c_p&space;rand()(x_{ij}^*&space;-&space;x_{ij})&space;&plus;&space;c_n&space;rand()&space;(x_{i'j}^*&space;-&space;x_{ij})" target="_blank"><img src="https://latex.codecogs.com/gif.latex?c_p&space;rand()(x_{ij}^*&space;-&space;x_{ij})&space;&plus;&space;c_n&space;rand()&space;(x_{i'j}^*&space;-&space;x_{ij})" title="c_p rand()(x_{ij}^* - x_{ij}) + c_n rand() (x_{i'j}^* - x_{ij})" /></a>
+```
+      The move to :
+```
+<a href="https://www.codecogs.com/eqnedit.php?latex=x_{ij}(t&plus;1)&space;=&space;x_{ij}(t)&space;&plus;&space;v_{ij}(t&plus;1)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?x_{ij}(t&plus;1)&space;=&space;x_{ij}(t)&space;&plus;&space;v_{ij}(t&plus;1)" title="x_{ij}(t+1) = x_{ij}(t) + v_{ij}(t+1)" /></a>
+
+There are different neighborhood types : local (only k neighbors considered over m particles in the population) and global. There are also genetic algorithms, it is designed for discrete optimization problems. The inspiration is from natural evolution, where organisms adapt to their environments – better able to survive over time. There are three aspects of the evolution : Survival of the fittest, Genetic combination in reproduction, Mutation. The generation loop says that : the crossover mutation leads to population replenishment which leads to the decoding of the genotype to the phenotype, which leads to fitness measurements and encoding, which leads to the selection and again to the crossover mutation. GA still much more widely used in general research community and robust to continuous and discrete optimization problems. We now define performance, in obstacle avoidance.
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=\phi&space;=&space;V(1-\sqrt{\Delta&space;V})(1-i)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\phi&space;=&space;V(1-\sqrt{\Delta&space;V})(1-i)" title="\phi = V(1-\sqrt{\Delta V})(1-i)" /></a>
+
+Where V is the main speed of the wheels, delta V is the absolute algebraic difference between the wheel speeds, i is the activation value of the sensor with the
+highest activity. Controller architecture can be of any type but worth using
+GA/PSO if the number of parameters to be tuned is important. Suppose you want to evolve homing behavior. Then the fitness function is given by :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=\phi&space;=&space;V(1-i)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\phi&space;=&space;V(1-i)" title="\phi = V(1-i)" /></a>
+
+Faithful realistic simulators enable to explore design solution which encompasses co-evolution (co-design) of control and morphological characteristics (body shape, number of sensors, placement of sensors, etc. ).
+
+**Week 9**
+
