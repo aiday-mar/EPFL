@@ -463,4 +463,18 @@ End for
 
 The division of labor and control.Talking about division of labor means that there is a potential redundancy in the role/contribution of individuals and coordination in
 role/task allocation helps in decreasing redundancy and increasing efficiency as a group. We have three castes : physical, temporal (temporal polyethism) and behavioral. Temporal polyethism says that young individuals work on internal tasks (brood care
-and nest maintenance). Older individuals forage for food and defend the nest. The flexibility of social roles : the number of individuals performing different tasks and the nature of the tasks to be done are subject to constant change in the course of the life of a colony.
+and nest maintenance). Older individuals forage for food and defend the nest. The flexibility of social roles : the number of individuals performing different tasks and the nature of the tasks to be done are subject to constant change in the course of the life of a colony. A threshold-based behavioral response appears to be a biologically
+plausible mechanism for achieving the flexibility of social roles. The lower the threshold, the lower can be the stimulus for achieving a given response; respectively, the lower the threshold, the higher will be the response of an individual for a given stimulus. The ratio of the majors in a colony artificially increased. Majors replace missing minors confirming the idea of the response threshold. Use a model to explain the wilson's results. Here you have a nonspatial model, i.e. equiprobable exposure of individuals to the stimuli associated with the task and stimulus homogeneously distributed over space. Below we have the dynamics of the fraction of active individuals in each caste:
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=\frac{dx}{dt}&space;=&space;\frac{s^2}{s^2&space;&plus;&space;\theta_1^2}(1-x_1)&space;-&space;r_a&space;x_1" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\frac{dx}{dt}&space;=&space;\frac{s^2}{s^2&space;&plus;&space;\theta_1^2}(1-x_1)&space;-&space;r_a&space;x_1" title="\frac{dx}{dt} = \frac{s^2}{s^2 + \theta_1^2}(1-x_1) - r_a x_1" /></a>
+
+Here s is the intensity of the stimuli associated with the task. Then \theta_i is the  response threshold of caste i to the task. r_a is the rate of task abandoning (i.e. probability per infinitesimal time interval that an active individual abandons the task on which it is engaged for moving to idle). Then we have the dynamics of demand associated with the task :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=\frac{ds}{dt}&space;=&space;\delta&space;-&space;\frac{\alpha}{N}(n_1&space;&plus;&space;n_2)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\frac{ds}{dt}&space;=&space;\delta&space;-&space;\frac{\alpha}{N}(n_1&space;&plus;&space;n_2)" title="\frac{ds}{dt} = \delta - \frac{\alpha}{N}(n_1 + n_2)" /></a>
+
+Where \delta is the rate of the stimulus increase, and \alpha is the normalized effectiveness rate for the individual contribution on the task (in this case an active individual of type 1 contribute in the same way as an active individual of type 2 when performing the task). Polists are primitive eusocial species. These species do not show morphological differences between castes in the adult stages, nor any control or physiological determination of the role an individual will play in the colony as an adult. The integration and coordination of individual activities is achieved through
+the interactions which occur between the members of the colony, and between
+the members of the colony and the local environment. The lower the threshold, the lower can be the stimulus for achieving a given response; respectively, the lower the threshold, the higher will be the response of an individual for a given stimulus.
+
+Individual behavioral algorithm
+
