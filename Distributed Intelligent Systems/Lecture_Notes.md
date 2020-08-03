@@ -494,6 +494,19 @@ The task allocation problem and solution depend heavily on the task description.
 
 **Week 11**
 
+Wireless sensor networks will enable spatially and temporally dense environmental monitoring, will enable precise, realtime alarm triggering. The sensorscope for example measures the temperature, the humidity, the precipitation, the solar radiation, the soil moisture. The sensorscopes are connected to a general packet radio service. But the closest server access point may be quite far from the stations. The Friis law says that:
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=\frac{P_t}{P_r}&space;\propto&space;(\frac{4&space;\pi&space;d}{\lambda})^2" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\frac{P_t}{P_r}&space;\propto&space;(\frac{4&space;\pi&space;d}{\lambda})^2" title="\frac{P_t}{P_r} \propto (\frac{4 \pi d}{\lambda})^2" /></a>
+
+The pros of multi-hop WSNs are that : only one car battery in the network, extended spatial coverage of the network, multiple routes for stations to communicate with the sink, auto configurable network (robustness). Multi-hop WSNs implementation is : neighborhood discovery followed by data routing, followed by time synchronization, followed by duty-cycling. The time synchronization says that weather conditions, especially temperature and humidity, may have a significant effect on hardware. Time synchronization, says that nodes need to know the time to timestamp packets, synchronize actions. How do we get time, fully decentralized (every node gets the time itself), partially centralized (time is propagated from reference nodes).
+
+Energy saving is a crucial driver for the design of WSN. Sensing data are typically only collected for a particular application and rarely used to control node actions: WSN are
+typically data-agnostic! The modified Friis law says that :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=\frac{P_t}{P_r}&space;=&space;G_t&space;G_r&space;(\frac{\lambda}{4&space;\pi})^2&space;(\frac{1}{R})^n" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\frac{P_t}{P_r}&space;=&space;G_t&space;G_r&space;(\frac{\lambda}{4&space;\pi})^2&space;(\frac{1}{R})^n" title="\frac{P_t}{P_r} = G_t G_r (\frac{\lambda}{4 \pi})^2 (\frac{1}{R})^n" /></a>
+
+Low power listening protocols are key for saving power. Is there a way to make a stronger overlap between WSN and DIS, in particular more closed-loop control at the node level, more distributed control at the network level? The quadtree is a hierarchical topology, we have bottom-up measurements and top-down control. Consider the state machine, it says that there is a layer increment: if all child nodes are processed, an idle node: if pruned by clusterhead, and Data: clusterhead replaces pruned children.
+
 **Week 12**
 
 **Week 13**
