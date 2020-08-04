@@ -508,5 +508,6 @@ typically data-agnostic! The modified Friis law says that :
 Low power listening protocols are key for saving power. Is there a way to make a stronger overlap between WSN and DIS, in particular more closed-loop control at the node level, more distributed control at the network level? The quadtree is a hierarchical topology, we have bottom-up measurements and top-down control. Consider the state machine, it says that there is a layer increment: if all child nodes are processed, an idle node: if pruned by clusterhead, and Data: clusterhead replaces pruned children. Now we study the spatiotemporal suppression of data reporting. We save communication energy via efficient reporting. Temporal suppression is when you ask yourself : has my value changed recently ? Spatial suppression is when you ask : are my neighbors reporting similar measurements ? The suppression-based algorithm says there is constraint chaining.
 
 **Week 12**
+We study the motivation for dense sensing and the mobility in environmental monitoring. Some examples of mobile sensor networks : pipeprobe (a mobile sensor droplet for mapping the hidden pipeline). 
 
 **Week 13**
