@@ -137,3 +137,40 @@ x_hat = B @ coeffs[:freq_to_keep]
 x_hat2 = basesNullspaceA @ coeffs[freq_to_keep:] + A2.T @ np.linalg.inv(A2 @ A2.T) @ y2 
 #consistent solution closest to R(B)
 ```
+
+Now we plot both estimators :
+
+```
+fig, ax = plt.subplots(3, 2, figsize = (20, 15))
+# since there are 3 by 2 subplots this means that we have three rows and two columns of different subplots
+ax[0][0].plot(t, x)
+ax[0][1].plot(t2, y2)
+ax[0][0].set_title('Original (x)')
+ax[0][1].set_title('Downsampled and blurred (y)')
+ax[1][0].plot(t, x_hat)
+ax[1][1].plot(t, np.real(x_hat2))
+ax[1][0].set_title('Point in R(B) that is closest to affine subspace of consistent solutions')
+ax[1][1].set_title('Point in affine subspace of consistent solutions that is closest to R(B)')
+ax[2][0].plot(t, np.real(x_hat)-x)
+ax[2][1].plot(t, np.real(x_hat2)-x)
+ax[2][0].set_title('Error for point in R(B) that is closest to affine subspace of consistent solutions')
+ax[2][1].set_title('Error for point in affine subspace of consistent solutions that is closest to R(B)')
+plt.show()
+print('MSE for point in R(B) that is closest to affine subspace of consistent solutions is', np.mean((x-x_hat)**2))
+print('MSE for point in affine subspace of consistent solutions that is closest to R(B) is', np.mean((x-x_hat2)**2))
+```
+
+Now let's look at a 2D version of tomography :
+
+```
+N = 64
+# Read an image from a file into an array.
+image = imread(data_dir + "/phantom.png", as_gray=True)
+image = rescale(image, (N / image.shape[0], N / image.shape[1]), mode='constant', multichannel = False)
+
+plt.imshow(image, interpolation='None')
+plt.gray()
+```
+As explained in class, in X-ray tomography, x-rays are fired through the object at different angles and the transmission is measured at the other side. To simulate these measurements, we want to be able to compute integrals at different angles. For example, it is very easy to do this horizontally and vertically by just summing the pixels.
+
+```
