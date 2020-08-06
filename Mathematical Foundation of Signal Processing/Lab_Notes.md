@@ -98,3 +98,42 @@ B = dct(np.eye(N)) #create an NxN DCT matrix
 # we select all the rows and then all the columns until the M+1 column
 B = B[:, :M] 
 ```
+
+Estimate x by projecting onto the range of \beta while maintaining consistency. We have the following code :
+
+```
+x_hat = B @ np.linalg.inv(A2 @ B) @ y2
+fig, ax = plt.subplots(1, 2, figsize = (15, 5))
+ax[0].plot(t, x)
+ax[1].plot(t, np.real(x_hat))
+ax[0].set_title('Original')
+ax[1].set_title('Oblique projection onto R(B) - Consistent')
+plt.show()
+print('MSE is', np.mean((x-x_hat)**2))
+```
+
+We have the following code :
+
+```
+# we will find both the solution in R(B) that is closest to the affine subspace of consistent solutions
+# and the solution in the affine subspace of consistent solutions that is closest to R(B)
+
+freq_to_keep = 120
+B = dct(np.eye(N))
+B = B[:, :freq_to_keep] #remove all cols after freq_to_keep to only keep the freq_to_keep lowest frequencies
+# where here basically we select all the rows but only select the first columns up to the column frq_to_keep
+
+U, s, Vh = np.linalg.svd(A2) #take the SVD of A2 so that we can abstract a bases for its null space
+basesNullspaceA = Vh[len(s):, :].T #abstract the null space
+# where we select only the row starting from the row given by index len(s) and all the columns 
+T = np.hstack([B, -basesNullspaceA]) #concatenate a bases for B with a bases for the null space of A
+
+coeffs = np.linalg.inv(T.T@T) @ T.T @ A2.T @ np.linalg.inv(A2@A2.T) @ y2 
+# solve the least squares problem (first 2*half_len coeffs are for B and the rest for the null space of A)
+# here we take the transpose of matrix T, then we take the matrix product with the matrix T
+# below we take the columns from the beginning to the column freq_to_keep
+x_hat = B @ coeffs[:freq_to_keep] 
+# point in R(B) that is closest to affine subspace of consistent solutions
+x_hat2 = basesNullspaceA @ coeffs[freq_to_keep:] + A2.T @ np.linalg.inv(A2 @ A2.T) @ y2 
+#consistent solution closest to R(B)
+```
