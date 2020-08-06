@@ -81,4 +81,20 @@ ax[1].set_title('Estimate (x_hat)')
 plt.show()
 print('Mean squared error (MSE) is', np.mean((x-x_hat)**2))
 ```
-Where here we are considering the mean of the difference of the two vectors where you take all the elements to the power of two.
+Where here we are considering the mean of the difference of the two vectors where you take all the elements to the power of two. We verify that the estimator is correct as follows :
+
+```
+# Since we used a right inverse, we should have consistency: let's check
+plt.plot(t2,A2 @ x)
+plt.plot(t2,A2 @ x_hat)
+```
+Below we use the discrete cosine transform matrix :
+
+```
+# construct matrix B so R(B) is M lowest frequencies 
+# the shape returns two parameters for the number of rows and columns of the matrix 
+[M, N] = A2.shape
+B = dct(np.eye(N)) #create an NxN DCT matrix
+# we select all the rows and then all the columns until the M+1 column
+B = B[:, :M] 
+```
