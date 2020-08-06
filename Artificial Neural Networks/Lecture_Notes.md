@@ -840,3 +840,77 @@ and also the transition probabilities. The advantages of model-based reinforceme
 
 **Week 11**
 
+There are different deep reinforcement learning methods, classified in different ways. Usually we train deep neural networks with independent and identically distributed mini-batches of training data. Temporally correlated weight updates can cause large weight changes ⇒ potentially unstable learning. Reshuffling weight updates helps to prevent this ⇒ reshuffling stabilizes learning. On-policy deep reinforcement learning says that we run multiple agents (e.g. 16) and
+environment simulations with different random seeds in parallel (ideally, every agents sees a different observation at any moment in time). The off-policy deep reinforcement learning says that you put many (e.g. 1M) experiences (observation, action, reward) of a single agent into replay buffer (a first-in-first-out memory buffer). We have the following deep Q-network DQN :
+
+```
+Initialize the neural network Q_{\theta} and empty replay buffer R
+Set target Q <- Q_{\theta}, counter t <- 0, observe s_0
+repeat 
+  Take action a_t and observe reward r_t and next state s_{t+1}
+  Store the following (s_t, a_t, r_t, s_{t+1}) in R
+  Sample random minibatch of transitions (s_j, a_j, r_j, s_{j+1}) from R
+  Update \theta with gradient of \sum_j (r_j + max_{a'} Q(s_{j+1}, a') - Q_{\theta} (s_j, a_j))^2
+  Increment t and reset Q <- Q_{\theta} every C steps
+Until some termination criterion is met
+return Q_{\theta}
+```
+
+There are pros and cons of On- and Off-Policy Deep RL. The pros are that there is a lower sample complexity, fewer interactions with the environment are needed, because experiences in the replay buffer can be used multiple times. But you need to story many experiences in the replay buffer. In the On-Policy Deep RL we have that a con is there is a higher sample complexity because the old experiences cannot be use to update a policy that has already changed. A positive aspect is that there is a lower memory complexity, only the current observations, actions and rewards of the parallel agents are kept to update the policy. Deep reinforcement learning for continuous control says that the standard policy gradient could be applied, but it is difficult to find hyper-parameter settings such that learning is neither unstable nor very slow.
+
+Consider the following proximal policy optimization. We have :
+
+```
+Initialize neural networks \pi_{\theta} and V_{\phi}
+Set counter t <- 0. observe s_0
+Repeat :
+  For all workers k=1...K do
+    Take action a_t^{(k)} and observer reward r_t^{(k)} and next state s_{t+1}^{(k)}
+    Compute R_t^{(k)} = r_t^{(k)} + \gamma V_{\phi} (s_{t+1}^{(k)}) and advantage A_t^{(k)} = R_t^{(k)} - V_{\phi} (s_t^{(k)})
+  End for
+  Optimize surrogate loss (TRPO or PPO-cLIP) wrt. \theta' with M epochs.
+  Update \phi with gradient of \sum_k (R_t^{(k)} - V_{\phi}(s_t^{(k)}))^2
+  Increment t.
+until some termination criterion is met.
+return \pi_{\theta} and V_{\phi}
+```
+
+One can improve the stability and sample efficiency of policy gradient methods by
+maximizing in an inner loop a surrogate objective function, like the one of TRPO or PPO-CLIP. With the update of policy gradient \theta' = \theta + \alpha \triangledown J(\theta) and a fixed learning rate \theta, J(\theta') = J(\theta) will always be positive. In proximal policy optimization methods we want to keep the ratio r_{\theta'} = \pi_{\theta'}(a_t; s_t)/ \pi_{\theta}(a_t;s_t) close to one, such that the state visitation probabilities p_{\theta}(s_t) and p_{\theta'}(s_t) are roughly the same. A2C uses each minibatch once to update the policy, whereas proximal policy methods use each minibatch multiple times, usually. In DQN for discrete actions the Q-values for Na actions are given as the activity of Na
+output neurons of a neural network with parameters θ and input given by the state s. Proposed solution: use a policy network π_ψ(s) that maps deterministically states s to continuous actions a. Learn to encode images as discrete states (similar images o, same discrete state s). Whenever the agent learns something new about the environment (P^a_{s→s} or R^a_{s→s} changes), update offline the policy by running (a smart version of) value iteration.
+
+In model-based reinforcement learning we can use background planning to
+update the Q- and V-values efficiently (e.g. by value iteration), if the number of
+states and actions is not too large. Learned abstractions may be useful to map high dimensional states (like images) to discrete states that can be used with standard planning methods. There is the monte-carlo tree searcg which requires four steps that are iterated many times before choosing an actual action. We have the following AlphaZero algorithm :
+
+```
+Each state-action pair (s,a) stores the visit counts N(s,a), the total action value W(s,a), the mean action value Q(s,a) and the prior action probabilitiy P(s,a)
+
+1. Selection 
+```
+<a href="https://www.codecogs.com/eqnedit.php?latex=a_t&space;=&space;\arg&space;\max_a&space;Q(s_t,&space;a)&space;&plus;&space;P(s_t,&space;a)&space;C(s)&space;\sqrt{N(s_t)}/(1&space;&plus;&space;N(s_t,&space;a))" target="_blank"><img src="https://latex.codecogs.com/gif.latex?a_t&space;=&space;\arg&space;\max_a&space;Q(s_t,&space;a)&space;&plus;&space;P(s_t,&space;a)&space;C(s)&space;\sqrt{N(s_t)}/(1&space;&plus;&space;N(s_t,&space;a))" title="a_t = \arg \max_a Q(s_t, a) + P(s_t, a) C(s) \sqrt{N(s_t)}/(1 + N(s_t, a))" /></a>
+```
+With the exploration rate :
+```
+<a href="https://www.codecogs.com/eqnedit.php?latex=C(s)&space;=&space;\log((1&space;&plus;&space;N(s)&space;&plus;&space;c_{base})/c_{base})&space;&plus;&space;c_{init}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?C(s)&space;=&space;\log((1&space;&plus;&space;N(s)&space;&plus;&space;c_{base})/c_{base})&space;&plus;&space;c_{init}" title="C(s) = \log((1 + N(s) + c_{base})/c_{base}) + c_{init}" /></a>
+```
+2. Expansion of lead node s_L, initialize as follows :
+```
+<a href="https://www.codecogs.com/eqnedit.php?latex=N(s_L,&space;a)&space;=&space;W(s_L,&space;a)&space;=&space;Q(s_L,&space;a)&space;=&space;0" target="_blank"><img src="https://latex.codecogs.com/gif.latex?N(s_L,&space;a)&space;=&space;W(s_L,&space;a)&space;=&space;Q(s_L,&space;a)&space;=&space;0" title="N(s_L, a) = W(s_L, a) = Q(s_L, a) = 0" /></a>
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=p(s_L,&space;a)&space;=&space;p_a" target="_blank"><img src="https://latex.codecogs.com/gif.latex?p(s_L,&space;a)&space;=&space;p_a" title="p(s_L, a) = p_a" /></a>
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=(p,v)&space;=&space;f_{\theta}(s_L)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?(p,v)&space;=&space;f_{\theta}(s_L)" title="(p,v) = f_{\theta}(s_L)" /></a>
+```
+3. No simulation
+
+4. Backprop
+```
+<a href="https://www.codecogs.com/eqnedit.php?latex=N(s_t,&space;a_t)&space;=&space;N(s_t,&space;a_t)&space;&plus;&space;1" target="_blank"><img src="https://latex.codecogs.com/gif.latex?N(s_t,&space;a_t)&space;=&space;N(s_t,&space;a_t)&space;&plus;&space;1" title="N(s_t, a_t) = N(s_t, a_t) + 1" /></a>
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=W(s_t,&space;a_t)&space;=&space;W(s_t,&space;a_t)&space;&plus;&space;v" target="_blank"><img src="https://latex.codecogs.com/gif.latex?W(s_t,&space;a_t)&space;=&space;W(s_t,&space;a_t)&space;&plus;&space;v" title="W(s_t, a_t) = W(s_t, a_t) + v" /></a>
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=Q(s_t,&space;a_t)&space;=&space;\frac{W(s_t,&space;a_t)}{N(s_t,&space;a_t)}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?Q(s_t,&space;a_t)&space;=&space;\frac{W(s_t,&space;a_t)}{N(s_t,&space;a_t)}" title="Q(s_t, a_t) = \frac{W(s_t, a_t)}{N(s_t, a_t)}" /></a>
+
+Here is how MuZero trains its model, we have : a trajectory is sampled from the replay buffer. For the initial step, the representation function h receives as input the past observations o_1, . . . , o_t from the selected trajectory. The model is subsequently unrolled recurrently for K steps. At each step k, the dynamics function g receives as input the hidden state s^(k−1) from the previous step and the real action a_{t+k}. The parameters of the representation, dynamics and prediction functions are jointly trained, end-to-end by backpropagation-through-time, to predict three quantities: the policy p^(k) ≈ π_{t+k}, value function v^(k) ≈ z_{t+k}, and reward r^(t+k) ≈ u_{t+k}, where z_{t+k} is a sample
+return: either the final reward (board games) or n-step return (Atari).
