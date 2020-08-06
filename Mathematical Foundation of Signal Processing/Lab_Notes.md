@@ -174,3 +174,38 @@ plt.gray()
 As explained in class, in X-ray tomography, x-rays are fired through the object at different angles and the transmission is measured at the other side. To simulate these measurements, we want to be able to compute integrals at different angles. For example, it is very easy to do this horizontally and vertically by just summing the pixels.
 
 ```
+# lets sum the columns to give the projection for x-rays fired vertically
+# and sum the rows to give the projection for x-rays fired horizontally
+fig, ax = plt.subplots(1, 2, figsize = (20, 5))
+ax[0].plot(np.sum(image, 0))
+ax[1].plot(np.sum(image, 1))
+ax[0].set_title('Sum of columns')
+ax[1].set_title('Sum of rows')
+
+# Lets vectorise the image into a vector x
+x = image.reshape(N*N)
+print(x.shape)
+```
+
+Where we print the shape of the vector into the console. We then have the following code :
+
+```
+A = []
+for col in range(N):
+    # where we have an N x N matrix of zeroes 
+    mask = np.zeros([N, N])
+    # where we have all the rows and essentially column col, but why do we assign it the value 1 ?
+    mask[:, col] = 1
+    A.append(mask.reshape(N*N))
+# meaning that now this python array is simply converted to a numpy array 
+A = np.array(A)
+
+# Let visualise a few rows from A (change the value of row and check things make sense)
+print('The dimensions of A are',A.shape)
+row = 10
+# where below we have the given row and then all the columns
+plt.imshow(A[row, :].reshape(N, N))
+
+# And we can recalculate the sum of the columns using A (we should get the same as we did before)
+plt.plot(A@x)
+```
