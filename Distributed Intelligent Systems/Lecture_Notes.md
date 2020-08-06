@@ -512,3 +512,4 @@ We study the motivation for dense sensing and the mobility in environmental moni
 
 **Week 13**
 
+We have different types of algorithms : casting, surge spiral, surge cast, crosswind formation, probabilisti odor compass, probabilistic robotic search. The behavioral approach can be a formation control (where you stay in formation), upwind movement (go towards the source), plume centering (stay in the plume). There are algorithm modifications for wind tunnel experiments : scaling factor, range averaging, collision avoidance. A mission example is as follows : measuring within a thin stratified bacterial layer, varying depth and thickness, high resolution temperature measurements within the layer to capture bacterial activity, added value of an AUV in respect to traditional instruments.
