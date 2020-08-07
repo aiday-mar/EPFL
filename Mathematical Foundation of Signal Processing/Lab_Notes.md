@@ -407,12 +407,14 @@ def tube_decomposition(N_detector):
     # The tolerance values are positive, typically very small numbers. 
     # The relative difference (rtol * abs(b)) and the absolute difference atol are added together 
     # to compare against the absolute difference between a and b.
+    # the tilde symbol probably means that we are taking the negation of the boolean value 
     mask = ~np.isclose(w, 0)
     xi, p, w = xi[mask], p[mask], w[mask]
-
+    
+    # returning simulatenously four values 
     return detector, xi, p, w
 
-
+# the last argument has a default value 
 def sampling_op(xi, p, w, N_height, N_width, window_profile='raised-cosine'):
     """
     Numerical approximation of continuous-domain sampling operator.
@@ -439,12 +441,17 @@ def sampling_op(xi, p, w, N_height, N_width, window_profile='raised-cosine'):
         the instrument (vectorized row-by-row).
     """
     ### Generate grid
+    # Return coordinate matrices from coordinate vectors.
+    # Make N-D coordinate arrays for vectorized evaluations of N-D scalar/vector
+    # fields over N-D grids, given one-dimensional coordinate arrays x1, x2,…, xn.
     Y, X = np.meshgrid(np.linspace(-1, 1, N_height), 
                        np.linspace(-1, 1, N_width), indexing='ij')
     V = np.stack((X, Y), axis=-1).reshape((N_height * N_width, 2))
     
-    # We only want a regular grid on the circumcircle, hence we throw away
-    # all vectors that lie outside the unit circle.
+    # We only want a regular grid on the circumcircle, hence we throw away all vectors that lie outside the unit circle.
+    # If axis is an integer, it specifies the axis of x along which to compute the vector norms. 
+    # If axis is a 2-tuple, it specifies the axes that hold 2-D matrices, and the matrix norms of these matrices are computed. 
+    # If axis is None then either a vector norm (when x is 1-D) or a matrix norm (when x is 2-D) is returned. The default is None.
     V[linalg.norm(V, axis=-1) >= 1] = 0
 
     def window(x):
@@ -458,16 +465,20 @@ def sampling_op(xi, p, w, N_height, N_width, window_profile='raised-cosine'):
         y : :py:class:`~numpy.ndarray`
             (N_sample,) values of window at `x`.
         """
+        # Return an array of zeros with the same shape and type as a given array.
         y = np.zeros_like(x, dtype=float)
         
         if window_profile == 'rect':
             # rect(x) = 1 if (-0.5 <= x <= 0.5)
             mask = (-0.5 <= x) & (x <= 0.5)
+            # isn't mask here a boolean ?
             y[mask] = 1
         elif window_profile == 'tri':
             # tri(x) = 1 - abs(x) if (-1 <= x <= 1)
             mask = (-1 <= x) & (x <= 1)
+            # the absolute value function is part of the numpy library 
             y[mask] = 1 - np.abs(x[mask])
+        # elif means else if 
         elif window_profile == 'raised-cosine':
             # rcos(x) = cos(0.5 * \pi * x) if (-1 <= x <= 1)
             mask = (-1 <= x) & (x <= 1)
@@ -479,17 +490,21 @@ def sampling_op(xi, p, w, N_height, N_width, window_profile='raised-cosine'):
 
 
     N_tube = len(xi)
+    # Row-based linked list sparse matrix
     S = sparse.lil_matrix((N_tube, N_height * N_width), dtype=float)
+    # Instantly make your loops show a smart progress meter - just wrap any iterable with tqdm(iterable), and you're done!
     for i in tqdm.tqdm(np.arange(N_tube)):
         projection = V @ xi[i]
         x = (projection - p[i]) * (2 / w[i])
-        mask = ((np.abs(x) <= 1)         &  # inner/outer boundary
-                ~np.isclose(projection, 0))    # circular boundary
+        mask = ((np.abs(x) <= 1)        
+                ~np.isclose(projection, 0)) 
+        # Return the indices of the elements that are non-zero.
         S[i, mask.nonzero()] = window(x[mask])
-        
+    
+    # Convert this matrix to Compressed Sparse Row format. 
+    # Duplicate entries will be summed together.
     S = S.tocsr(copy=True)
     return S
-
 
 def draw_tubes(S, N_height, N_width, idx, ax):
     """
@@ -511,16 +526,19 @@ def draw_tubes(S, N_height, N_width, idx, ax):
     -------
     ax : :py:class:`~matplotlib.axes.Axes`
     """
+    # gives the length of the vector now 
     N_tube_wanted = len(idx)
 
     tubes = S[idx, :]
+    # Is tubes of a sparse matrix type?
     if sparse.issparse(tubes):
         tubes = tubes.toarray()
         
     tubes = (tubes
              .reshape((N_tube_wanted, N_height, N_width))
              .sum(axis=0))
-
+    # in the above you sum along an axis as follows :
+    # https://stackoverflow.com/questions/41733479/sum-along-axis-in-numpy-array
     ax.get_xaxis().set_visible(False) 
     ax.get_yaxis().set_visible(False)
     ax.set_title('Detector Tubes')
@@ -550,15 +568,21 @@ def get_intensity(path_img, N_height, N_width, pad_size, max_rate=1e6):
         (N_height, N_width) intensity.
     """
     lambda_rgb = plt.imread(path_img).astype(float)
+    # This example converts an image with RGB channels into an image with a single grayscale channel.
     lambda_ = color.rgb2gray(lambda_rgb)
     
     # We pad the image with zeros so that the mask does not touch the detector ring.
+    # the first argument is the array to pad and then you have the pad size 
     lambda_ = np.pad(lambda_, pad_size, mode='constant')
+    # Resize image to match a certain size.
+    # Performs interpolation to up-size or down-size N-dimensional images. 
+    # Note that anti-aliasing should be enabled when down-sizing images to avoid aliasing artifacts. 
+    # For down-sampling with an integer factor also see skimage.transform.downscale_local_mean.
     lambda_ = transform.resize(lambda_, (N_height, N_width), order=1, mode='constant')
+    # maybe the max() method returns the maximal element in the array ? 
     lambda_ *= max_rate / lambda_.max()  # (N_height, N_width)
 
     return lambda_
-
 
 def sinogram(xi, p, N, ax):
     r"""
@@ -578,23 +602,30 @@ def sinogram(xi, p, N, ax):
     -------
     ax : :py:class:`~matplotlib.axes.Axes`
     """
+    
     N_tube = len(xi)
+    # Evenly round to the given number of decimals.
     theta = np.around(np.arctan2(*xi.T), 3)
     N = N.astype(float) / N.max()
-
+    
+    # not sure what the below does 
     cmap = cm.RdBu_r
     ax.scatter(theta, p, s=N*20, c=N, cmap=cmap)
 
     ax.set_xlabel('theta [rad]')
+    # here we must have the lower and the upper limit 
     ax.set_xlim(-np.pi / 2, np.pi / 2)
     ax.set_ylabel('p')
     ax.set_ylim(-1, 1)
 
     ax.set_title('Sinogram')
     ax.axis(aspect='equal')
-
+    
+    # This is a mixin class to support scalar data to RGBA mapping. 
+    # The ScalarMappable makes use of data normalization before returning RGBA colors from the given colormap.
     mappable = cm.ScalarMappable(cmap=cmap)
     mappable.set_array(N)
+    # Add a colorbar to a plot
     ax.get_figure().colorbar(mappable)
     
     return ax
@@ -661,6 +692,8 @@ def least_squares(S, N, regularize=False):
     """
     P = S.T  # (N_px, N_tube)  # sampling operator adjoint
     G = (S @ P).toarray()
+    # Returns two objects, a 1-D array containing the eigenvalues of a, and a 2-D square array or matrix 
+    # (depending on the input type) of the corresponding eigenvectors (in columns).
     D, V = linalg.eigh(G)
 
     if regularize:
@@ -670,8 +703,16 @@ def least_squares(S, N, regularize=False):
         D, V = D[~mask], V[:, ~mask]
         
         # In addition, we will only keep the spectral components that account for 95% of \norm{G}{F}
+        # Perform an indirect sort along the given axis using the algorithm specified by the kind keyword. 
+        # It returns an array of indices of the same shape as a that index data along the given axis in sorted order.
+        # indices put into order so that corresponding values are increasing. Then after it seems like we are selecting the last column of the array.
+        # https://stackoverflow.com/questions/17901218/numpy-argsort-what-is-it-doing
         idx = np.argsort(D)[::-1]
         D, V = D[idx], V[:, idx]
+        # numpy.clip() function is used to Clip (limit) the values in an array.
+        # Given an interval, values outside the interval are clipped to the interval edges. 
+        # For example, if an interval of [0, 1] is specified, values smaller than 0 become 0, and values larger than 1 become 1.
+        # then within this clipped set of elements in a vector we find the indices where the result is furthermore smaller than 0.95
         mask = np.clip(np.cumsum(D) / np.sum(D), 0, 1) <= 0.95
         D, V = D[mask], V[:, mask]
 
@@ -701,16 +742,20 @@ def kaczmarz(S, N, N_iter, permute=False, I0=None):
     I : :py:class:`~numpy.ndarray`
         (N_px,) vectorized image
     """
+    # the shape returns two values 
     N_tube, N_px = S.shape
 
+    # here it seems that we have a matrix of floats and we have two parameters specifying the size of the matrix of zeroes, the second one for some reason is not specified 
     I = np.zeros((N_px,), dtype=float) if (I0 is None) else I0.copy()
 
     if permute:
+        # permuting a vector of elements from one to N_iter
         index = np.random.permutation(N_iter)
     else:
         index = np.arange(N_iter)
         
     for k in tqdm.tqdm(index):
+        # where here we take the modulo of N_tube 
         idx = k % N_tube
         n, s = N[idx], S[idx].toarray()[0]
         l = s @ s
