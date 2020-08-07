@@ -385,21 +385,28 @@ def tube_decomposition(N_detector):
     xi[xi[:, 1] < 0] *= -1
 
     # Tube offset from origin such that xi*p points to the tube's mid-point.
-    p = np.squeeze(xi.reshape((N_tube, 1, 2)) @ 
-                   detector[dA].reshape((N_tube, 2, 1)))
+    # This function removes one-dimensional entry from the shape of the given array. 
+    # Two parameters are required for this function.
+    # https://www.tutorialspoint.com/numpy/numpy_squeeze.htm
 
-    # Tube width.
+    p = np.squeeze(xi.reshape((N_tube, 1, 2)) @ detector[dA].reshape((N_tube, 2, 1)))
+
+    # Tube width, no need to specify the type of the variable 
     intra_detector_angle = np.mean(detector_angle[1:] - detector_angle[:-1])
     M = rotation_matrix(intra_detector_angle)
+    # the dot product of the two vectors
     intra_detector = np.dot(detector, M.T)
 
     diff_vector = intra_detector[dA] - intra_detector[dA - 1]
     w = np.squeeze(diff_vector.reshape((N_tube, 1, 2)) @ 
                    xi.reshape((N_tube, 2, 1)))
+    # in this vector we have the absolute values of all the entries in vector w
     w = np.abs(w) 
 
-    # `w` can be very close to 0 and cause problem later on. 
-    # We discard these tubes for practical purposes.
+    # Returns a boolean array where two arrays are element-wise equal within a tolerance.
+    # The tolerance values are positive, typically very small numbers. 
+    # The relative difference (rtol * abs(b)) and the absolute difference atol are added together 
+    # to compare against the absolute difference between a and b.
     mask = ~np.isclose(w, 0)
     xi, p, w = xi[mask], p[mask], w[mask]
 
