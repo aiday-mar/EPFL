@@ -128,3 +128,9 @@ The Roofline Model has advantages and disadvantages. The advantages caps the per
 <a href="https://www.codecogs.com/eqnedit.php?latex=(-1)^s&space;(d_0&space;&plus;&space;d_1&space;\beta&space;&plus;&space;d_2&space;\beta^2&space;&plus;&space;...&space;&plus;&space;d_{p-1}&space;\beta^{p-1})&space;\beta&space;^e" target="_blank"><img src="https://latex.codecogs.com/gif.latex?(-1)^s&space;(d_0&space;&plus;&space;d_1&space;\beta&space;&plus;&space;d_2&space;\beta^2&space;&plus;&space;...&space;&plus;&space;d_{p-1}&space;\beta^{p-1})&space;\beta&space;^e" title="(-1)^s (d_0 + d_1 \beta + d_2 \beta^2 + ... + d_{p-1} \beta^{p-1}) \beta ^e" /></a>
 
 Here beta is the base, e is the exponent and s is the sign.
+
+**Week 4**
+
+Here we study optimization on one core, OpenMP, MPI and hybrid programming. The cycle of software design looks as follows : requirement analysis, design, implementation, testing, evolution. When you have no serial code, you design your application in a parallel way from scratch. When you have a serial code you follow a debugging-profiling-optimization cycle before any parallelization. You can debug using standard tools like gdb, or new tools such as Totalview, Alinea, DDT or recently Eclipse PTP.
+
+We can profile with gprof and Intel Amplifier. With this we see the Conjugate Gradient solver is the most consuming part, the CPI value (Clockticks per Instructions Retired) is good. You can optimize using compiler and linker flags, optimized external libraries, handmade refactoring, algorithmic changes. You can parallelize only when the sequential code has no bugs and is optimized. You can ask yourself the following questions while parallelizing.
