@@ -105,4 +105,15 @@ git push
 git pull
 ```
 
-When you are working on the same file from two different devices, to commit the changes, first pull then type `git commit -a`, then push the modifications. In git you can checkout branches as follows : `git checkout -b feature`, where here feature is the name of the copy you checked out of the master repo. Now when you commit you commit to this feature copy. Then when you want to merge the branch with the master you can write : `git merge feature`. Often you could decide to have multiple servers.
+When you are working on the same file from two different devices, to commit the changes, first pull then type `git commit -a`, then push the modifications. In git you can checkout branches as follows : `git checkout -b feature`, where here feature is the name of the copy you checked out of the master repo. Now when you commit you commit to this feature copy. Then when you want to merge the branch with the master you can write : `git merge feature`. Often you could decide to have multiple servers. You can write :
+
+```
+# on the second remote server
+git init --bare
+# on the computer
+git remote add server2 <remote url 2>
+git push server2 
+```
+
+**Week 3**
+
