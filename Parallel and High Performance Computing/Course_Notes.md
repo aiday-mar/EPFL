@@ -55,3 +55,54 @@ In theoretical computer science, communication complexity studies the amount of 
 
 **Week 2**
 
+A cluster is composed of computer nodes that form the back-end, there is a scheduler which connected to the back-end, and login nodes which form the front-end. The login nodes are connected to the scheduler and the computer nodes. The computer nodes are connected to the cluster filesystem and the shared filesystems. To connect to a remote cluster you probably need to this via internet ? You can use modules using the following commands :
+
+```
+module avail
+module load <module>
+module unload <module>
+module purge 
+module list
+```
+
+The makefile is a build automation system, it is a set of rules on how to produce an executable, what to compile, how to link, what to link, etc. There are two types of libraries : static and shared. Static libraries are archives of object files, shared libraries are libraries loaded dynamically at execution. To generate a shared library :
+
+```
+g++ -o filename.so -shared filename.o
+g++ -L<path to the library> -name -o <executable> <object_1> ... <object_n>
+```
+
+The job is submitted from the login nodes to the scheduler, which submits the job to the computer nodes, these run the job. SLURM can be written as Simple Linux Utility for Resource Management, and it is a job scheduler. Some basic commands are as follows :
+
+```
+sbatch : submit a job to the queue
+salloc : allocated resources
+squeue : visualize the state of the queue
+```
+The common options of SLURM are :
+
+```
+-A --account : defines which account to use
+-u --user : defines which user to use, useful for squeue
+--reservation : defined which reservation to use
+--p --partition : defines which partition to use, list of partitions can be found with sinfo
+-N --nodes : defines the number of nodes to use
+-t --time : defines the maximum wall time
+-n --tasks : number of tasks in the MPI sense
+-c --cpus-per-task : number of cpus per process
+--ntasks-per-node : number of tasks per node 
+--mem : defines the quantity of memory per node requested
+```
+
+Now we study Git. We can clone as follows :
+
+```
+git clone <uri repo.git>
+git status
+git add <filename>
+git commit -m <message>
+git push
+git pull
+```
+
+When you are working on the same file from two different devices, to commit the changes, first pull then type `git commit -a`, then push the modifications. In git you can checkout branches as follows : `git checkout -b feature`, where here feature is the name of the copy you checked out of the master repo. Now when you commit you commit to this feature copy. Then when you want to merge the branch with the master you can write : `git merge feature`. Often there re 
