@@ -150,4 +150,21 @@ Where clause is one of the following : if or num_threads which is the conditiona
   foor-loop
 }
 ```
-Where clause is one of the following : `schedule(kind[, chunk_size}), collapse(n), ordered, private(list), firstprivate(list), lastprivate(list), reduction()`. Consider the different types of kind keywords in the schedule. Suppose kind is static, then the iterations are divided into chunks sized chunk_size assigned to threads in a round-robin fashion. If the chunk-size is not specified, the system decides. Suppose that the kind is dynamic, the iterations are divided in chunks sized chunk_size assigned to threads when they request them until no chunk remains to be distributed. If the chunk_size is not specified, then the default is one. Suppose that the kind is guided, then the iterations are divided in chunks sized chunk_size assigned to threads when they request them. The size of the chunks is proportional to the remaining unassigned chunks. By default the chunk size is approximately loop_count/number_of_threads. The kind auto specifies that the decisions is delegated to the compiler and/or the runtime system. The kind runtime specifies that the decision is delegated to the runtime system.
+Where clause is one of the following : `schedule(kind[, chunk_size}), collapse(n), ordered, private(list), firstprivate(list), lastprivate(list), reduction()`. Consider the different types of kind keywords in the schedule. Suppose kind is static, then the iterations are divided into chunks sized chunk_size assigned to threads in a round-robin fashion. If the chunk-size is not specified, the system decides. Suppose that the kind is dynamic, the iterations are divided in chunks sized chunk_size assigned to threads when they request them until no chunk remains to be distributed. If the chunk_size is not specified, then the default is one. Suppose that the kind is guided, then the iterations are divided in chunks sized chunk_size assigned to threads when they request them. The size of the chunks is proportional to the remaining unassigned chunks. By default the chunk size is approximately loop_count/number_of_threads. The kind auto specifies that the decisions is delegated to the compiler and/or the runtime system. The kind runtime specifies that the decision is delegated to the runtime system. Here we have a parallel for example :
+
+```
+#pragma omp parallel shared(A, B, C) private(i,j,k, myrank)
+{
+  myrank = omp_get_thread_num();
+  mysize = omp_get_num_threads();
+  chunk = (N/mysize);
+  #pragma omp for schedule(static, chunk)
+  for (i=0; i<N; i++){
+    for (j=0; j<N; j++){
+      for (k=0; k<N; k++){
+        C[i][j] = C[i][j] + A[i][k]*B[k][j];
+      }
+    }
+  }
+}
+```
