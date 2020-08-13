@@ -168,3 +168,42 @@ Where clause is one of the following : `schedule(kind[, chunk_size}), collapse(n
   }
 }
 ```
+
+Use the collapse clause to increase the total number of iterations
+that will be partitioned across the available number of OMP
+threads by reducing the granularity of work to be done by each
+thread. You can improve performance by avoiding use of the collapsed-loop
+indices (if possible) inside the collapse loop-nest (since the
+compiler has to recreate them from the collapsed loop-indices
+using divide/mod operations AND the uses are complicated
+enough that they don’t get dead-code-eliminated as part of
+compiler optimizations). A collapse directive example :
+
+```
+#pragma omp parallel for collapse(2) shared(A) private(k,l)
+  for(k=0; k<kmax;k++) {
+    for(l=0; l<lmax; l++) {
+      for(i=0; i<N; i++) {
+        for(j=0; j<N;j++) {
+          A[i][j] = A[i][j]*s + A[i][j]*t;
+        }
+      }
+    }
+  }
+```
+
+What is an OpenMP task ? It offers a solution to parallelize irregular problems (unbounded loops, recursives, master/slave schemes etc...). OpenMP tasks are composed of code that will be executed, data initialized at task creation time, ICV's which are Internal Control Variables. The sychronization says that all tasks  created by a thread of a team are guaranteed to be completed at thread exit. Within a task group, it is possible to synchronize through #pragma omp taskwait.
+
+The task directive has the following execution model. A task t is executed by the thread T of the team that generated it. A thread T can suspend/resume/restart a task t. Tasks are tied by default : these are executed by the same thread, tied tasks hav scheduled restrictions. It is possible to untie tasks using the directive untied. We have the following synchronization constructs. The following directives are mandatory : mandatory which means the region is executed by the master thread only, critical which means that the region is executed by only one thread at a time, barrier which means all threads must reach this directive to continue, taskwait which means that all tasks and childs must reach this directive to continue, atomic(read|write|update|capture) which means the asociated storage location is accessed by only one thread/task at a time, flush which means that this operation makes the thread's temporary view of memory consistent with the shared memory, ordered which means that a structured block is executed in order of the loop iterations. An example of the master construct :
+
+```
+#pragma omp parallel default(shared)
+{
+  #pragma omp master
+  {
+    printf("I am the master\n");
+  }
+}
+```
+
+You can nest parallel regions within other parallel regions. You can include the libomp.so and libgomp.so by writing `#include <omp.h>`. We have the following runtime library routines : `omp_get_wtime` meaning it returns the elapsed wall clock time in seconds, `omp_get_wtick` meaning it returns the precision of the timer used by `omp_get_wtime`. You can set the environment variables as follows. Under csh we have `setenv OMP_VARIABLE "value"`, and under bash we have `export OMP_VARIABLE="value"`.
