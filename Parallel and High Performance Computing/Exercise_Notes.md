@@ -60,19 +60,30 @@ int main() {
 Now in the *pi* folder we have the `pi_reduction.cc` file which we can write as follows :
 
 ```
+// The elements in this header deal with time. 
 #include <chrono>
 #include <cmath>
 #include <cstdio>
+
+// If the /openmp flag was passed to the compiler and compilation was successful
+// a preprocessor directive will be added that you can use to check this at runtime:
 
 #if defined(_OPENMP)
 #include <omp.h>
 #endif
 
+// Class std::chrono::high_resolution_clock represents the clock with the 
+// smallest tick period provided by the implementation.
 using clk = std::chrono::high_resolution_clock;
+// It consists of a count of ticks of type Rep and a tick period, where the tick period 
+// is a compile-time rational constant representing the number of seconds from one tick to the next.
 using second = std::chrono::duration<double>;
+// Class template std::chrono::time_point represents a point in time. 
+// It is implemented as if it stores a value of type Duration indicating the time interval from the start of the Clock's epoch.
 using time_point = std::chrono::time_point<clk>;
 
 inline int digit(double x, int n) {
+  // Computes the nearest integer not greater in magnitude than arg for std::trunc
   return std::trunc(x * std::pow(10., n)) -
          std::trunc(x * std::pow(10., n - 1)) * 10.;
 }
