@@ -261,6 +261,7 @@ Then we have the following `dumpers.cc` file.
 #include <fstream>
 #include <array>
 
+// specifying the definitions of the methods by specifying the class then two two-dots
 void Dumper::set_min(float min) {
   m_min = min;
 }
@@ -277,12 +278,15 @@ float Dumper::max() const {
   return m_max;
 }
 
-/* -------------------------------------------------------------------------- */
 void DumperASCII::dump(int step) {
+  // this is an output file stream
   std::ofstream fout;
+  // probably means we only output strings 
   std::stringstream sfilename;
 
+  // sets the width of the output to 5 
   sfilename << "output/out_" << std::setfill('0') << std::setw(5) << step << ".pgm";
+  // the str() probably converts the passed sfilename to a string 
   fout.open(sfilename.str());
 
   int m = m_grid.m();
