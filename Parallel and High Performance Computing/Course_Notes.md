@@ -210,4 +210,11 @@ You can nest parallel regions within other parallel regions. You can include the
 
 **Week 5**
 
-We have optimization on one core, OpenMP, MPI and hybrid programming. We have an overview of the de-facto industrial standards.
+We have optimization on one core, OpenMP, MPI and hybrid programming. We have an overview of the de-facto industrial standards. We will study the distributed memory programming paradigm MPI. The goal of MPI is to provide a source-code portability. MPI is used to run multiple instances of the same program, for example the following code `mpirun -np p myApp myArgs` starts p instances of the program `myApp myArgs`. Instances exchange information by sending messages to each other. Communications take place within a communicator : a set of processes indexed from 0 to the communicatorSize - 1. A special communicator called MPI_COMM_WORLD contains all the processes. There are different types of communication in MPI, the following : point-to-point, collectives, one-sided. We have the following methods :
+
+```
+MPI_Send(buf, count, datatype, destination, tag, communicator)
+MPI_Recv(buf, count, datatype, source,tag, communicator, status)
+```
+
+Each send must be matched by a receive. 
