@@ -224,16 +224,18 @@ int main(int argc, char *argv[]) {
   int rank, size;
   int buf[100];
   MPI_Status status;
+  // initiallized with the references to the command line input number and actual values
   MPI_Init(&argc, &argv);
-6 MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-7 MPI_Comm_size(MPI_COMM_WORLD, &size);
-8 if (rank == 0) {
-9 MPI_Send(buf, 100, MPI_INT, 1, 0, MPI_COMM_WORLD
-);
-10 } else if (rank==1) {
-11 MPI_Recv(buf, 100, MPI_INT, 0, 0, MPI_COMM_WORLD
-,&status);
-12 }
-13 MPI_Finalize();
-14 }
+  MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+  MPI_Comm_size(MPI_COMM_WORLD, &size);
+  
+  if (rank == 0) {
+   MPI_Send(buf, 100, MPI_INT, 1, 0, MPI_COMM_WORLD);
+  } else if (rank==1) {
+   MPI_Recv(buf, 100, MPI_INT, 0, 0, MPI_COMM_WORLD,&status);
+  }
+  MPI_Finalize();
+}
 ```
+
+We have the following blocking point-to-point communication keywords that we can use. 
