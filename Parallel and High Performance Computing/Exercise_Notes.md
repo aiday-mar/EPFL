@@ -287,6 +287,8 @@ void DumperASCII::dump(int step) {
   // sets the width of the output to 5 
   sfilename << "output/out_" << std::setfill('0') << std::setw(5) << step << ".pgm";
   // the str() probably converts the passed sfilename to a string 
+  // Opens the file identified by argument filename, associating it with the stream object,
+  // so that input/output operations are performed on its content. Argument mode specifies the opening mode.
   fout.open(sfilename.str());
 
   int m = m_grid.m();
@@ -299,37 +301,39 @@ void DumperASCII::dump(int step) {
   for (int i = 0; i < m; i++) {
     for (int j = 0; j < n; j++) {
       int v = 255. * (m_grid(i, j) - m_min) / (m_max - m_min);
+      // you take the minimum of the variable and the value
       v = std::min(v, 255);
       fout << v << std::endl;
     }
   }
 }
 
-/* -------------------------------------------------------------------------- */
 void DumperBinary::dump(int step) {
   std::ofstream fout;
   std::stringstream sfilename;
 
   sfilename << "out_" << std::setfill('0') << std::setw(5) << step << ".bmp";
+  // Flags describing the requested input/output mode for the file.
   fout.open(sfilename.str(), std::ios_base::binary);
 
   int h = m_grid.m();
   int w = m_grid.n();
 
   int row_size = 3 * w;
-  // if the file width (3*w) is not a multiple of 4 adds enough bytes to make it
-  // a multiple of 4
+  // if the file width (3*w) is not a multiple of 4 adds enough bytes to make it a multiple of 4
+  // where you take modulo 4, or you find the remainder upon the division by four
   int padding = (4 - (row_size) % 4) % 4;
   row_size += padding;
 
   int filesize = 54 + (row_size)*h;
-
+  // in this vector we have variables of type char only 
   std::vector<char> img(row_size*h);
+  // Assigns the given value to the elements in the range [first, last).
   std::fill(img.begin(), img.end(), 0);
-
 
   for (int i = 0; i < h; i++) {
     for (int j = 0; j < w; j++) {
+      // the value of this float is given by the following calculation
       float v = ((m_grid(h - 1 - i, j) - m_min) / (m_max - m_min));
 
       float r = v * 255; // Red channel
@@ -345,13 +349,15 @@ void DumperBinary::dump(int step) {
       img[row_size * i + 3 * j + 0] = b;
     }
   }
-
+  // we have an array of characters of 14 elements 
   std::array<char, 14> bmpfileheader = {'B', 'M', 0, 0,  0, 0, 0,
                                         0,   0,   0, 54, 0, 0, 0};
   std::array<char, 40> bmpinfoheader = {40, 0, 0, 0, 0, 0, 0,  0,
                                         0,  0, 0, 0, 1, 0, 24, 0};
 
   bmpfileheader[2] = filesize;
+  // The >> operator shifts its left-hand operand right by the number of bits 
+  // defined by its right-hand operand.
   bmpfileheader[3] = filesize >> 8;
   bmpfileheader[4] = filesize >> 16;
   bmpfileheader[5] = filesize >> 24;
@@ -368,7 +374,9 @@ void DumperBinary::dump(int step) {
   bmpinfoheader[21] = (filesize - 54) >> 8;
   bmpinfoheader[22] = (filesize - 54) >> 16;
   bmpinfoheader[23] = (filesize - 54) >> 24;
-
+  
+  // Inserts the first n characters of the array pointed by s into the stream.
+  // use data() method to get the data
   fout.write(bmpfileheader.data(), 14);
   fout.write(bmpinfoheader.data(), 40);
 
