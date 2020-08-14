@@ -444,3 +444,117 @@ public:
 
 #endif /* DUMPERS_HH */
 ```
+
+Then we have the following `grid.cc` file :
+
+```
+// you need to include the corresponding header .hh file for this .cc file 
+#include "grid.hh"
+#include <algorithm>
+
+// within this method you call the other method
+Grid::Grid(int m, int n) : m_m(m), m_n(n), m_storage(m * n) { clear(); }
+void Grid::clear() { std::fill(m_storage.begin(), m_storage.end(), 0.); }
+
+// these methods do not change the current instant of the class so they are const
+// methods and they return an int
+int Grid::m() const { return m_m; }
+int Grid::n() const { return m_n; }
+```
+
+Then we have the following `grid.hh` file :
+
+```
+#ifndef GRID_HH
+#define GRID_HH
+#include <vector>
+
+class Grid {
+public:
+  Grid(int m, int n);
+
+  // access the value [i][j] of the grid
+  // returns a reference to a float 
+  inline float & operator()(int i, int j) { return m_storage[i * m_n + j]; }
+  // returns a float that we should not be able to modify later
+  // but also the method itself does not modify the current instant
+  inline const float & operator()(int i, int j) const {
+    return m_storage[i * m_n + j];
+  }
+
+  // set the grid to 0
+  void clear();
+
+  int m() const;
+  int n() const;
+
+private:
+  int m_m, m_n;
+  std::vector<float> m_storage;
+};
+
+#endif /* GRID_HH */  
+```
+
+Then we have the following `poisson.cc` file :
+
+```
+#include "simulation.hh"
+#include <chrono>
+#include <iostream>
+#include <sstream>
+#include <tuple>
+#include <chrono>
+#include <omp.h>
+// where we define here some constants
+#define EPSILON 0.005
+
+typedef std::chrono::high_resolution_clock clk;
+typedef std::chrono::duration<double> second;
+
+// looks like in the .cc files you need to refer to strings through the std:: namespace
+static void usage(const std::string & prog_name) {
+  // when you output an error
+  std::cerr << prog_name << " <grid_size>" << std::endl;
+  exit(0);
+}
+
+// argv and argc are how command line arguments are passed to main() in C and C++.
+// The variables are named argc (argument count) and argv (argument vector)
+int main(int argc, char * argv[]) {
+  // apply the usage method to the first element input into the prompt
+  if (argc != 2) usage(argv[0]);
+  
+  std::stringstream args(argv[1]);
+  int N;
+  // This is used to read from stringstream object.
+  // meaning the value is extracted into the integer N
+  args >> N;
+
+  if(args.fail()) usage(argv[0]);
+  
+  // in c++ unlike in Java you do not write new Object, you just directly write
+  // in the corresponding arguments
+  Simulation simu(N, N);
+
+  simu.set_initial_conditions();
+
+  simu.set_epsilon(EPSILON);
+
+  float l2;
+  int k;
+
+  auto start = clk::now();
+  // std::tie constructs and returns a tuple of references.
+  std::tie(l2, k) = simu.compute();
+  auto end = clk::now();
+
+  second time = end - start;
+
+  std::cout << omp_get_max_threads() << " " << N << " "
+            << k << " " << std::scientific << l2 << " "
+            << time.count() << std::endl;
+
+  return 0;
+}
+```
