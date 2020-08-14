@@ -225,3 +225,30 @@ void DoubleBuffer::swap() {
   m_current.swap(m_old);
 }
 ```
+The corresponding `double_buffer.hh` file :
+
+```
+#ifndef DOUBLE_BUFFER
+#define DOUBLE_BUFFER
+#include <memory>
+#include "grid.hh"
+
+class DoubleBuffer {
+public:
+  DoubleBuffer(int m, int n);
+  
+  // defining the private and the public methods and parameters of the class
+  Grid & current();
+  Grid & old();
+
+  void swap();
+private:
+  // this is a parameter not a method definition
+  std::unique_ptr<Grid> m_current;
+  std::unique_ptr<Grid> m_old;
+};
+
+#endif /* DOUBLE_BUFFER */
+```
+
+Then we have the following `dumpers.cc` file.
