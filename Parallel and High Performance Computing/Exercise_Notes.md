@@ -173,3 +173,55 @@ all: clean $(EXE)
 clean:
 	rm -f $(EXE) *.o *~
 ```
+
+Now consider the *poisson* folder. We have the following code inside. The Makefile :
+
+```
+CXX=g++
+LD=${CXX}
+CXXFLAGS+=-Wall -Wextra -Werror -pedantic -std=c++11 -fopenmp -O3 -march=native
+LDFLAGS+=-lm -fopenmp
+
+// all the cc files have then a corresponding .o file
+OBJS=poisson.o simulation.o double_buffer.o grid.o dumpers.o
+
+all: poisson
+
+// where poisson is defined as below and the dollar sign signifies a variable 
+// using the g++ compiler 
+poisson: $(OBJS)
+	$(LD) -o $@ $(OBJS) $(LDFLAGS)
+
+clean:
+	rm -f hello poisson *.o *~
+```
+
+The `double_buffer.cc` file :
+
+```
+// where here you can include the header files in double quotes
+#include "double_buffer.hh"
+#include "grid.hh"
+
+// where the DoubleBuffer is a class which is defined in the header file double_buffer.hh
+// where we must be calling here the constructor of that class
+// and we define the constructor as having an empty definition, but also you
+// define m_current as being a new Grid 
+// std::unique_ptr<MyClass> my_p_obj( new MyClass(myObject) );
+// https://stackoverflow.com/questions/37180818/c-how-to-convert-already-created-object-to-unique-ptr
+DoubleBuffer::DoubleBuffer(int m, int n)
+    : m_current(new Grid(m, n)), m_old(new Grid(m, n)) {}
+
+// the following is the definition of the public methods which do not need an instantiation 
+// of the class DoubleBuffer in order to be defined 
+// here we are reeturning a pointer to the private method 
+// The return type is a reference to a grid
+Grid & DoubleBuffer::current() { return *m_current; }
+Grid & DoubleBuffer::old() { return *m_old; }
+
+// the definition of the last public method 
+void DoubleBuffer::swap() {
+  // you can access the swap method of the unique pointer to the grid 
+  m_current.swap(m_old);
+}
+```
