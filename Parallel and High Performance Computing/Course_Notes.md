@@ -217,4 +217,23 @@ MPI_Send(buf, count, datatype, destination, tag, communicator)
 MPI_Recv(buf, count, datatype, source,tag, communicator, status)
 ```
 
-Each send must be matched by a receive. 
+Each send must be matched by a receive. Here is an example :
+
+```
+int main(int argc, char *argv[]) {
+  int rank, size;
+  int buf[100];
+  MPI_Status status;
+  MPI_Init(&argc, &argv);
+6 MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+7 MPI_Comm_size(MPI_COMM_WORLD, &size);
+8 if (rank == 0) {
+9 MPI_Send(buf, 100, MPI_INT, 1, 0, MPI_COMM_WORLD
+);
+10 } else if (rank==1) {
+11 MPI_Recv(buf, 100, MPI_INT, 0, 0, MPI_COMM_WORLD
+,&status);
+12 }
+13 MPI_Finalize();
+14 }
+```
