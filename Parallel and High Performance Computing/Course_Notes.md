@@ -238,4 +238,71 @@ int main(int argc, char *argv[]) {
 }
 ```
 
-We have the following blocking point-to-point communication keywords that we can use. 
+We have the following blocking point-to-point communication keywords that we can use. `MPI_Send` returns when buffer can be reused, `MPI_Ssend` returns when the other end posted matchs recv, `MPI_Recv` returns when the message has been received, `MPI_Sendrecv` send and receives within the same call to avoid deadlocks, `MPI_Bsend` returns immediately and send a buffer than can be reused immediately, `MPI_Rsend` returns only when the send buffer can be safely reused, `MPI_Sendrecv_replace` which can send, receive and replaces the buffer values using only one buffer.
+
+We have the following non-blocking point-to-point comunications keywords that we can use. `MPI_Isend` and `MPI_Irecv` do not wait for message to be buffered send/recv. It fills an additional `MPI_Request` parameter that identifies the request. The following wait calls block until the requests are completed : `MPI_Wait(request, status), MPI_Waitall(count, array_of_requests, array_of_statusses)`. We have also non-blocking versions of the previous keywords seen in the paragraph above, `MPI_Issend`, `MPI_Ibsend`, `MPI_Irsend`. We have the following waiting and test keywords : `MPI_Waitsome` waits for an MPI request to complete, `MPI_Waitany` waits for any specifies MPI request to complete, `MPI_Test` tests for the completion of a request, `MPI_Testall` tests for the completion of all previously initiated requests, `MPI_Testany` tests for the completion of any previously initiated requests, `MPI_Testsome` tests for some given requests to complete. We have the following examples of code using MPI :
+
+```
+int main(int argc, char *argv[]) {
+  int rank;
+  int buf[100];
+  MPI_Request request;
+  MPI_Status status;
+  // initialization using references to the argument count and the array of arguments
+  MPI_Init(&argc, &argv);
+  MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+  
+  if (rank == 0) {
+    MPI_Isend(buf, 100, MPI_INT, 1, 0,MPI_COMM_WORLD, &request);
+  } else if (rank == 1) {
+    MPI_Irecv(buf, 100, MPI_INT, 0, 0,MPI_COMM_WORLD, &request);
+  }
+  // add references to the request and to the status
+  MPI_Wait(&request, &status);
+  MPI_Finalize();
+}
+```
+
+Then we have the following code where process 0 and 1 exchange the content of their buffer with non-blocking actions :
+
+```
+if (rank == 0) {
+  MPI_Isend(buf1, 10, MPI_INT, 1, 0, MPI_COMM_WORLD,&request);
+  MPI_Recv(buf2, 10, MPI_INT, 1, 0, MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+}else if (rank == 1){
+  MPI_Isend(buf1, 10, MPI_INT, 0, 0, MPI_COMM_WORLD,request);
+  MPI_Recv(buf2, 10, MPI_INT, 0, 0,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+}
+
+MPI_Wait(&request, &status);
+// you copy from the first buffer to the second, the first number of elements specified
+// by the third parameter
+memcpy(buf1, buf2, 10*sizeof(int));
+```
+
+In the below processes 0 and 1 exchange the content of their buffers with `sendrecv`. 
+
+```
+if (rank == 0) {
+  MPI_Sendrecv(buf1, 10, MPI_INT, 1, 0, buf2, 10,
+              MPI_INT, 1, 0, MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+} else if (rank == 1) {
+  MPI_Sendrecv(buf1, 10, MPI_INT, 0, 0, buf2, 10,
+      MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+}
+
+memcpy(buf1, buf2, 10*sizeof(int));
+```
+
+You can also exchange the contents of the buffers from processes 0 and 1 with the keyword `sendrecv_replace()`. 
+
+```
+if (rank == 0){
+  MPI_Sendrecv_replace(buf1, 10, MPI_INT, 1, 0, 1, 0, 
+  MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+} else if (rank == 1) {
+  MPI_Sendrecv_replace(buf1, 10, MPI_INT, 0, 0, 0, 0, 
+  MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+}
+```
+
