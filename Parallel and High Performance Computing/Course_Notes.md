@@ -600,3 +600,33 @@ int MPI_Dist_graph_create()
 
 **Week 7**
 
+We have hybrid versus pure MPI. Pure MPI has no code modification, most of the libraries support multi-thread. In hybrid languages we have no messages within an SMP node, there are no topology problems. We have hybrid MPI or OpenMP example code :
+
+```
+int main(int argc, char *argv[]) {
+  int numprocs, rank, namelen,provided;
+  char processor_name[MPI_MAX_PROCESSOR_NAME];
+  int iam = 0, np = 1;
+  MPI_Init_thread(&argc, &argv,MPI_THREAD_SINGLE, provided);
+  MPI_Comm_size(MPI_COMM_WORLD, &numprocs);
+  MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+  #pragma omp parallel default(shared) private(iam,np)
+  {
+    np = omp_get_num_threads();
+    iam = omp_get_thread_num();
+    printf("Hello from thread %d out of %d from process %d out of %d on\n",
+    iam, np, rank, numprocs);
+  }
+ MPI_Finalize();
+}
+```
+
+There are four options for the thread support : MPI_THREAD_SINGLE, MPI_THREAD_FUNNELED (only master thread makes calls to the MPI_library), MPI_THREAD_SERIALIZED (only one thread at a time will make calls to the MPI library), MPI_THREAD_MULTIPLE (any thread may call the MPI library at any time). In most cases the MPI_THREAD_FUNNELED provides the best choice for hybrid programs. The following `int MPI_Query_thread( int * thread_level_provided)` returns the level of thread support provided by the MPI library. A good solution is one MPI process per SMP node. 
+
+Halo regions are local copies of remote data that are needed for computations. Halo regions need to be copied fequently. Using threads reduces the size of halo region copies that need to be stored. Reducing halo region sizes also reduces communication requirements. Do not use hybrid if the pure MPI code scales ok. Always observe the topology dependece of intranode MPI and threads overhead. 
+
+**Week 8**
+
+**Week 9**
+
+**Week 10**
