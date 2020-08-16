@@ -336,3 +336,67 @@ if (rank == root) {
 ```
 
 You can define your own communicators. `MPI_Comm_dup` duplicates a communicator (eg : to enable private communications within library functions), `MPI_Comm_split` splits a communicator into multiple smaller communicators (useful when using 2D and 3D domain decomposition). We time the MPI programs. `MPI_Wtime()` returns a double precision floating point number, the time in seconds since some arbitrary point of time in the past. `MPI_Wtick()` returns a double precision floating point number, the time in seconds between successive ticks of the clock.
+
+There are also datatypes related to the MPI library. We have other derived MPI datatypes : `MPI_Type_contiguous` which produces a new data type by making copies of an existing data type, `MPI_Type_vector` which is similar to contiguous, but allows for regular gaps in the dispacements, `MPI_Type_indexed` is an array of displacements of the input data type which is provided as the map for the new data type, `MPI_Type_create_struct` is the new data type which is formed according to a completely defined map of the component data types, `MPI_Type_extent` returns the size in bytes of the specified data type, `MPI_Type_commit` commits the new datatype to the system, `MPI_Type_free` deallocates the specified datatype object.
+
+```
+struct { int a; char b; } foo;
+MPI_Aint zero_address, first_address, second_address;
+MPI_Get_address(&foo, &zero_address);
+MPI_Get_address(&foo.a, &first_address);
+MPI_Get_address(&foo.b, &second_address);
+MPI_Datatype newtype;
+MPI_Aint displs[2];
+blen[0] = 1; 
+indices[0] = MPI_Aint_diff(first_address, zero_address);
+oldtypes[0] = MPI_INT; 
+oldtypes[1] = MPI_CHAR;
+blen[1] = 1; 
+indices[1] = MPI_Aint_diff(second_address, first_address);
+MPI_Type_create_struct( 2, blen, indices, oldtypes, &newtype );
+MPI_Type_Commit(&newtype);
+foo f = {1,’z’};
+MPI_Send(&f, 1, newtype, 0, 100, MPI_COMM_WORLD );
+MPI_Type_free( &newtype );
+```
+
+Now we want to pack and unpack the data using the following code :
+
+```
+int x; float a, int position=0;
+char buffer[100];
+if (myrank==0) {
+  MPI_Pack(&a, 1, MPI_FLOAT, buffer, 100, &position,MPI_COMM_WORLD)
+  MPI_Pack(&x, 1, MPI_INT, buffer, 100, &position,MPI_COMM_WORLD)
+  MPI_Send(buffer, 100, MPI_PACKED, 1, 999,MPI_COMM_WORLD);
+}else if (myrank==1) {
+  MPI_Recv(buffer, 1000, MPI_PACKED, 0, 999,MPI_COMM_WORLD, status)
+  MPI_Unpack(buffer, 100, &position, &a, 1,MPI_FLOAT, MPI_COMM_WORLD);
+  MPI_Unpack(buffer, 100, &position, &x, 1, MPI_INT,MPI_COMM_WORLD);
+}
+```
+
+An MPI group is an ordered set of processes, each process has a unique ID and can belong to several different groups. A group can be used to create a new communicator. An MPI communicator is a group of processes, it encapsulates the communications between the belonging processes, an MPI communication can take place only with a communicator. We have the following code to create a new communicator :
+
+```
+MPI_Init(&argc,&argv);
+MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+MPI_Comm_size(MPI_COMM_WORLD, &size);
+MPI_Comm_group(MPI_COMM_WORLD, &old_g);
+int nbr_g1 = 5;
+// is this like type casting 
+ranks1 = (int*) malloc(nbr_g1*sizeof(int));
+ranks2 = (int*) malloc((size-nbr_g1)*sizeof(int));
+for (i=0;i<nbr_grp1;i++) ranks1[i]=i;
+for (i=0;i<(size-nbr_g1);i++) ranks2[i]=size-i-1;
+if (rank < nbr_g1) {
+  MPI_Group_incl(old_g,nbr_g1,ranks1,&new_g);
+} else {
+  MPI_Group_incl(old_g,(size-nbr_g1),ranks2,&new_g);
+}
+MPI_Comm_create(MPI_COMM_WORLD,new_g,&new_comm);
+MPI_Group_rank(new_g, &new_rank);
+printf("rank %d grprank is %d \n",rank,new_rank);
+MPI_Finalize();
+```
+
