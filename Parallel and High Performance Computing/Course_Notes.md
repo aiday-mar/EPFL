@@ -441,3 +441,162 @@ MPI_Win_free(win);
 MPI_Free_mem(mem);
 ```
 
+MPI-3 provides new features as follows : `MPI_Get_accumulate(), MPI_Fetch_and_op(), MPI_Compare_and_swap`. We request based primitives as follows `MPI_R{put, get, accumulate, get_accumulate}, MPI_Win_{un}lock_all, MPI_Win_flush{_all}, MPI_Win_flush_local{_all}`. In the master slave example we have the master part :
+
+```
+int main(int argc, char *argv[]) {
+  int world_size, universe_size, *universe_sizep,flag;
+  MPI_Comm everyone; /* intercommunicator */
+  char worker_program[100];
+  MPI_Init(&argc, &argv);
+  MPI_Comm_size(MPI_COMM_WORLD, &world_size);
+  MPI_Attr_get(MPI_COMM_WORLD, MPI_UNIVERSE_SIZE, &universe_sizep, &flag);
+  universe_size = *universe_sizep;
+  choose_worker_program(worker_program);
+  MPI_Comm_spawn(worker_program, MPI_ARGV_NULL, universe_size-1, 
+  MPI_INFO_NULL, 0,MPI_COMM_SELF, &everyone, MPI_ERRCODES_IGNORE);
+
+  / * Parallel code here. */
+  MPI_Finalize();
+  return 0; }
+```
+
+The slave problem :
+
+```
+int main(int argc, char *argv[]) {
+  int size;
+  MPI_Comm parent;
+  MPI_Init(&argc, &argv);
+  MPI_Comm_get_parent(&parent);
+  if (parent == MPI_COMM_NULL) error("No parent!");
+  MPI_Comm_remote_size(parent, &size);
+  if (size != 1) error("Something’s wrong with the parent");
+
+  / * Parallel code here. */
+
+  MPI_Finalize();
+  return 0;
+}
+```
+
+We open and close a file in parallel using the following keywords : `comm` which is the communicator that contains the writing/reading MPI processes, `*filename` which is a file name, `amode` which is the file access mode, `info` is the file info object, `*fh` is the file handle.
+
+```
+int MPI_File_open(MPI_Comm comm, const char *filename, int amode, MPI_Info info, MPI_File *fh)
+int MPI_File_close(MPI_File *fh)
+```
+
+We have the following definitions : `etype` is the elementary type of the data of the parallel accessed file, `offset` is a position in the file in term of multiple etypes, `displacement` of a position within the file is the number of bytes from the beginning of the file. We have the following independent read/write examples :
+
+```
+int MPI_File_write_at(MPI_File fh, MPI_Offset offset, ROMIO_CONST void *buf, int count, MPI_Datatype datatype, MPI_Status *status)
+int MPI_File_read_at(MPI_File fh, MPI_Offset offset, void *buf,int count, MPI_Datatype datatype, MPI_Status *status)
+```
+
+Initialy, each process view the file as a linear byte stream and each process views data in its own native representation. Then `disp` is the displacement in bytes, `etype` is the elementary type. We have the following.
+
+```
+int MPI_File_set_view(MPI_File fh, MPI_Offset disp, MPI_Datatype etype, MPI_Datatype filetype, ROMIO_CONST char *datarep, MPI_Info info)
+int MPI_File_get_view(MPI_File fh, MPI_Offset *disp, MPI_Datatype *etype, MPI_Datatype *filetype, char *datarep)
+
+int MPI_File_write(MPI_File fh, ROMIO_CONST void *buf, int count, MPI_Datatype datatype, MPI_Status * status)
+int MPI_File_read(MPI_File fh, void *buf, int count, MPI_Datatype datatype, MPI_Status *status)
+int MPI_File_write_all(MPI_File fh, ROMIO_CONST void *buf, int count, MPI_Datatype datatype, MPI_Status *status)
+```
+
+We have the v-version of MPI_Gather calle MPI_Gatherv.
+
+```
+MPI_Comm comm;
+int gsize,sendarray[100];
+int root, *rbuf, stride;
+int *displs,i,*rcounts;
+...
+MPI_Comm_size(comm, &gsize);
+rbuf = (int *)malloc(gsize*stride*sizeof(int));
+displs = (int *)malloc(gsize*sizeof(int));
+rcounts = (int *)malloc(gsize*sizeof(int));
+for (i=0; i<gsize; ++i) {
+  displs[i] = i*stride;
+  rcounts[i] = 100;
+}
+MPI_Gatherv(sendarray, 100, MPI_INT, rbuf, rcounts, displs, MPI_INT,root, comm);
+```
+
+We have a v-version of MPI_Scatter :
+
+```
+MPI_Comm comm;
+int gsize,*sendbuf;
+int root, rbuf[100], i, *displs, *scounts;
+...
+MPI_Comm_size(comm, &gsize);
+sendbuf = (int *)malloc(gsize*stride*sizeof(int));
+...
+displs = (int *)malloc(gsize*sizeof(int));
+scounts = (int *)malloc(gsize*sizeof(int));
+for (i=0; i<gsize; ++i) {
+  displs[i] = i*stride;
+  scounts[i] = 100;
+}
+MPI_Scatterv(sendbuf, scounts, displs, MPI_INT, rbuf,100, MPI_INT, root, comm);
+```
+
+We have the following non-blocking collectives. 
+
+```
+int MPI_Ibarrier(MPI_Comm comm,MPI_Request *request) 
+int MPI_Ibcast(void* buffer, int count, MPI_Datatype datatype, int root,MPI_Comm comm, MPI_Recv)
+```
+
+An example is :
+
+```
+MPI_Comm comm;
+int array1[100], array2[100];
+int root=0;
+MPI_Request req;
+...
+MPI_Ibcast(array1, 100, MPI_INT, root, comm, &req);
+compute(array2, 100);
+MPI_Wait(&req, MPI_STATUS_IGNORE);
+```
+
+We have the following non-blocing collectives :
+
+```
+int MPI_Ireduce() 
+int MPI_Iallreduce()
+int MPI_Allreduce()
+int MPI_Ireduce_scatter_block()
+int MPI_Reduce_scatter_block()
+int MPI_Ireduce_scatter()
+int MPI_Reduce_scatter()
+int MPI_Iscan()
+int MPI_Iexscan
+int MPI_Cart_create(MPI_Comm comm_old, int ndims, const int dims[], const int periods[], int reorder, MPI_Comm *comm_cart)
+```
+
+We have a virtual topology cartesian example :
+
+```
+gsizes[0] = m; // no. of rows in global array
+gsizes[1] = n; // no. of columns in global array
+psizes[0] = 2; // no. of procs. in vert. dimension
+psizes[1] = 3; // no. of procs. in hori. dimension
+lsizes[0] = m/psizes[0]; // no. of rows in local array
+lsizes[1] = n/psizes[1]; // no. of columns in local array
+dims[0] = 2; 
+dims[1] = 3;
+periods[0] = periods[1] = 1;
+MPI_Cart_create(MPI_COMM_WORLD, 2, dims, periods, 0, &comm);
+MPI_Comm_rank(comm, &rank);
+MPI_Cart_coords(comm, rank, 2, coords);
+printf("Process %d has position (%d, %d) \n", rank, coords[0], coords[1]);
+int MPI_Dist_graph_create_adjacent()
+int MPI_Dist_graph_create()
+```
+
+**Week 7**
+
