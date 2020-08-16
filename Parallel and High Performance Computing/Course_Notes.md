@@ -400,3 +400,44 @@ printf("rank %d grprank is %d \n",rank,new_rank);
 MPI_Finalize();
 ```
 
+We have persistent communications example : 
+
+```
+MPI_Request recvreq;
+MPI_Request sendreq;
+
+MPI_Recv_init (buffer, N, MPI_FLOAT, rank-1,tag_check_infos, MPI_COMM_WORLD, &recvreq);
+MPI_Send_init (buffer, N, MPI_FLOAT, rank+1,tag_check_infos, MPI_COMM_WORLD, &sendreq);
+
+/* ... copy stuff into buffer ... */
+
+MPI_Start(&recvreq);
+MPI_Wait(&recvreq, &status);
+MPI_Request_free( &recvreq );
+MPI_Request_free( &sendreq );
+```
+
+There is one-side communication keywords. For the initialization we have `MPI_Alloc_Mem(), MPI_Free_Mem(), MPI_Win_Create(), MPI_Win_Free()`. For remote memory access we have : `MPI_Put(), MPI_Get(), MPI_Accumulate()`. For the synchronization we have : `MPI_Win_Fence(), MPI_Win_Post(), MPI_Win_Start(), MPI_Win_Complete(), MPI_Win_Wait(), MPI_Win_Lock(), MPI_Win_Unlock()`. We have the following example :
+
+```
+int MPI_Alloc_mem(MPI_Aint size, MPI_Info info, void *baseptr);
+int MPI_Win_create(void *base, MPI_Aint size, int disp_unit, MPI_Info info, MPI_Comm comm, MPI_Win *win)
+int MPI_Put(const void *origin_addr, int origin_count, MPI_Datatype origin_datatype, int target_rank, MPI_Aint target_disp, int target_count, MPI_Datatype target_datatype, MPI_Win win)
+int MPI_Get(void *origin_addr, int origin_count, MPI_Datatype origin_datatype, int target_rank, MPI_Aint target_disp, int target_count, MPI_Datatype target_datatype, MPI_Win win)
+```
+
+There is the one-sided communications example :
+
+```
+MPI_Win win;
+int *mem;
+float x = 1.0;
+MPI_Alloc_mem(size * sizeof(int), MPI_INFO_NULL, &mem);
+MPI_Win_create(mem, size * sizeof(int), sizeof(int), MPI_INFO_NULL, MPI_COMM_WORLD, &win);
+
+// Write x at position 1 within process 0 ’s memory
+MPI_Put(&x, 1, MPI_FLOAT, 0, rank, 1, MPI_INT, win);
+MPI_Win_free(win);
+MPI_Free_mem(mem);
+```
+
