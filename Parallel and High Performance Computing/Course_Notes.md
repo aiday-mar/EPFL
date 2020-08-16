@@ -306,3 +306,33 @@ if (rank == 0){
 }
 ```
 
+We have that `MPI_ANY_SOURCE` and `MPI_ANY_TAG` are wildcards. We have the following collective communications : `MPI_Bcast` sends the same data to every process, `MPI_Scatter` sends pieces of the buffer to every process of the communicator, `MPI_Gather` retrieves pieces of data from every process, `MPI_Allgather` all pieces retrieved by all processes, `MPI_Reduce` performs a reduction operation across all nodes, `MPI_Allreduce` the result is distributed to all processes, `MPI_Alltoall` sends all data to all processes, every process of the communicator must participate. The following code is for when you receive image parts out of order.
+
+```
+MPI_Isend(imgPart, partSize, MPI_BYTE, 0,0, MPI_COMM_WORLD, &request);
+if (rank == 0) {
+  char *buf = malloc(nProcs * partSize);
+  MPI_Status s;
+  int count;
+  for (int i = 0; i < nProcs; i++) {
+    MPI_Probe(MPI_ANY_SOURCE, MPI_ANY_TAG, comm, &s);
+    MPI_Get_count(&s, MPI_BYTE, &count);
+    MPI_Recv(buf + s.MPI_SOURCE*count, count, MPI_BYTE, s.MPI_SOURCE, s.MPI_TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+  }
+} MPI_WAIT(&request, MPI_STATUS_IGNORE);
+```
+
+We receive the image parts with a collective :
+
+```
+int root = 0;
+char *buf = NULL;
+if (rank == root) {
+  buf = malloc(nProcs*partSize);
+  MPI_Gather(part, partSize, MPI_BYTE, buf, partSize, MPI_BYTE, root, MPI_COMM_WORLD);
+} else {
+  MPI_Send(part, ..., ..., rank, MPI_TAG);
+}
+```
+
+You can define your own communicators. `MPI_Comm_dup` duplicates a communicator (eg : to enable private communications within library functions), `MPI_Comm_split` splits a communicator into multiple smaller communicators (useful when using 2D and 3D domain decomposition). We time the MPI programs. `MPI_Wtime()` returns a double precision floating point number, the time in seconds since some arbitrary point of time in the past. `MPI_Wtick()` returns a double precision floating point number, the time in seconds between successive ticks of the clock.
