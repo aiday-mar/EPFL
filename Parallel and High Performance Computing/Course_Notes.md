@@ -627,6 +627,30 @@ Halo regions are local copies of remote data that are needed for computations. H
 
 **Week 8**
 
+Why should one run on GPUs ? Over the years the single-thread performance increased linearly, the number of logical cores increased exponentially and the frequency remained constant. GPU is specialized for compute-intensive, highly parallel computation. But the GPU architecture is not as flexible as CPU. The GPU is composed of many core devices, where each core has a fetch/decode comonent, an ALU and an execution context. We have removed the control logic, the branch predictor and the mem pre-fetcher, and the cache. In the streaming multiprocessor architecture there are many regions available each with different performance characteristics. Each GPU is compromised of one or more streaming multiprocessors SM. Instructions are executed in multiples of 32 threads. Each streaming multiprocessor has a collection of cores, registers and memory. The host is the CPU and its memory, and the device is the GPU and its memory. 
+
+The CPU is responsible for allocating the memory, kernels must be launched from the CPU. The GPU then communicates with the device memory, which copies the results into the main memory. The main memory copies data from the device memory. We have simple programming directives, a simple compiler pragma, compiler parallelization code, and it targets a variety of platforms. We have OpenACC directives :
+
+```
+#pragma acc data copyin(a, b) copyout(c)
+{
+  ...
+  #pragma acc parallel
+  {
+    #pragma acc loop gang vector
+      for (i=0; i < n; ++i) {
+        z[i] = x[i] + y[i];
+        ...
+      }
+  }
+  ...
+}
+```
+
+The CUDA programming interface consists of the C language extension to target portions of the source code on the computer devices. A runtime library splits into a host component which provides functions to control and access one or more compute devices, a device component which provides device-specific functions, a common component which provides built-in vector types and subsets of the C standard libary supported on both the host and the device.
+
+You need to compile separately host code and device code. We have the following `cuda-gdb` which is the extension of the gdb debugger. Then we also have `nvprof` whih is a cuda profiler to help with cuda optimization. 
+
 **Week 9**
 
 **Week 10**
