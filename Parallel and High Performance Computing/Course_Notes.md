@@ -649,8 +649,202 @@ The CPU is responsible for allocating the memory, kernels must be launched from 
 
 The CUDA programming interface consists of the C language extension to target portions of the source code on the computer devices. A runtime library splits into a host component which provides functions to control and access one or more compute devices, a device component which provides device-specific functions, a common component which provides built-in vector types and subsets of the C standard libary supported on both the host and the device.
 
-You need to compile separately host code and device code. We have the following `cuda-gdb` which is the extension of the gdb debugger. Then we also have `nvprof` whih is a cuda profiler to help with cuda optimization. 
+You need to compile separately host code and device code. We have the following `cuda-gdb` which is the extension of the gdb debugger. Then we also have `nvprof` which is a cuda profiler to help with cuda optimization. A set of tasks work collectively and simultaneously on the same structure with each task operating on its own portion of the structure. Tasks perform identical operations on their portions of the structure. Operations on each portion must be independent. The GPU is a compute device that has its own RAM, it runs data-parallel portions of an applications as kernels by using many threads. The kernels are C\C++ functions with some restrictions, and a few language extensions. Kernels are executed by many threads. GPU threads are lightweight, GPUs need 1000 threads for full efficiency.
+
+The cores in the streaming multiprocessors are SIMT (Single Instruction Multiple Threads). All the cores execute the same instruction on different data. The minimum of 32 threads doing the same thing at the same time. Lots of active threads is the key to performance. Execution alternates between active warps which become inactive when they wait for data. Threads are organized in grids of blocks. CUDA is designed to execute 1000s of threads. Threads are grouped together into thread blocks, threads are grouped together into a grid.
+
+The host launches kernels. The host is responsible for managing the allocated memory on the host and the device, data exchange between host and device, and it handles errors. We cn use CUDA through CUDA C, or the Driver API, which has a more verbose syntax. Using CUDA you can express different things, declarations of functions with `_host_, _global_, _device_`, declarations on the data `_shared_, _device_, _constant_`, we copy to and from the host using `cudaMemcpy`, we can use the concurrency management `_Synchthreads()`. The CUDA kernels are denoted by the `_global_` function qualifier. A kernel is a pointer to device memory and parameters are passed by value. Kernels are declared in the source/header files before they are called :
+
+```
+_global_ void kernel(*float a)
+
+int main() {
+  dim3 gridSize, blockSize;
+  float a*;
+  
+  kernel<<<gridSize, blockSize>>>(a);
+}
+
+_global_ void kernel(float* a)
+{
+  ...
+}
+```
+
+Kernels have read-only built-in variables :
+
+gridDim : dimensions of the grid
+blockIdx : unique index of a block within a grid
+blockDim : dimensions of the block
+threadIdx : unique index of the thread within a block
+
+We cannot vary the size of the blocks or grids during a kernel call. The code inside the kernel is written from a single thread point of view. We have the following code:
+
+```
+int main(void) {
+  printf( "Hello, world! \n");
+  return 0;
+}
+```
+
+To compile we can write : `nvcc -o hello_world hello_world.cu`. To execute `./hello_world`. The CUDA C keyword `_global_` indicates that a function runs on the device and is called from the host code. `nvcc` splits the source file into host and device components. NVIDIA's compiler handles device functions like `kernel`. The standard host compiler handles host functions like `main()`. The triple angle brackets mark a call from the host code to the device code, this is a kernel launch in CUDA jargon. 
+
+```
+int main(void) {
+  kernel<<< 1,1 >>> ();
+  printf( "Hello, World! \n" );
+  return 0;
+}
+```
+
+Inside the kernel we have the following CUDA syntax :
+
+```
+_global_ void kernel( int *array) {
+  int index_x = blockIdx.x*blockDim.x + threadIdx.x;
+  int index_y = blockIdx.y*blockDim.y + threadIdx.y;
+  
+  int grid_width = gridDim.x*blockDim.x;
+  ind index = index_y * grid_width + index_x;
+  
+  int result = blockIdx.y * gridDim.x + blockIdx.x;
+  array[index] = result;
+}
+
+dim3 block_size;
+block_size.x = 5;
+block_size.y = 3;
+
+dim3 grid_size;
+grid_size.x = 3;
+grid_size.y = 2;
+
+kernel<<< grid_size, block_size >>>(device_array);
+```
+
+CUDA syntax appears in the following thread identifiers, the result for each kernel is launched with the following execution configuration.
+
+```
+_global_ void MyKernel(int* a)
+{
+  int idx = blockIdx.x * blockDim.x + threadIdx.x;
+  a[idx] = 5;
+}
+
+_global_ void MyKernel(int* a)
+{
+  int idx = blockIdx.x*blockDim.x + threadIdx.x;
+  a[idx] = blockIdx.x;
+} 
+
+_global_ void MyKernel(int* a)
+{
+  int idx = blockIdx.x*blockDim.x + threadIdx.x;
+  a[idx] = threadIdx.x;
+}
+```
+
+The memory management says that : `cudaMalloc(void** pointer, size_t nbytes), cudaMemset(void* pointer, int value, size_t count), cudaFree(void* pointer)`. We have the following code :
+
+```
+int n = 1024;
+int nBytes = 1024*sizeof(int);
+int *a = 0;
+cudaMalloc((void**)&a, nBytes);
+cudaMemset(a,0, nBytes);
+cudaFree(a);
+```
+
+Host and device have separate memory spaces, data is moved between the CPU and the GPI via the PCIe bus. Pointers were just addresses, you can't tell from the pointer value whether the address is on the device or the host. Host code manages data transfer to and from the device : `cudaMemcpy(void* dst, void* src, size_t nbytes, enum cudaMemcpyKind direction)`. Where here the direction is one of the following values : `cudaMemcpyHostToDevice, cudaMemcpyDeviceToHost, cudaMemcpyHostToHost, cudaMemcpyDefault`. Kernel launches are asynchronous, they return to CPU immediately, the kernel starts executing once all outstanding CUDA calls are complete. `cudaMemcpy()` is synchronous, blocks until the copy is complete, the copy starts once all outstanding CUDA calls are complete. `cudaDeviceSynchronize()` blocks until all outstanding CUDA calls are complete. Most CUDA functions return `cudaError_t`, `cudaSucces` indicates no error, and we use `cudaGetErrorString()`. The following `char* cudaGetErrorString(cudaError_t err)` returns a string describing the error condition. We have the following example :
+
+```
+cudaError_t err;
+e = cudaMemcpy(...);
+If(e) printf("Error : %s\n", cudaGetErrorString(err));
+```
+
+The following `cudaError_t cudaGetLastError()` returns an error code for the last CUDA runtime function. At exit, this clears the global error state, the subsequent calls will return success.
 
 **Week 9**
+
+Threads are organized in grids of blocks and are executed on streaming multiprocessors SM. Blocks from the grid are distributed across the SM. A block will execute on one and only one SM. Blocks might need to be synchronized once in a while. Indepdence requirements gives scalability. However within a block CUDA permits non data-parallel approaches. Implemented via control-flows statements in a kernel. Threads are free to execute unique paths through a kernel. CUDA threads may access data from multiple memory spaces during their execution. Each thread has a private local memory. Each thread block has shared memory visible to all threads of the block and with the same lifetime as the block. All threads have access to the same global memory. Transfer to/from CPU is very slow. Global memory is slow. Texture, constant and shared memory are fast. Registers are very fast. The global memory is visible by all the threads, shared between blocks and grids and kernel execution. The programmer explicitly manages the allocation and the deallocation with cuda API. The constant memory is cached in the multiprocessor, it is fairly quick, the cache can be broadcasted to all active threads. The constants there are declared at the file scope, the constant values are set from the host code. We have the following keywords `_device_, _constant_`. Texture caches are designed for graphics applications where memory access patterns exhibit a great deal of
+spatial locality. 
+
+The shared memory is shared within a block, it is generally quick, there is up to 128 KB per multiprocessor, but a maximum of 48KB per block. The shared memory has a block scope, which is only visible to the threads in the same block. Threads can share results, and avoid redundant computations. Threads can share memory access. There is the similar benefits as CPU cache, however, this must be explicitly managed by the programmer with the qualified `_shared_`. When a variable is declared in a shared memory the compiler creates a copy of that variable for each block. Every thread within the blocks sees this memory, can access and modify its content. Threads from other blocks do not see this memory. This provides an excellent means by which threads within a block can communicate and collaborate on computations. The local memory is a scratch space per thread, it is used for whatever does not fit into registers. The variable declared within a kernel is allocated per thread. It is only accessible by the threads, it has the lifetime of a thread. The local memory have registers which has the fastest on-chip memory. When registers are not available the compiler are put off chip. The register memory is limited, shared memory in blocks is limited, can have many threads using fewer registers, or few threads using many registers.
+
+Can be sped up when memory is contiguous, all threads in a warp execute the same instruction, during a load the hardware detect whether all threads access to consecutive memory locations. Contiguous, means the memory is together. The example of non-contiguous memory. Memory coalescing has in-order access, we access addresses in the order of the memory, there are examples of bad accesses.
+
+```
+template 
+_global_ void offset(T* a, int s)
+{
+  int i = blockDim.x * blockIdx.x + threadIdx.x + s;
+  a[i] = a[i] + 1;
+}
+
+template
+_global_ void stride(T* a, int s)
+{
+  int i = (blockDim.x*blockIdx.x + threadIdx.x)*s;
+  a[i] = a[i] + 1;
+}
+```
+
+The shared memory is on-chip memory so faster. Allocated per block, and all threads can access to it. If thread A and B load the data from the global memory and write in shared there could be race conditions. There is code related to the static shared memory :
+
+```
+_global_ void staticReverse(int *d, int n)
+{
+  _shared_ int s[64];
+  int t = threadIdx.x;
+  int tr = n-t-1;
+  s[t] = d[t];
+  _syncthreads();
+  d[t] = s[tr];
+}
+```
+
+The following is an example of dynamic shared memory :
+
+```
+_global_ void dynamicReverse(int *d, int n)
+{
+  extern _shared_ int s[];
+  int t = threadIdx.x;
+  int tr = n-t-1;
+  s[t] = d[t]
+  _syncthreads();
+  d[t] = s[tr];
+}
+```
+
+To achieve high memory bandwidth for concurrent access, shared memory is divided into banks that can be accessed simultaneously. If multiple threads requested addresses map to the same memory bank, the accesses are serialized. The hardware splits a conflicting memory request into as many separate conflict-free requests as
+necessary, decreasing the effective bandwidth by a factor equal to the number of colliding memory requests. To minimize bank conflicts, it is important to understand how memory addresses map to memory banks. You want to avoid multiple thread access to the same bank.
+
+You can for example do an efficient matrix transpose in CUDA. Using a thread block with fewer threads than elements in a tile is advantageous for the matrix transpose because each thread transposes four matrix elements, so much of the index calculation cost is amortized over these elements. We have for this the following code :
+
+```
+_global_ void copy(float *odata, const float *idata)
+{
+  int x = blockIdx.x * TILE_DIM + threadIdx.x;
+  int y = blockIdy.y * TILE_DIM + threadIdx.y;
+  int width = gridDim.x * TILE_DIM;
+  
+  for (int j = 0; j < TILE_DIM; j += BLOCK_ROWS) {
+    odata[(y+j)*width + x] = idata[(y+j)*width + x];
+  }
+}
+
+_global_ void transposeNaive(float *odata, const float *idata)
+{
+  int x = blockIdx.x * TILE_DIM + threadIdx.x;
+  int y = blockIdx.y * TILE_DIM + threadIdx.y;
+  int width = gridDim.x * TILE_DIM;
+  
+  for(int j=0; j < TILE_DIM; j += BLOCK_ROWS) {
+    odata[x*width + (y+j)] = idata[(y+j)*width + x];
+  }
+}
+```
 
 **Week 10**
