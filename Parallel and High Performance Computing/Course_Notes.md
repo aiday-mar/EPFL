@@ -946,3 +946,5 @@ _syncthreads();
 ```
 
 **Week 10**
+
+We now have an introduction to profiling and optimization. 
