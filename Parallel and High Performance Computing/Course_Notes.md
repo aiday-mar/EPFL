@@ -847,4 +847,102 @@ _global_ void transposeNaive(float *odata, const float *idata)
 }
 ```
 
+Next we have the following coalesced transpose via shared memory example :
+
+```
+_global_ void transposeCoalesced(float *odata, const float *idata) 
+{
+  _shared_ float tile[TILE_DIM][TILE_DIM];
+  int x = blockIdx.x * TILE_DIM + threadIdx.x;
+  int y = blockIdx.y * TILE_DIM + threadIdx.y;
+  int width = gridDim.x * TILE_DIM;
+  
+  for (int j = 0; j < TILE_DIM; j += BLOCK_ROWS) {
+    tile[threadIdx.y + j][threadIdx.x] = idata[(y+j)*width + x];
+  }
+  
+  _syncthreads();
+  x = blockIdx.y * TILE_DIM + threadIdx.x;
+  y = blockIdx.x * TILE_DIM + threadIdx.y;
+  
+  for (int j=0; j < TILE_DIM; j += BLOCK_ROWS) {
+    odata[(y+j)*width + x] = tile[threadIdx.x][threadIdx.y + j];
+  }
+}
+```
+
+Then we have the following copy in the shared memory :
+
+```
+_global_ void copySharedMem(float *odata, const float *idata)
+{
+  _shared_ float tile[TILE_DIM * TILE_DIM];
+  int x = blockIdx.x * TILE_DIM + threadIdx.x;
+  int y = blockIdx.y * TILE_DIM + threadIdx.y;
+  int width = gridDim.x * TILE_DIM;
+  
+  for (int j =0; i < TILE_DIM; j += BLOCK_ROWS) {
+    tile[(threadIdx.y + j) * TILE_DIM + threadIdx.x] = idata[(y+j)* width + x];
+  }
+  
+  _syncthreads();
+  for (int j=0; j<TILE_DIM; j+= BLOCK_ROWS) {
+    odata[(y+j)*width + x] = tile[(threadIdx.y + j)*TILE_DIM + threadIDx.x]
+  }
+}
+``` 
+
+You should use multiple thread blocks to process very large arrays, to keep all multiprocessors on the GPU busy, each thread block reduces a portion of the array. How do we communicate partials results between thread blocks ? We decompose into multiple kernels. In the kernel decomposition, we avoid the global `sync` by decomposing the computation into multiple kernel invocations. What is our optimization goal ? We should strive to read the GPU peak performance. For this we choose the right metric : GFLOPs are used for compute-bound kernels, and the bandwidth for memory-bound kernels. Reductions have very low arithmetic intensity. The reduction number one is interleaved addressing :
+
+```
+_global_ void reduce(int *g_idata, int *g_odata) {
+  extern_shared_int sdata[];
+  unsigned int tid = threadIdx.x;
+  unsigned int i = blockIdx.x*blockDim.x + threadIdx.x;
+  sdata[tid] = g_idata[i];
+  _syncthreads();
+  
+  for(unsigned int s=1; s < blockDim.x; s *= 2) {
+    if(tid % ( 2*s) == 0) {
+      sdata[tid] += sdata[tid + s];
+    }
+    _syncthreads();
+  }
+  
+  if (tid==0) g_odata[blockIdx.x] = sdata[0];
+}
+```
+
+Now the problem is that the highly divergent warps are very inefficient, and the percentage symbol operator is very slow. To solve this problem we replace the divergent branch in the inner loop with the strided index and the non-divergent branch as follows :
+
+```
+for (unsigned int s=1; s < blockDim.x; s *= 2) {
+  int index = 2 * s * tid;
+  if (index < blockDim.x) {
+    sdata[index] += sdata[index + s];
+  }
+  _syncthreads();
+}
+```
+
+But the new problem is that there is shared memory bank conflicts. The solution is to replace the strided indexing in the inner loop with the reversed loop and threadID-based indexing : 
+
+```
+for (unsigned int s = blockDim.x/2; s > 0; s >>= 1) {
+  if (tid < s) {
+    sdata[tid] += sdata[tid + s];
+  }
+  _syncthreads();
+}
+```
+
+The other reduction you can do is halve the number of blocks and replace the single load with two loads and first add of the reduction :
+
+```
+unsigned int tid = threadIdx.x;
+unsigned int i = blockIdx.x * (blockDim.x*2) + threadIdx.x;
+sdata[tid] = g_idata[i] + g_idata[i + blockDim.x];
+_syncthreads();
+```
+
 **Week 10**
