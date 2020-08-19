@@ -978,3 +978,47 @@ Multiple units enable the use of Instruction Level Parallelism ILP. The instruct
 <a href="https://www.codecogs.com/eqnedit.php?latex=P_{core}&space;=&space;n_{super}^{FP}&space;\cdot&space;n_{FMA}&space;\cdot&space;n_{SIMD}&space;\cdot&space;f" target="_blank"><img src="https://latex.codecogs.com/gif.latex?P_{core}&space;=&space;n_{super}^{FP}&space;\cdot&space;n_{FMA}&space;\cdot&space;n_{SIMD}&space;\cdot&space;f" title="P_{core} = n_{super}^{FP} \cdot n_{FMA} \cdot n_{SIMD} \cdot f" /></a>
 
 Where we multiply the super-scalarity, the FMA factor, the SIMD factor and the clock speed. Caches help with getting instructions and data to the CPU "fast". Caches are organized in cache lines. Only complete cache lines are transferred between memory hierarchy levels. We understand the memory hierarchy as follows : the processor has a control, datapath has registers, and on-chip cache, a second level cache SRAM, a main memory DRAM, a secondary storage Disk and a tertiar storage Disk. Data elements are brought into cache one cache line, which is a fixed size of data. In order to obtain optimal or sup-optimal performances we need to exploit the locality principle. The spatial locality says we need to reuse the data elements within a relatively close storage location. The temporal locality says we need to reuse the data elements within a relatively small time duration. 
+
+The following snippet of code contains mandy deeply nested loops :
+
+```
+ii=0
+do b=below_ef+1,tot_orbs
+do j=1,below_ef
+  ii=ii+1
+  jj=0
+  do a=below_ef+1,tot_orbs
+  do i=1,below_ef
+    jj=jj+1
+    t2_ccm_eqn%f5d(a,b,i,j)= t2_ccm_eqn%
+      f5d(a,b,i,j) + tmat7(ii,jj)
+    t2_ccm_eqn%f5d(b,a,i,j)= t2_ccm_eqn%
+      f5d(b,a,i,j) - tmat7(ii,jj)
+    t2_ccm_eqn%f5d(a,b,j,i)= t2_ccm_eqn%
+      f5d(a,b,j,i) - tmat7(ii,jj)
+    t2_ccm_eqn%f5d(b,a,j,i)= t2_ccm_eqn%
+      f5d(b,a,j,i) + tmat7(ii,jj)
+    ops_cnt=ops_cnt+4
+  end do
+  end do
+end do
+```
+
+There is loop fusion and a loop fission example. Calling functions and subroutines requires overhead by the CPU to perform. Inlining is the process by which the compiler can replace a function call in the object with the source code. We have the following function inlining keywords :
+
+```
+-fno-inline : disable inlining
+-finline-functions : enable inlining of functions
+Mextract=option[, option, ...] : extract functions selected by option for the use in inline 
+// option my be name:function or size:N where N is a number of statements
+Minline=option[, option, ...] : perform inlining using option
+// option may be lib:filename.ext, name:function, size:N, levels:P
+-ip : enable single-file interprocedural optimization, including enhanced lining
+-ipo : enable interprocedural optimization across files
+```
+
+We have simple MPI parallelization firt, where MPI is "share nothing". Here we run the same code path with the same data but we insert a few MPI calls. There are the following paralell overhead factors : broadcast and reduction. There is the following MPI parallel efficiency calculation :
+
+<a href="https://www.codecogs.com/eqnedit.php?latex=E_p&space;=&space;\frac{T_1}{p&space;T_p}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?E_p&space;=&space;\frac{T_1}{p&space;T_p}" title="E_p = \frac{T_1}{p T_p}" /></a>
+
+We have the following libraries. BLAS: de facto standard for performing basic linear algebra operations such as matrix-vector or matrix-matrix operations. LAPACK: software library for numerical linear algebra. It provides routine for solving systems of linear equations, linear least square, eigenvalues problems, singular value decomposition. ScaLAPACK is a library of high-performance linear algebra routines for parallel distributed memory machines. FFTW: FFTW is a C subroutine library for computing the discrete Fourier transform (DFT) in one or more dimensions, of arbitrary input size, and of both real and complex data. PETSc is a suite of data structures and routines for the scalable (parallel) solution of scientific applications modeled by partial differential equations. Hierarchical Data Format (HDF, HDF4, or HDF5) is the name of a set of file formats and libraries designed to store and organize large amounts of numerical data.
