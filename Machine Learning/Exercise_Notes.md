@@ -9,7 +9,7 @@
 `np.sum(a, axis = k)` sums the elements of matrix a along dimension k,
 `linalg.inv(a)` returns the inverse of matrix a
 
-
+Once Git is installed you can pull a github repository using: git clone <url.git>, e.g. git clone https://github.com/epfml/ML_course.git. You do not want to break the master branch by mistake, so you start by creating and moving to a new branch: git checkout -b <name-of-my-new-branch>. Here the -b flag stands for the word branch.
 
 **Problem set 10**
 
