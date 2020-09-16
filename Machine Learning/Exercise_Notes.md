@@ -19,7 +19,18 @@ git add file.py
 git commit -m "some message clearly explaining the modification"
 ```
 
-You can also push to the origin as follows : `git push origin <name-of-my-new-branch>`. Once your PR is accepted and merged, do not forget to switch back to master: git checkout master and pull your approved changes git pull origin master. Often in the python interpreted code you write the following at the beginning of the line `%matplotlib inline`, as well as `%load_ext autoreload, %autoreload 2`.
+You can also push to the origin as follows : `git push origin <name-of-my-new-branch>`. Once your PR is accepted and merged, do not forget to switch back to master: git checkout master and pull your approved changes git pull origin master. Often in the python interpreted code you write the following at the beginning of the line `%matplotlib inline`, as well as `%load_ext autoreload, %autoreload 2`. Plots are directly embedded in the notebook thanks to the '%matplolib inline' command at the beginning.
+
+You can define a function as follows using 
+
+```
+x = [2,3,4]
+
+def my_function(l):
+    l.append(12)
+```
+
+Here we have the vector x, and we take this vector x into the parameters of the function and then append a scalar or 12 at the end. Consider now the following histogram. 
 
 **Problem set 10**
 
