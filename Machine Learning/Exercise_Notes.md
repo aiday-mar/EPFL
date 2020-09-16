@@ -2,11 +2,11 @@
 
 **Lab 1**
 
-`a.max(0)` finds the maximum element for each column of matrix a
-`a.max(1)` finds the maximum element for each row of matrix a
-`a.dot(b)` is the matrix multiplication of two matrices a and b
-`a.shape[k]` returns the size along dimension k of the matrix a
-`np.sum(a, axis = k)` sums the elements of matrix a along dimension k
+`a.max(0)` finds the maximum element for each column of matrix a,
+`a.max(1)` finds the maximum element for each row of matrix a,
+`a.dot(b)` is the matrix multiplication of two matrices a and b,
+`a.shape[k]` returns the size along dimension k of the matrix a,
+`np.sum(a, axis = k)` sums the elements of matrix a along dimension k,
 `linalg.inv(a)` returns the inverse of matrix a
 
 
