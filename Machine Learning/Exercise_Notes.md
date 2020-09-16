@@ -44,7 +44,7 @@ np.array([[1,3,4],[2,5,6]])
 
 Where one set of square brackets implies that there is this one row, and inside of it you have two more rows. Next `np.arange(10)` creates an array which starts from 0 and goes to 9. Consider now the following `tensor_3 = np.ones((2, 4, 2))`. Then this has one pair of square brackets. Then two rows, then 4 rows in each of the two rows, and each such row has two columns. Now the following are not methods, these are attributes `tensor_3.shape, tensor_3.dtype`. You can see these are not methods because there are no brackets after the word shape or dtype. 
 
-Following this, it would seem that writing b = a implies that if b is changed then a is also. However if you write `b = a.copy()` then when you change b then a does not change. 
+Following this, it would seem that writing b = a implies that if b is changed then a is also. However if you write `b = a.copy()` then when you change b then a does not change. The next thing we learn is how to slice the arrays in python. 
 
 **Problem set 10**
 
