@@ -30,7 +30,20 @@ def my_function(l):
     l.append(12)
 ```
 
-Here we have the vector x, and we take this vector x into the parameters of the function and then append a scalar or 12 at the end. Consider now the following histogram. 
+Here we have the vector x, and we take this vector x into the parameters of the function and then append a scalar or 12 at the end. Consider now the following histogram method in the matplotlib library :
+
+```
+matplotlib.pyplot.hist(x, bins=None, range=None, density=False, weights=None, cumulative=False, bottom=None, histtype='bar', align='mid', orientation='vertical', rwidth=None, log=False, color=None, label=None, stacked=False, \*, data=None, \*\*kwargs)
+```
+
+Where the first parameter x is the array or the sequences of the arrays for which we must drsw a histogram. If bins is an integer, it defines the number of equal-width bins in the range. The lower and upper range of the bins. Lower and upper outliers are ignored. If not provided, range is (x.min(), x.max()). In the above the array is defined as an array of 1000 random integers. You can define numpy arrays as follows :
+
+```
+np.array([[1,3,4],[2,5,6]])
+```
+
+Where one set of square brackets implies that there is this one row, and inside of it you have two more rows. Next `np.arange(10)` creates an array which starts from 0 and goes to 9. Consider now the following `tensor_3 = np.ones((2, 4, 2))`. Then this has one pair of square brackets. Then two rows, then 4 rows in each of the two rows, and each such row has two columns. 
+
 
 **Problem set 10**
 
