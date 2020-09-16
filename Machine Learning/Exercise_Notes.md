@@ -9,7 +9,17 @@
 `np.sum(a, axis = k)` sums the elements of matrix a along dimension k,
 `linalg.inv(a)` returns the inverse of matrix a
 
-Once Git is installed you can pull a github repository using: git clone <url.git>, e.g. git clone https://github.com/epfml/ML_course.git. You do not want to break the master branch by mistake, so you start by creating and moving to a new branch: git checkout -b <name-of-my-new-branch>. Here the -b flag stands for the word branch.
+Once Git is installed you can pull a github repository using: git clone <url.git>, e.g. git clone https://github.com/epfml/ML_course.git. You do not want to break the master branch by mistake, so you start by creating and moving to a new branch: git checkout -b <name-of-my-new-branch>. Here the -b flag stands for the word branch. Then when you are on your branch, you can change the files as if you were on the master branch :
+        
+```
+# let's say we modify file.py here
+git status # check the status of the files git is tracking
+# you can individually add the necessary files into the branch you checked out
+git add file.py
+git commit -m "some message clearly explaining the modification"
+```
+
+You can also push to the origin as follows : `git push origin <name-of-my-new-branch>`. Once your PR is accepted and merged, do not forget to switch back to master: git checkout master and pull your approved changes git pull origin master. Often in the python interpreted code you write the following at the beginning of the line `%matplotlib inline`, as well as `%load_ext autoreload, %autoreload 2`.
 
 **Problem set 10**
 
