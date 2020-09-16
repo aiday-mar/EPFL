@@ -1,5 +1,16 @@
 # Exercise Notes
 
+**Lab 1**
+
+`a.max(0)` finds the maximum element for each column of matrix a
+`a.max(1)` finds the maximum element for each row of matrix a
+`a.dot(b)` is the matrix multiplication of two matrices a and b
+`a.shape[k]` returns the size along dimension k of the matrix a
+`np.sum(a, axis = k)` sums the elements of matrix a along dimension k
+`linalg.inv(a)` returns the inverse of matrix a
+
+
+
 **Problem set 10**
 
 We fill in the notebook function split_data to split the dataset into training and testing data. We need to import the right libraries that we will use to analyse the data.
