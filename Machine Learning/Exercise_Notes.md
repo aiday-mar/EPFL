@@ -46,9 +46,78 @@ np.array([[1,3,4],[2,5,6]])
 
 Where one set of square brackets implies that there is this one row, and inside of it you have two more rows. Next `np.arange(10)` creates an array which starts from 0 and goes to 9. Consider now the following `tensor_3 = np.ones((2, 4, 2))`. Then this has one pair of square brackets. Then two rows, then 4 rows in each of the two rows, and each such row has two columns. Now the following are not methods, these are attributes `tensor_3.shape, tensor_3.dtype`. You can see these are not methods because there are no brackets after the word shape or dtype. 
 
+*Task a*
+
+```
+%matplotlib inline
+import numpy as np
+import matplotlib.pyplot as plt
+%load_ext autoreload
+%autoreload 2
+```
+
+You want to standardize the code so you write :
+
+```
+def standardize(x):
+    ''' fill your code in here...
+    '''
+    # where it seems we are taking the mean along the rows 
+    centered_data = x - np.mean(x, axis=0)
+    # and we are taking the standard deviation once for each row too, it's part of the numpy family of functions 
+    std_data = centered_data / np.std(centered_data, axis=0)
+    
+    return std_data
+
+std_data = standardize(data)
+
+print(std_data, "\n\n", np.mean(std_data, axis=0), "\n\n", np.std(std_data, axis=0))
+```
+
 *Task b*
 
 Following this, it would seem that writing b = a implies that if b is changed then a is also. However if you write `b = a.copy()` then when you change b then a does not change. The next thing we learn is how to slice the arrays in python. Next we have : `p, q = (np.random.rand(i, 2) for i in (4, 5))`, which means that the parameters are actually the dimensions of the given array so it would seem like maybe vector p has dimension 4 x 2 and q has dimension 5 x 2. 
+
+`np.indices` works as follows : return an array representing the indices of a grid, compute an array where the subarrays contain index values 0, 1, … varying only along the corresponding axis. Next `np.ravel` returns a flattened one-dimensional array. Then in the following code we have :
+
+```
+def with_indices(p, q):
+    # we have the arrays of indices as described in the jupyter notebook
+    rows, cols = np.indices((p.shape[0], q.shape[0]))
+    # here we take the arrays row and cols and make each array into one vector which is one dimensional, then you square all the element of the matrix
+    # and you sum along the columsn it would seem
+    distances = np.sqrt(np.sum((p[rows.ravel(), :] - q[cols.ravel(), :])**2, axis=1))
+    # you reshape everythin to be as before 
+    return distances.reshape((p.shape[0], q.shape[0]))
+```
+
+It seems like you can also work with functions as though they are variables, as below :
+
+```
+# below these are names of functions actually
+methods = [naive, naive_2, with_indices, with_indices_2, scipy_version, tensor_broadcasting]
+# this is an empty array 
+timers = []
+for f in methods:
+    # this must be a method
+    r = %timeit -o f(p_big, q_big)
+    timers.append(r)
+```
+
+The %timeit magic runs the given code many times, then returns the speed of the fastest result. Then we plot a graph as follows :
+
+```
+plt.figure(figsize=(10,6))
+plt.bar(np.arange(len(methods)), [r.best*1000 for r in timers], log=False)  # Set log to True for logarithmic scale
+# _name_ must return the name property of the method
+plt.xticks(np.arange(len(methods))+0.2, [f.__name__ for f in methods], rotation=30)
+plt.xlabel('Method')
+plt.ylabel('Time (ms)')
+plt.show()
+```
+
+*Task C* NEED TO FINISH
+
 
 **Problem set 10**
 
